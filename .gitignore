@@ -1,0 +1,22 @@
+# Python pre-compiled files
+*.pyc
+*.log
+
+# Specific files
+logs/*
+pids/*
+squid_configs/*
+
+# PyCharm
+.idea/
+# !.idea/dictionaries/*
+
+# Env exclude
+venv/*
+venv*
+.venv/*
+.python-version
+
+# Other
+config.yaml
+docker-compose.yml

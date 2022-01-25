@@ -1,0 +1,7 @@
+SQLAlchemy~=1.4.29
+sqlalchemy-utils~=0.38.2
+concurrent-log-handler~=0.9.19
+psycopg2-binary~=2.9.3
+alembic~=1.7.5
+coloredlogs~=15.0.1
+PyYAML~=6.0

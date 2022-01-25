@@ -1,0 +1,10 @@
+debug_mode: False
+
+db:
+  server: "localhost"
+  port: 5432
+  name:
+  login:
+  password:
+  pool_size: 25
+  max_overflow: 100
