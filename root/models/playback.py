@@ -7,11 +7,11 @@ class Playback(models.Base):
     __tablename__ = 'playbacks'
 
     id = Column(Integer, primary_key=True, nullable=False, autoincrement=True)
-    adspot_id = Column(Integer)
-    timeslot_id = Column(Integer)
-    advert_id = Column(Integer)
-    content_id = Column(Integer)
-    status_id = Column(Integer)
+    adspot_id = Column(Integer, ForeignKey('adspots.id'))
+    timeslot_id = Column(Integer, ForeignKey('timeslots.id'))
+    advert_id = Column(Integer, ForeignKey('advertisers.id'))
+    content_id = Column(Integer, ForeignKey('contents.id'))
+    status_id = Column(Integer, ForeignKey('playback_statuses.id'))
     smart_contract = Column(String)
 
     def __init__(

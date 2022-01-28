@@ -7,10 +7,10 @@ class TimeSlot(models.Base):
     __tablename__ = 'timeslots'
 
     id = Column(Integer, primary_key=True, nullable=False, autoincrement=True)
-    adspot_id = Column(Integer)
-    from_time = Column(Integer)
-    to_time = Column(Integer)
-    locked = Column(Boolean)
+    adspot_id = Column(Integer, ForeignKey('adspots.id'))
+    from_time = Column(Integer, nullable=False)
+    to_time = Column(Integer, nullable=False)
+    locked = Column(Boolean, nullable=False)
 
     def __init__(
             self,
