@@ -8,8 +8,8 @@ class AdSpot(models.Base):
 
     id = Column(Integer, primary_key=True, nullable=False, autoincrement=True)
     name = Column(String, nullable=False)
-    publisher_id = Column(Integer)
-    adspot_type_id = Column(Integer)
+    publisher_id = Column(Integer, ForeignKey('publishers.id'))
+    adspot_type_id = Column(Integer, ForeignKey('adspot_types.id'))
     ad_metadata = Column(String)
 
     def __init__(
