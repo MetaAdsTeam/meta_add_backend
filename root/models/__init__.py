@@ -3,3 +3,5 @@ from .publisher import Publisher
 from .adspot_type import AdSpotType
 from .adspot import AdSpot
 from .timeslot import TimeSlot
+from .playback import Playback
+from .advertiser import Advertiser
