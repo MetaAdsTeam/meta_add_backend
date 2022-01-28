@@ -19,6 +19,15 @@ loop = tornado.ioloop.IOLoop.current()
 def all_handlers():
     return [
         tornado.web.url(r"/", MainHandler, name=enums.UrlName.MAIN.value),
+        tornado.web.url(r"/adspot_type", AdSpotType, name=enums.UrlName.ADSPOT_TYPE.value),
+        tornado.web.url(r"/adspot", AdSpot, name=enums.UrlName.ADSPOT.value),
+        tornado.web.url(r"/timeslot", TimeSlot, name=enums.UrlName.TIMESLOT.value),
+        tornado.web.url(r"/playback", Playback, name=enums.UrlName.PLAYBACK.value),
+        tornado.web.url(r"/playback_status", PlaybackStatus, name=enums.UrlName.PLAYBACK_STATUS.value),
+        tornado.web.url(r"/content", Content, name=enums.UrlName.CONTENT.value),
+        tornado.web.url(r"/content_type", ContentType, name=enums.UrlName.CONTENT_TYPE.value),
+        tornado.web.url(r"/publisher", Publisher, name=enums.UrlName.PUBLISHER.value),
+        tornado.web.url(r"/advertiser", Advertiser, name=enums.UrlName.ADVERTISER.value),
     ]
 
 
