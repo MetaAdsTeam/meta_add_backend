@@ -4,7 +4,7 @@ from root import models
 
 
 class Advertiser(models.Base):
-    __tablename__ = 'advertiser'
+    __tablename__ = 'advertisers'
 
     id = Column(Integer, primary_key=True, nullable=False, autoincrement=True)
     name = Column(String, nullable=False)
