@@ -36,6 +36,10 @@ class Context:
             self.__db_controller = DBController(self)
         return self.__db_controller
 
+    def stop(self) -> None:
+        if self.__db_controller is not None:
+            self.__db_controller.stop()
+
     @property
     def db_controller(self) -> 'DBController':
         if self.__db_controller is None:
