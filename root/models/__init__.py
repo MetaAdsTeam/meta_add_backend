@@ -5,3 +5,4 @@ from .adspot import AdSpot
 from .timeslot import TimeSlot
 from .playback import Playback
 from .advertiser import Advertiser
+from .playback_status import PlaybackStatus
