@@ -8,3 +8,4 @@ from .advertiser import Advertiser
 from .playback_status import PlaybackStatus
 from .content import Content
 from .content_type import ContentTypes
+from .ad_place import AdPlace
