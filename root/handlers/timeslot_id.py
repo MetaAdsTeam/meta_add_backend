@@ -5,11 +5,11 @@ from root import enums
 from root.handlers import BaseHandler
 
 
-class TimeSlot(BaseHandler):
+class TimeSlotId(BaseHandler):
     def set_default_headers(self):
         self.set_header("Content-Type", 'application/json')
 
-    def post(self):
+    def post(self, id_):
         data = {
             1: {'id': 1, 'adspot_id': 1, 'from_time': '00:00', 'to_time': '01:00'},
             2: {'id': 2, 'adspot_id': 0, 'from_time': '01:00', 'to_time': '02:00'},
@@ -37,5 +37,8 @@ class TimeSlot(BaseHandler):
             24: {'id': 24, 'adspot_id': 6, 'from_time': '23:00', 'to_time': '24:00'},
 
         }
-        r = json.dumps(data)
+        if not id_:
+            r = json.dumps(data)
+        else:
+            r = json.dumps(data.get(int(id_), {}))
         self.write(r)

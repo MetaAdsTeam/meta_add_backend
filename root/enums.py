@@ -8,7 +8,9 @@ class UrlName(Enum):
     MAIN = "main"
     ADSPOT_TYPE = 'adspot_type'
     ADSPOT = 'adspot'
+    ADSPOT_ID = 'adspot_id'
     TIMESLOT = 'timeslot'
+    TIMESLOT_ID = 'timeslot'
     PLAYBACK = 'playback'
     PLAYBACK_STATUS = 'playback_status'
     CONTENT = 'content'
