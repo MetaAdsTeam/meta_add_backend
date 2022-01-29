@@ -21,5 +21,5 @@ class DBConfig:
 class AdPlace:
     id: int
     system: str
-    place_id: int
+    place_id: str
     name: str

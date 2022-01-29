@@ -1,3 +1,5 @@
+from typing import Any
+
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 from logging import Logger
@@ -23,13 +25,20 @@ class MS:
         return self.__logger
 
     def get_adspots(self) -> list['dc.AdPlace']:
-        rows: list['models.AdPlace'] = self.session.execute(
-            select(models.AdPlace)
+        rows: list[Any['models.AdPlace', models.AdSpotType]] = self.session.execute(
+            select(
+                models.AdPlace,
+                models.AdSpotType,
+            ).join(
+                models.AdSpotType,
+                models.AdPlace.adspot_type == models.AdSpotType.id,
+            )
         ).all()
         return [
             dc.AdPlace(
                 row.AdPlace.id,
-                row.AdPlace.adspot_type,
+                row.AdSpotType.name,
                 row.AdPlace.place_id,
                 row.AdPlace.name,
-            ) for row in rows]
+            ) for row in rows
+        ]
