@@ -30,6 +30,10 @@ class BaseHandler(RequestHandler):
     def data_received(self, chunk: bytes) -> Optional[Awaitable[None]]:
         pass
 
+    def prepare(self):
+        self._prepare_json_args()
+        self.context = self.settings['context']
+
     def _request_summary(self) -> str:
         return "%s [%s] %s " % (
             self.request.method,

@@ -12,3 +12,4 @@ from .content import Content
 from .content_type import ContentType
 from .publisher import Publisher
 from .advertiser import Advertiser
+from .ad_places import AdPlaces

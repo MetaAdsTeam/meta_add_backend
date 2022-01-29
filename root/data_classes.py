@@ -15,3 +15,11 @@ class DBConfig:
     def db_con_string(self) -> str:
         return f'postgresql://{self.login}:{self.password}' \
                f'@{self.server}:{self.port}/{self.name}'
+
+
+@dataclass
+class AdPlace:
+    id: int
+    system: str
+    place_id: int
+    name: str
