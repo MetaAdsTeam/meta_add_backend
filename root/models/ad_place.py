@@ -11,6 +11,7 @@ class AdPlace(models.Base):
     place_id = Column(String, nullable=False)
     publisher = Column(Integer, ForeignKey('publishers.id'))
     adspot_type = Column(Integer, ForeignKey('adspot_types.id'))
+    price = Column(Integer, nullable=False, default=0)
 
     def __init__(
             self,
@@ -18,8 +19,10 @@ class AdPlace(models.Base):
             place_id,
             publisher,
             adspot_type,
+            price,
     ):
         self.name = name
         self.place_id = place_id
         self.publisher = publisher
         self.adspot_type = adspot_type
+        self.price = price
