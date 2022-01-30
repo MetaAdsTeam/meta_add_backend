@@ -29,7 +29,7 @@ class AdSpot:
 
 
 @dataclass
-class Content:
+class Creative:
     id: int
     type: str
     nft_ref: str

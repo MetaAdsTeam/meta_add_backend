@@ -79,13 +79,13 @@ class MS:
             )
         ).all()
         return [
-            dc.Content(
-                row.Content.id,
-                row.ContentTypes.name,
-                row.Content.nft_ref,
-                str(row.Content.nft_bin),
-                row.Content.url,
-                row.Content.name,
+            dc.Creative(
+                row.Creative.id,
+                row.CreativeType.name,
+                row.Creative.nft_ref,
+                str(row.Creative.nft_bin),
+                row.Creative.url,
+                row.Creative.name,
             ) for row in rows
         ]
 
