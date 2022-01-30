@@ -14,3 +14,6 @@ class PlaybacksHandler(BaseHandler):
                 {k: asdict(w) for k, w in enumerate(self.ms.get_playbacks())}
             )
         )
+
+    def get(self):
+        self.post()

@@ -14,3 +14,6 @@ class AdSpotsHandler(BaseHandler):
                 {k: asdict(w) for k, w in enumerate(self.ms.get_adspots())}
             )
         )
+
+    def get(self):
+        self.post()

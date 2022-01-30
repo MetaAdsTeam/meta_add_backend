@@ -16,3 +16,6 @@ class CreativesHandler(BaseHandler):
                 {k: asdict(w) for k, w in enumerate(self.ms.get_creatives())}
             )
         )
+
+    def get(self):
+        self.post()

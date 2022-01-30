@@ -16,3 +16,6 @@ class AdSpotIdHandler(BaseHandler):
         self.write(
             json.dumps(result)
         )
+
+    def get(self):
+        self.post()
