@@ -40,7 +40,7 @@ class MS:
                 row.AdSpotType.name,
                 row.AdSpot.description,
                 row.AdSpot.publisher_id,
-                row.AdSpot.adspot_type,
+                row.AdSpotType.name,
                 row.AdSpot.price,
                 row.AdSpot.spot_metadata,
             ) for row in rows
