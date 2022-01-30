@@ -38,7 +38,7 @@ class MS:
             dc.AdSpot(
                 row.AdSpot.id,
                 row.AdSpotType.name,
-                row.AdSpotType.description,
+                row.AdSpot.description,
                 row.AdSpot.publisher_id,
                 row.AdSpot.adspot_type,
                 row.AdSpot.price,
