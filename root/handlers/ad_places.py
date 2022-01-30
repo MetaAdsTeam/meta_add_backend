@@ -4,7 +4,7 @@ from dataclasses import asdict
 from root.handlers import BaseHandler
 
 
-class AdPlaces(BaseHandler):
+class AdPlacesHandler(BaseHandler):
     def set_default_headers(self):
         self.set_header("Content-Type", 'application/json')
 
