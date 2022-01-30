@@ -61,37 +61,12 @@ class MS:
         return row and dc.AdSpot(
             row.AdSpot.id,
             row.AdSpotType.name,
-            row.AdSpotType.description,
+            row.AdSpot.description,
             row.AdSpot.publisher_id,
-            row.AdSpot.adspot_type,
+            row.AdSpotType.name,
             row.AdSpot.price,
             row.AdSpot.spot_metadata,
         )
-
-    def get_adspotsss(self, id_) -> 'dc.AdSpot':
-        pass
-        # row = self.session.execute(
-        #     select(
-        #         models.AdSpot,
-        #         models.AdSpotType,
-        #         models.Publisher,
-        #     ).join(
-        #         models.AdSpotType,
-        #         models.AdSpot.adspot_type_id == models.AdSpotType.id,
-        #     ).join(
-        #         models.Publisher,
-        #         models.AdSpot.publisher_id == models.Publisher.id,
-        #     ).filter(
-        #         models.AdSpot.id == id_,
-        #     )
-        # ).first()
-        # return dc.AdSpot(
-        #     row.AdSpot.id,
-        #     row.AdSpotType.name,
-        #     row.AdSpot.place_id,
-        #     row.AdSpot.price,
-        #     row.Publisher.id,
-        # )
 
     def get_creatives(self) -> list['dc.Content']:
         rows: list['models.Creative'] = self.session.execute(
