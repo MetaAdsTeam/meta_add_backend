@@ -3,15 +3,16 @@ from sqlalchemy import Column, Integer, String, LargeBinary, ForeignKey
 from root import models
 
 
-class Content(models.Base):
-    __tablename__ = 'contents'
+class Creative(models.Base):
+    __tablename__ = 'creatives'
 
     id = Column(Integer, primary_key=True, nullable=False, autoincrement=True)
     advert_id = Column(Integer, nullable=False)
-    content_type_id = Column(Integer, ForeignKey('content_types.id'))
+    content_type_id = Column(Integer, ForeignKey('creative_types.id'))
     nft_ref = Column(String, nullable=False)
     nft_bin = Column(LargeBinary, nullable=False)
     name = Column(String, nullable=False)
+    description = Column(String)
     url = Column(String, nullable=False)
 
     def __init__(
@@ -21,6 +22,7 @@ class Content(models.Base):
             nft_ref,
             nft_bin,
             name,
+            description,
             url,
     ):
         self.advert_id = advert_id
@@ -28,4 +30,5 @@ class Content(models.Base):
         self.nft_ref = nft_ref
         self.nft_bin = nft_bin
         self.name = name
+        self.description = description
         self.url = url

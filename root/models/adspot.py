@@ -8,15 +8,24 @@ class AdSpot(models.Base):
 
     id = Column(Integer, primary_key=True, nullable=False, autoincrement=True)
     name = Column(String, nullable=False)
-    ad_place_id = Column(Integer, ForeignKey('ad_places.id'))
+    description = Column(String)
+    publisher_id = Column(Integer, ForeignKey('publishers.id'))
+    spot_type_id = Column(Integer, ForeignKey('adspot_types.id'))
+    price = Column(Integer, nullable=False, default=0)
     spot_metadata = Column(String)
 
     def __init__(
             self,
             name,
-            ad_place_id,
+            description,
+            publisher_id,
+            spot_type_id,
+            price,
             spot_metadata,
     ):
         self.name = name
-        self.ad_place_id = ad_place_id
+        self.description = description
+        self.publisher_id = publisher_id
+        self.spot_type_id = spot_type_id
+        self.price = price
         self.spot_metadata = spot_metadata

@@ -10,9 +10,10 @@ class Playback(models.Base):
     adspot_id = Column(Integer, ForeignKey('adspots.id'))
     timeslot_id = Column(Integer, ForeignKey('timeslots.id'))
     advert_id = Column(Integer, ForeignKey('advertisers.id'))
-    content_id = Column(Integer, ForeignKey('contents.id'))
+    content_id = Column(Integer, ForeignKey('creatives.id'))
     status_id = Column(Integer, ForeignKey('playback_statuses.id'))
     smart_contract = Column(String)
+    play_price = Column(Integer)
 
     def __init__(
             self,
@@ -22,6 +23,7 @@ class Playback(models.Base):
             content_id,
             status_id,
             smart_contract,
+            play_price,
     ):
         self.adspot_id = adspot_id
         self.timeslot_id = timeslot_id
@@ -29,3 +31,4 @@ class Playback(models.Base):
         self.content_id = content_id
         self.status_id = status_id
         self.smart_contract = smart_contract
+        self.play_price = play_price

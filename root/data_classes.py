@@ -18,20 +18,14 @@ class DBConfig:
 
 
 @dataclass
-class AdPlace:
-    id: int
-    system: str
-    place_id: str
-    name: str
-
-
-@dataclass
 class AdSpot:
     id: int
-    ad_place_name: str
-    ad_place_desc: str
-    price: int
+    name: str
+    description: str
     publisher_id: int
+    spot_type: str
+    price: int
+    spot_metadata: str
 
 
 @dataclass
