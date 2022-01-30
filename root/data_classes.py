@@ -23,3 +23,12 @@ class AdPlace:
     system: str
     place_id: str
     name: str
+
+
+@dataclass
+class AdSpot:
+    id: int
+    ad_place_name: str
+    ad_place_desc: str
+    price: int
+    publisher_id: int

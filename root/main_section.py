@@ -24,7 +24,7 @@ class MS:
             self.__logger = root.log_lib.get_logger(self.__class__.__name__)
         return self.__logger
 
-    def get_adspots(self) -> list['dc.AdPlace']:
+    def get_ad_places(self) -> list['dc.AdPlace']:
         rows: list[Any['models.AdPlace', models.AdSpotType]] = self.session.execute(
             select(
                 models.AdPlace,
@@ -42,3 +42,31 @@ class MS:
                 row.AdPlace.name,
             ) for row in rows
         ]
+
+    def get_adspot(self, id_) -> 'dc.AdSpot':
+        row = self.session.execute(
+            select(
+                models.AdSpot,
+                models.AdPlace,
+                models.AdSpotType,
+                models.Publisher,
+            ).join(
+                models.AdPlace,
+                models.AdSpot.ad_place_id == models.AdPlace.id,
+            ).join(
+                models.AdSpotType,
+                models.AdPlace.adspot_type == models.AdSpotType.id,
+            ).join(
+                models.Publisher,
+                models.AdPlace.publisher == models.Publisher.id,
+            ).filter(
+                models.AdSpot.id == id_
+            )
+        ).first()
+        return dc.AdSpot(
+            row.AdSpot.id,
+            row.AdPlace.name,
+            row.AdPlace.place_id,
+            row.AdPlace.price,
+            row.Publisher.id
+        )
