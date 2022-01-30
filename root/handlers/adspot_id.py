@@ -9,8 +9,10 @@ class AdSpotIdHandler(BaseHandler):
         self.set_header("Content-Type", 'application/json')
 
     def post(self, id_):
+        result = None
+        adspot = self.ms.get_adspot(id_)
+        if adspot:
+            result = asdict(adspot)
         self.write(
-            json.dumps(
-                asdict(self.ms.get_adspot(id_))
-            )
+            json.dumps(result)
         )

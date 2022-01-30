@@ -47,6 +47,28 @@ class MS:
         ]
 
     def get_adspot(self, id_) -> 'dc.AdSpot':
+        row: Any['models.AdSpot', models.AdSpotType] = self.session.execute(
+            select(
+                models.AdSpot,
+                models.AdSpotType,
+            ).join(
+                models.AdSpotType,
+                models.AdSpot.spot_type_id == models.AdSpotType.id,
+            ).filter(
+                models.AdSpot.id == id_,
+            )
+        ).first()
+        return row and dc.AdSpot(
+            row.AdSpot.id,
+            row.AdSpotType.name,
+            row.AdSpotType.description,
+            row.AdSpot.publisher_id,
+            row.AdSpot.adspot_type,
+            row.AdSpot.price,
+            row.AdSpot.spot_metadata,
+        )
+
+    def get_adspotsss(self, id_) -> 'dc.AdSpot':
         pass
         # row = self.session.execute(
         #     select(
