@@ -131,7 +131,8 @@ class MS:
                 row.Creative.url,
                 row.PlaybackStatus.name,
                 row.Playback.smart_contract,
-                row.Playback.spot_price,
+                row.AdSpot.price,
                 row.Playback.play_price,
+                row.TimeSlot.locked,
             ) for row in rows
         ]

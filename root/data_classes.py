@@ -52,3 +52,4 @@ class Playback:
     smart_contract: str
     spot_price: int
     play_price: int
+    locked: bool
