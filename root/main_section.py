@@ -94,23 +94,22 @@ class MS:
         # )
 
     def get_creatives(self) -> list['dc.Content']:
-        pass
-        # rows: list['models.Creative'] = self.session.execute(
-        #     select(
-        #         models.Creative,
-        #         models.CreativeType,
-        #     ).join(
-        #         models.CreativeType,
-        #         models.Creative.content_type_id == models.CreativeType.id,
-        #     )
-        # ).all()
-        # return [
-        #     dc.Content(
-        #         row.Content.id,
-        #         row.ContentTypes.name,
-        #         row.Content.nft_ref,
-        #         str(row.Content.nft_bin),
-        #         row.Content.url,
-        #         row.Content.name,
-        #     ) for row in rows
-        # ]
+        rows: list['models.Creative'] = self.session.execute(
+            select(
+                models.Creative,
+                models.CreativeType,
+            ).join(
+                models.CreativeType,
+                models.Creative.content_type_id == models.CreativeType.id,
+            )
+        ).all()
+        return [
+            dc.Content(
+                row.Content.id,
+                row.ContentTypes.name,
+                row.Content.nft_ref,
+                str(row.Content.nft_bin),
+                row.Content.url,
+                row.Content.name,
+            ) for row in rows
+        ]
