@@ -1,5 +1,7 @@
 debug_mode: False
 
+uri_prefix: ''
+
 db:
   server: "localhost"
   port: 5432

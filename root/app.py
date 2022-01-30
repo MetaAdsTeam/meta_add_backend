@@ -14,19 +14,19 @@ loop = tornado.ioloop.IOLoop.current()
 
 def all_handlers():
     return [
-        tornado.web.url(r"/", MainHandler, name=enums.UrlName.MAIN.value),
-        tornado.web.url(r"/ad_places", AdPlaces, name=enums.UrlName.ADPLACES.value),
-        tornado.web.url(r"/adspot_type", AdSpotType, name=enums.UrlName.ADSPOT_TYPE.value),
-        tornado.web.url(r"/adspot", AdSpot, name=enums.UrlName.ADSPOT.value),
-        tornado.web.url(r"/adspot/id/([0-9]+)", AdSpotId, name=enums.UrlName.ADSPOT_ID.value),
-        tornado.web.url(r"/timeslot", TimeSlot, name=enums.UrlName.TIMESLOT.value),
-        tornado.web.url(r"/timeslot/id/([0-9]+)", TimeSlotId, name=enums.UrlName.TIMESLOT_ID.value),
-        tornado.web.url(r"/playback", Playback, name=enums.UrlName.PLAYBACK.value),
-        tornado.web.url(r"/playback_status", PlaybackStatus, name=enums.UrlName.PLAYBACK_STATUS.value),
-        tornado.web.url(r"/content", Content, name=enums.UrlName.CONTENT.value),
-        tornado.web.url(r"/content_type", ContentType, name=enums.UrlName.CONTENT_TYPE.value),
-        tornado.web.url(r"/publisher", Publisher, name=enums.UrlName.PUBLISHER.value),
-        tornado.web.url(r"/advertiser", Advertiser, name=enums.UrlName.ADVERTISER.value),
+        tornado.web.url(fr"{root.context.uri_prefix}/", MainHandler, name=enums.UrlName.MAIN.value),
+        tornado.web.url(fr"{root.context.uri_prefix}/ad_places", AdPlaces, name=enums.UrlName.ADPLACES.value),
+        tornado.web.url(fr"{root.context.uri_prefix}/adspot_type", AdSpotType, name=enums.UrlName.ADSPOT_TYPE.value),
+        tornado.web.url(fr"{root.context.uri_prefix}/adspot", AdSpot, name=enums.UrlName.ADSPOT.value),
+        tornado.web.url(fr"{root.context.uri_prefix}/adspot/id/([0-9]+)", AdSpotId, name=enums.UrlName.ADSPOT_ID.value),
+        tornado.web.url(fr"{root.context.uri_prefix}/timeslot", TimeSlot, name=enums.UrlName.TIMESLOT.value),
+        tornado.web.url(fr"{root.context.uri_prefix}/timeslot/id/([0-9]+)", TimeSlotId, name=enums.UrlName.TIMESLOT_ID.value),
+        tornado.web.url(fr"{root.context.uri_prefix}/playback", Playback, name=enums.UrlName.PLAYBACK.value),
+        tornado.web.url(fr"{root.context.uri_prefix}/playback_status", PlaybackStatus, name=enums.UrlName.PLAYBACK_STATUS.value),
+        tornado.web.url(fr"{root.context.uri_prefix}/content", Content, name=enums.UrlName.CONTENT.value),
+        tornado.web.url(fr"{root.context.uri_prefix}/content_type", ContentType, name=enums.UrlName.CONTENT_TYPE.value),
+        tornado.web.url(fr"{root.context.uri_prefix}/publisher", Publisher, name=enums.UrlName.PUBLISHER.value),
+        tornado.web.url(fr"{root.context.uri_prefix}/advertiser", Advertiser, name=enums.UrlName.ADVERTISER.value),
     ]
 
 
@@ -78,7 +78,10 @@ def start(port: int = 5000):
 
     # Base SIG handlers
     for sig in (signal.SIGTERM, signal.SIGINT):
-        signal.signal(sig, lambda signum, stack: tornado.ioloop.IOLoop.current().add_callback_from_signal(stop))
+        signal.signal(
+            sig,
+            lambda signum, stack: tornado.ioloop.IOLoop.current().add_callback_from_signal(stop)
+        )
 
     logger.info('Starting Application')
     loop.start()

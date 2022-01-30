@@ -27,6 +27,7 @@ class Context:
             with open(config_path, 'w+') as f:
                 yaml.dump(self.config, f, default_flow_style=False)
         self.debug_mode: str = self.config.get('debug_mode', False)
+        self.uri_prefix: str = self.config.get('uri_prefix', '')
         db: dict[str, Any] = self.config['db']
         self.db_config = dc.DBConfig(**db)
         self.__db_controller: Optional['DBController'] = None
