@@ -12,7 +12,7 @@ class UrlName(Enum):
     ADSPOT_ID = 'adspot_id'
     TIMESLOT = 'timeslot'
     TIMESLOT_ID = 'timeslot_id'
-    PLAYBACK = 'playback'
+    PLAYBACKS = 'playbacks'
     PLAYBACK_STATUS = 'playback_status'
     CREATIVES = 'creatives'
     CREATIVE_TYPES = 'creative_types'

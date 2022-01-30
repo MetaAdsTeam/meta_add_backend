@@ -36,3 +36,19 @@ class Content:
     nft_bin: str
     url: str
     name: str
+
+
+@dataclass
+class Playback:
+    id: int
+    adspot_name: str
+    from_time: int
+    to_time: int
+    advert_id: int
+    creative_name: str
+    creative_description: str
+    creative_url: str
+    status_name: str
+    smart_contract: str
+    spot_price: int
+    play_price: int

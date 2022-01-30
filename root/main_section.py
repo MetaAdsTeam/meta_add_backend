@@ -100,7 +100,7 @@ class MS:
                 models.CreativeType,
             ).join(
                 models.CreativeType,
-                models.Creative.content_type_id == models.CreativeType.id,
+                models.Creative.creative_type_id == models.CreativeType.id,
             )
         ).all()
         return [
@@ -111,5 +111,52 @@ class MS:
                 str(row.Content.nft_bin),
                 row.Content.url,
                 row.Content.name,
+            ) for row in rows
+        ]
+
+    def get_playbacks(self) -> list['dc.Playback']:
+        rows: list['models.Playback'] = self.session.execute(
+            select(
+                models.Playback,
+                models.Creative,
+                models.CreativeType,
+                models.Advertiser,
+                models.TimeSlot,
+                models.PlaybackStatus,
+                models.AdSpot,
+            ).join(
+                models.Creative,
+                models.Playback.creative_id == models.Creative.id,
+            ).join(
+                models.CreativeType,
+                models.Creative.creative_type_id == models.CreativeType.id,
+            ).join(
+                models.Advertiser,
+                models.Creative.advert_id == models.Advertiser.id,
+            ).join(
+                models.TimeSlot,
+                models.Playback.timeslot_id == models.TimeSlot.id,
+            ).join(
+                models.PlaybackStatus,
+                models.Playback.status_id == models.PlaybackStatus.id,
+            ).join(
+                models.AdSpot,
+                models.Playback.adspot_id == models.AdSpot.id,
+            )
+        ).all()
+        return [
+            dc.Playback(
+                row.Playback.id,
+                row.AdSpot.name,
+                row.TimeSlot.from_time,
+                row.TimeSlot.to_time,
+                row.Creative.advert_id,
+                row.Creative.name,
+                row.Creative.description,
+                row.Creative.url,
+                row.PlaybackStatus.name,
+                row.Playback.smart_contract,
+                row.Playback.spot_price,
+                row.Playback.play_price,
             ) for row in rows
         ]

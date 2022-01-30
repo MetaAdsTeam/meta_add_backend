@@ -9,8 +9,7 @@ class Playback(models.Base):
     id = Column(Integer, primary_key=True, nullable=False, autoincrement=True)
     adspot_id = Column(Integer, ForeignKey('adspots.id'))
     timeslot_id = Column(Integer, ForeignKey('timeslots.id'))
-    advert_id = Column(Integer, ForeignKey('advertisers.id'))
-    content_id = Column(Integer, ForeignKey('creatives.id'))
+    creative_id = Column(Integer, ForeignKey('creatives.id'))
     status_id = Column(Integer, ForeignKey('playback_statuses.id'))
     smart_contract = Column(String)
     play_price = Column(Integer)
@@ -19,16 +18,14 @@ class Playback(models.Base):
             self,
             adspot_id,
             timeslot_id,
-            advert_id,
-            content_id,
+            creative_id,
             status_id,
             smart_contract,
             play_price,
     ):
         self.adspot_id = adspot_id
         self.timeslot_id = timeslot_id
-        self.advert_id = advert_id
-        self.content_id = content_id
+        self.creative_id = creative_id
         self.status_id = status_id
         self.smart_contract = smart_contract
         self.play_price = play_price
