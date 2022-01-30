@@ -8,7 +8,7 @@ from .timeslot import TimeSlotHandler
 from .timeslot_id import TimeSlotIdHandler
 from .playback import PlaybackHandler
 from .playback_status import PlaybackStatusHandler
-from .content import ContentHandler
+from .contents import ContentsHandler
 from .content_type import ContentTypeHandler
 from .publisher import PublisherHandler
 from .advertiser import AdvertiserHandler

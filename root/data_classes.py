@@ -32,3 +32,13 @@ class AdSpot:
     ad_place_desc: str
     price: int
     publisher_id: int
+
+
+@dataclass
+class Content:
+    id: int
+    type: str
+    nft_ref: str
+    nft_bin: str
+    url: str
+    name: str

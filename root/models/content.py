@@ -8,7 +8,7 @@ class Content(models.Base):
 
     id = Column(Integer, primary_key=True, nullable=False, autoincrement=True)
     advert_id = Column(Integer, nullable=False)
-    content_type_id = Column(Integer, ForeignKey('adspot_types.id'))
+    content_type_id = Column(Integer, ForeignKey('content_types.id'))
     nft_ref = Column(String, nullable=False)
     nft_bin = Column(LargeBinary, nullable=False)
     name = Column(String, nullable=False)

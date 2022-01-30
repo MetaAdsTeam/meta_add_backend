@@ -14,7 +14,7 @@ class UrlName(Enum):
     TIMESLOT_ID = 'timeslot_id'
     PLAYBACK = 'playback'
     PLAYBACK_STATUS = 'playback_status'
-    CONTENT = 'content'
+    CONTENTS = 'contents'
     CONTENT_TYPE = 'content_type'
     PUBLISHER = 'publisher'
     ADVERTISER = 'advertiser'

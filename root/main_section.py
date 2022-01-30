@@ -60,7 +60,7 @@ class MS:
                 models.Publisher,
                 models.AdPlace.publisher == models.Publisher.id,
             ).filter(
-                models.AdSpot.id == id_
+                models.AdSpot.id == id_,
             )
         ).first()
         return dc.AdSpot(
@@ -68,5 +68,26 @@ class MS:
             row.AdPlace.name,
             row.AdPlace.place_id,
             row.AdPlace.price,
-            row.Publisher.id
+            row.Publisher.id,
         )
+
+    def get_contents(self) -> list['dc.Content']:
+        rows: list['models.Content'] = self.session.execute(
+            select(
+                models.Content,
+                models.ContentTypes,
+            ).join(
+                models.ContentTypes,
+                models.Content.content_type_id == models.ContentTypes.id,
+            )
+        ).all()
+        return [
+            dc.Content(
+                row.Content.id,
+                row.ContentTypes.name,
+                row.Content.nft_ref,
+                str(row.Content.nft_bin),
+                row.Content.url,
+                row.Content.name,
+            ) for row in rows
+        ]
