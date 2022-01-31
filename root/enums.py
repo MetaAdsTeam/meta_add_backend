@@ -7,7 +7,7 @@ class UrlName(Enum):
     """
     MAIN = "main"
     ADPLACES = 'adplaces'
-    ADSPOT_TYPE = 'adspot_type'
+    ADSPOT_TYPES = 'adspot_types'
     ADSPOTS = 'adspots'
     ADSPOT_ID = 'adspot_id'
     TIMESLOT = 'timeslot'

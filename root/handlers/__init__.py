@@ -2,7 +2,7 @@ from .base import BaseHandler
 from .main import MainHandler
 from .adspots import AdSpotsHandler
 from .adspot_id import AdSpotIdHandler
-from .adspot_type import AdSpotTypeHandler
+from .adspot_types import AdSpotTypesHandler
 from .timeslot import TimeSlotHandler
 from .timeslot_id import TimeSlotIdHandler
 from .playbacks import PlaybacksHandler
