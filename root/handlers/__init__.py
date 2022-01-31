@@ -11,3 +11,4 @@ from .creatives import CreativesHandler
 from .creative_type import CreativeTypeHandler
 from .publisher import PublisherHandler
 from .advertiser import AdvertiserHandler
+from .adspot_stats_id import AdSpotStatsIdHandler

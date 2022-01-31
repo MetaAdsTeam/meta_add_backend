@@ -53,3 +53,12 @@ class Playback:
     spot_price: int
     play_price: int
     locked: bool
+
+
+@dataclass
+class AdSpotStats:
+    id: int
+    likes: int
+    views_amount: int
+    average_time: int
+    max_traffic: int

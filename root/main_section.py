@@ -68,7 +68,7 @@ class MS:
             row.AdSpot.spot_metadata,
         )
 
-    def get_creatives(self) -> list['dc.Content']:
+    def get_creatives(self) -> list['dc.Creative']:
         rows: list['models.Creative'] = self.session.execute(
             select(
                 models.Creative,
@@ -136,3 +136,19 @@ class MS:
                 row.TimeSlot.locked,
             ) for row in rows
         ]
+
+    def get_adspot_stats(self, id_) -> 'dc.AdSpotStats':
+        row: models.AdSpotsStats = self.session.execute(
+            select(
+                models.AdSpotsStats,
+            ).filter(
+                models.AdSpotsStats.id == id_,
+            )
+        ).first()
+        return row and dc.AdSpotStats(
+            row.AdSpotsStats.id,
+            row.AdSpotsStats.likes,
+            row.AdSpotsStats.views_amount,
+            row.AdSpotsStats.average_time,
+            row.AdSpotsStats.max_traffic,
+        )

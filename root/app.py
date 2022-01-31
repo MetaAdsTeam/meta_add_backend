@@ -20,6 +20,8 @@ def all_handlers():
                         AdSpotsHandler, name=enums.UrlName.ADSPOTS.value),
         tornado.web.url(fr"{root.context.uri_prefix}/adspot/id/([0-9]+)",
                         AdSpotIdHandler, name=enums.UrlName.ADSPOT_ID.value),
+        tornado.web.url(fr"{root.context.uri_prefix}/adspot_stats/id/([0-9]+)",
+                        AdSpotStatsIdHandler, name=enums.UrlName.ADSPOT_STATS_ID.value),
         # tornado.web.url(fr"{root.context.uri_prefix}/adspot_types",
         #                 AdSpotTypesHandler, name=enums.UrlName.ADSPOT_TYPES.value),
         # tornado.web.url(fr"{root.context.uri_prefix}/timeslot",
