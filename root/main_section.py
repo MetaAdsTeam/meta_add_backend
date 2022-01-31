@@ -1,6 +1,6 @@
 from typing import Any
 
-from sqlalchemy import select
+from sqlalchemy import select, insert
 from sqlalchemy.orm import Session
 from logging import Logger
 import root
@@ -83,11 +83,14 @@ class MS:
                 row.Creative.id,
                 row.CreativeType.name,
                 row.Creative.nft_ref,
-                str(row.Creative.nft_bin),
                 row.Creative.url,
                 row.Creative.name,
             ) for row in rows
         ]
+
+    def add_creative(self, creative):
+        self.session.add(creative)
+        self.session.commit()
 
     def get_playbacks(self) -> list['dc.Playback']:
         rows: list['models.Playback'] = self.session.execute(

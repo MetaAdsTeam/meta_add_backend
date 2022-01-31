@@ -80,3 +80,18 @@ class BaseHandler(RequestHandler):
                self.request.headers.get("X-Forwarded-For") or \
                self.request.remote_ip
 
+    async def send_no_data(self):
+        await self.send_json({'msg': 'No data'}, 404)
+
+    async def send_ok(self, status: int = 200):
+        await self.send_json({'msg': 'ok'}, status)
+
+    async def send_failed(self, msg: str = 'failed'):
+        await self.send_json({'msg': msg}, 400)
+
+    async def send_json(self, data, status: int = 200) -> None:
+        self.set_header('Content-Type', 'application/json')
+        self.set_status(status)
+        if self.__sc is not None:
+            self.__sc.close()
+        await self.finish(escape.json_encode(data))

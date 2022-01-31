@@ -1,3 +1,4 @@
+import datetime
 from dataclasses import dataclass, field
 
 
@@ -33,7 +34,6 @@ class Creative:
     id: int
     type: str
     nft_ref: str
-    nft_bin: str
     url: str
     name: str
 
@@ -62,3 +62,10 @@ class AdSpotStats:
     views_amount: int
     average_time: int
     max_traffic: int
+
+
+@dataclass
+class AdTaskConfig:
+    name: str
+    start_date: datetime.datetime
+    end_date: datetime.datetime
