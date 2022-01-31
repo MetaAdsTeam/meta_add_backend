@@ -8,3 +8,4 @@ from .advertiser import Advertiser
 from .playback_status import PlaybackStatus
 from .creative import Creative
 from .creative_type import CreativeType
+from .adspot_stats import AdSpotsStats
