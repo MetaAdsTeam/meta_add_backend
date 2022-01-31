@@ -8,12 +8,9 @@ class PlaybacksHandler(BaseHandler):
     def set_default_headers(self):
         self.set_header("Content-Type", 'application/json')
 
-    def post(self):
+    def get(self):
         self.write(
             json.dumps(
-                {k: asdict(w) for k, w in enumerate(self.ms.get_playbacks())}
+                {'data': [asdict(w) for k, w in enumerate(self.ms.get_playbacks())]}
             )
         )
-
-    def get(self):
-        self.post()
