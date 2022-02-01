@@ -218,3 +218,17 @@ class MS:
                 row.PlaybackStatus.name,
             ) for row in rows
         ]
+
+    def get_adspot_types(self) -> list['dc.AdSpotTypes']:
+        rows: list[models.AdSpotType] = self.session.execute(
+            select(
+                models.PlaybackStatus,
+            )
+        ).all()
+        return [
+            dc.AdSpotTypes(
+                row.AdSpotType.id,
+                row.AdSpotType.name,
+                row.AdSpotType.publish_url,
+            ) for row in rows
+        ]

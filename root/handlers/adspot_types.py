@@ -11,6 +11,6 @@ class AdSpotTypesHandler(BaseHandler):
     def get(self):
         self.write(
             json.dumps(
-                {'data': [asdict(w) for k, w in enumerate(self.ms.get_adspots())]}
+                {'data': [asdict(w) for k, w in enumerate(self.ms.get_adspot_types())]}
             )
         )

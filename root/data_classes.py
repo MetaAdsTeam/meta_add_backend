@@ -86,3 +86,10 @@ class Timeslot:
 class PlaybackStatuses:
     id: str
     name: str
+
+
+@dataclass
+class AdSpotTypes:
+    id: str
+    name: str
+    publish_url: str
