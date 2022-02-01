@@ -23,7 +23,7 @@ class BaseHandler(RequestHandler):
     __sc: 'db_controller.SessionContext' = None
     __sc_cm: 'db_controller.WithSessionContextManager' = None
     __ms: 'main_section.MS' = None
-    json_args: dict = {}
+    json_args: dict = None
     template_loader: Loader = None
     context: 'Context' = None
 
@@ -47,6 +47,7 @@ class BaseHandler(RequestHandler):
             # if self.request.headers.get('Content-Type') in ('application/x-json', 'application/json'):
             self.json_args = json_decode(self.request.body) if self.request.body else {}
         else:  # self.request.headers.get('Content-Type') == 'application/x-www-form-urlencoded':
+            self.json_args = {}
             for k, v in self.request.arguments.items():
                 if len(v) == 1:
                     self.json_args[k] = v[0].decode('utf-8')

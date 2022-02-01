@@ -17,6 +17,7 @@ class CreativesHandler(BaseHandler):
         )
 
     async def post(self):
+        # print(self.json_args)
         try:
             creative = models.Creative(**self.json_args)
         except TypeError as e:
@@ -24,3 +25,10 @@ class CreativesHandler(BaseHandler):
         else:
             self.ms.add_creative(creative)
             await self.send_ok()
+
+    async def delete(self):
+        id_s = self.json_args.get('id_s', [])
+        if not isinstance(id_s, list):
+            id_s = [id_s]
+        self.ms.delete_creatives(id_s)
+        await self.send_ok()

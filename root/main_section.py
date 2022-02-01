@@ -1,6 +1,6 @@
 from typing import Any
 
-from sqlalchemy import select, insert
+from sqlalchemy import select, insert, delete
 from sqlalchemy.orm import Session
 from logging import Logger
 import root
@@ -90,6 +90,12 @@ class MS:
 
     def add_creative(self, creative):
         self.session.add(creative)
+        self.session.commit()
+
+    def delete_creatives(self, id_s):
+        self.session.execute(
+            delete(models.Creative).where(models.Creative.id.in_(id_s))
+        )
         self.session.commit()
 
     def get_playbacks(self) -> list['dc.Playback']:
