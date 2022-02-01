@@ -188,3 +188,13 @@ class MS:
             row.TimeSlot.to_time,
             row.Playback.play_price,
         )
+
+    def add_playback(self, playback):
+        self.session.add(playback)
+        self.session.commit()
+
+    def delete_playbacks(self, id_s):
+        self.session.execute(
+            delete(models.Creative).where(models.Creative.id.in_(id_s))
+        )
+        self.session.commit()
