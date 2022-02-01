@@ -46,7 +46,7 @@ class MS:
             ) for row in rows
         ]
 
-    def get_adspot(self, id_) -> 'dc.AdSpot':
+    def get_adspot(self, id_: int) -> 'dc.AdSpot':
         row: Any['models.AdSpot', models.AdSpotType] = self.session.execute(
             select(
                 models.AdSpot,
@@ -140,7 +140,7 @@ class MS:
             ) for row in rows
         ]
 
-    def get_adspot_stats(self, id_) -> 'dc.AdSpotStats':
+    def get_adspot_stats(self, id_: int) -> 'dc.AdSpotStats':
         row: models.AdSpotsStats = self.session.execute(
             select(
                 models.AdSpotsStats,
@@ -154,4 +154,31 @@ class MS:
             row.AdSpotsStats.views_amount,
             row.AdSpotsStats.average_time,
             row.AdSpotsStats.max_traffic,
+        )
+
+    def get_timeslots_by_adspot_id(self, id_: int) -> 'dc.Timeslot':
+        row: models.TimeSlot = self.session.execute(
+            select(
+                models.Playback,
+                models.TimeSlot,
+                models.AdSpot,
+                models.AdSpotsStats,
+            ).join(
+                models.TimeSlot,
+                models.Playback.timeslot_id == models.TimeSlot.id,
+            ).join(
+                models.AdSpot,
+                models.Playback.adspot_id == models.AdSpot.id,
+            ).join(
+                models.AdSpotsStats,
+                models.AdSpotsStats.spot_id == models.AdSpot.id,
+            ).filter(
+                models.AdSpotsStats.id == id_,
+            )
+        ).first()
+        return row and dc.Timeslot(
+            row.TimeSlot.id,
+            row.TimeSlot.from_time,
+            row.TimeSlot.to_time,
+            row.Playback.play_price,
         )

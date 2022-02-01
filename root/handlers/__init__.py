@@ -12,3 +12,4 @@ from .creative_type import CreativeTypeHandler
 from .publisher import PublisherHandler
 from .advertiser import AdvertiserHandler
 from .adspot_stats_id import AdSpotStatsIdHandler
+from .timeslots_by_adspot_id import TimeslotsByAdspotId

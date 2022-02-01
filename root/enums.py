@@ -19,3 +19,4 @@ class UrlName(Enum):
     CREATIVE_TYPES = 'creative_types'
     PUBLISHER = 'publisher'
     ADVERTISER = 'advertiser'
+    TIMESLOTS_BY_ADSPOT_ID = 'timeslots_by_adspot_id'

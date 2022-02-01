@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy import Column, Integer, String, ForeignKey, Float
 
 from root import models
 
@@ -11,7 +11,7 @@ class AdSpot(models.Base):
     description = Column(String)
     publisher_id = Column(Integer, ForeignKey('publishers.id'))
     spot_type_id = Column(Integer, ForeignKey('adspot_types.id'))
-    price = Column(Integer, nullable=False, default=0)
+    price = Column(Float, nullable=False, default=0)
     spot_metadata = Column(String)
 
     def __init__(

@@ -25,7 +25,7 @@ class AdSpot:
     description: str
     publisher_id: int
     spot_type: str
-    price: int
+    price: float
     spot_metadata: str
 
 
@@ -51,7 +51,7 @@ class Playback:
     status_name: str
     smart_contract: str
     spot_price: int
-    play_price: int
+    play_price: float
     locked: bool
 
 
@@ -69,3 +69,11 @@ class AdTaskConfig:
     name: str
     start_date: datetime.datetime
     end_date: datetime.datetime
+
+
+@dataclass
+class Timeslot:
+    id: str
+    from_time: int
+    to_time: int
+    price: float

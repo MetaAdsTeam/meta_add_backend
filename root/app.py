@@ -40,6 +40,8 @@ def all_handlers():
         #                 PublisherHandler, name=enums.UrlName.PUBLISHER.value),
         # tornado.web.url(fr"{root.context.uri_prefix}/advertiser",
         #                 AdvertiserHandler, name=enums.UrlName.ADVERTISER.value),
+        tornado.web.url(fr"{root.context.uri_prefix}/timeslots_by_adspot/id/([0-9]+)",
+                        TimeslotsByAdspotId, name=enums.UrlName.TIMESLOTS_BY_ADSPOT_ID.value),
     ]
 
 

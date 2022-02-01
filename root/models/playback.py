@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, Boolean
+from sqlalchemy import Column, Integer, String, ForeignKey, Boolean, Float
 
 from root import models
 
@@ -12,7 +12,7 @@ class Playback(models.Base):
     creative_id = Column(Integer, ForeignKey('creatives.id'))
     status_id = Column(Integer, ForeignKey('playback_statuses.id'))
     smart_contract = Column(String)
-    play_price = Column(Integer)
+    play_price = Column(Float)
 
     def __init__(
             self,
