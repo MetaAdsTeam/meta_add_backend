@@ -48,11 +48,14 @@ class Playback:
     creative_name: str
     creative_description: str
     creative_url: str
+    creative_path: str
     status_name: str
     smart_contract: str
     spot_price: int
     play_price: float
     locked: bool
+    adspot_type_name: str
+    publish_url: str
 
 
 @dataclass
@@ -77,3 +80,9 @@ class Timeslot:
     from_time: int
     to_time: int
     price: float
+
+
+@dataclass
+class PlaybackStatuses:
+    id: str
+    name: str

@@ -13,6 +13,7 @@ class Creative(models.Base):
     name = Column(String, nullable=False)
     description = Column(String)
     url = Column(String, nullable=False)
+    path = Column(String, nullable=False)
 
     def __init__(
             self,
@@ -22,6 +23,7 @@ class Creative(models.Base):
             name,
             description,
             url,
+            path,
     ):
         self.advert_id = advert_id
         self.content_type_id = content_type_id
@@ -29,3 +31,4 @@ class Creative(models.Base):
         self.name = name
         self.description = description
         self.url = url
+        self.path = path

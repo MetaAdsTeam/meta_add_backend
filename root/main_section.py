@@ -108,6 +108,7 @@ class MS:
                 models.TimeSlot,
                 models.PlaybackStatus,
                 models.AdSpot,
+                models.AdSpotType
             ).join(
                 models.Creative,
                 models.Playback.creative_id == models.Creative.id,
@@ -126,6 +127,9 @@ class MS:
             ).join(
                 models.AdSpot,
                 models.Playback.adspot_id == models.AdSpot.id,
+            ).join(
+                models.AdSpotType,
+                models.AdSpot.spot_type_id == models.AdSpotType.id,
             )
         ).all()
         return [
@@ -138,11 +142,14 @@ class MS:
                 row.Creative.name,
                 row.Creative.description,
                 row.Creative.url,
+                row.Creative.path,
                 row.PlaybackStatus.name,
                 row.Playback.smart_contract,
                 row.AdSpot.price,
                 row.Playback.play_price,
                 row.TimeSlot.locked,
+                row.AdSpotType.name,
+                row.AdSpotType.publish_url,
             ) for row in rows
         ]
 
@@ -198,3 +205,16 @@ class MS:
             delete(models.Creative).where(models.Creative.id.in_(id_s))
         )
         self.session.commit()
+
+    def get_playback_statuses(self) -> list['dc.PlaybackStatuses']:
+        rows: list[models.PlaybackStatus] = self.session.execute(
+            select(
+                models.PlaybackStatus,
+            )
+        ).all()
+        return [
+            dc.PlaybackStatuses(
+                row.PlaybackStatus.id,
+                row.PlaybackStatus.name,
+            ) for row in rows
+        ]

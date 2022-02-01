@@ -6,7 +6,7 @@ from .adspot_types import AdSpotTypesHandler
 from .timeslot import TimeSlotHandler
 from .timeslot_id import TimeSlotIdHandler
 from .playbacks import PlaybacksHandler
-from .playback_status import PlaybackStatusHandler
+from .playback_statuses import PlaybackStatusesHandler
 from .creatives import CreativesHandler
 from .creative_type import CreativeTypeHandler
 from .publisher import PublisherHandler
