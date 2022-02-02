@@ -1,6 +1,7 @@
+import datetime
 from typing import Any
 
-from sqlalchemy import select, insert, delete
+from sqlalchemy import select, insert, delete, update
 from sqlalchemy.orm import Session
 from logging import Logger
 import root
@@ -153,6 +154,56 @@ class MS:
                 row.Playback.processed_at,
             ) for row in rows
         ]
+
+    def allocate_pending_playbacks(self) -> list['dc.AdTask']:
+        rows: list['models.Playback'] = self.session.execute(
+            select(
+                models.Playback,
+                models.Creative,
+                models.TimeSlot,
+                models.AdSpotType
+            ).select_from(
+                models.Playback
+            ).join(
+                models.Creative,
+                models.Playback.creative_id == models.Creative.id,
+            ).join(
+                models.TimeSlot,
+                models.Playback.timeslot_id == models.TimeSlot.id,
+            ).join(
+                models.AdSpot,
+                models.Playback.adspot_id == models.AdSpot.id,
+            ).join(
+                models.AdSpotType,
+                models.AdSpot.spot_type_id == models.AdSpotType.id,
+            ).filter(
+                models.Playback.processed_at.is_(None)
+            )
+        ).all()
+        return [
+            dc.AdTask(
+                row.Playback.id,
+                row.AdSpotType.publish_url,
+                dc.AdTaskConfig(
+                    row.Creative.path,
+                    row.TimeSlot.from_time,
+                    row.TimeSlot.to_time,
+                )
+            ) for row in rows
+        ]
+
+    def mark_playback_processed(self, playback_id: int):
+        self.session.execute(
+            update(
+                models.Playback
+            ).where(
+                models.Playback.id == playback_id
+            ).values(
+                processed_at=datetime.datetime.utcnow()
+            ).execution_options(
+                synchronize_session="evaluate"
+            )
+        )
 
     def get_adspot_stats(self, id_: int) -> 'dc.AdSpotStats':
         row: models.AdSpotsStats = self.session.execute(

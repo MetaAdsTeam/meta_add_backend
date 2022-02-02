@@ -76,6 +76,13 @@ class AdTaskConfig:
 
 
 @dataclass
+class AdTask:
+    playback_id: int
+    api_url: str
+    config: 'AdTaskConfig'
+
+
+@dataclass
 class TimeSlot:
     id: int
     from_time: int
