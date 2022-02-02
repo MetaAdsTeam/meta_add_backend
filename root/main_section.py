@@ -254,3 +254,18 @@ class MS:
                 row.Playback.play_price,
             ) for row in rows
         ]
+
+    def add_timeslot(self, timeslot):
+        self.session.add(timeslot)
+        self.session.commit()
+        return timeslot.id
+
+    def add_playback_timeslot(self, timeslot, playback):
+        self.session.add(timeslot)
+        self.session.flush()
+        if timeslot.id:
+            playback.timeslot_id = timeslot.id
+            self.session.add(playback)
+            self.session.commit()
+        else:
+            self.session.rollback()

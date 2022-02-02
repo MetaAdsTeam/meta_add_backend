@@ -15,3 +15,13 @@ class TimeSlotsHandler(BaseHandler):
                 {'data': [asdict(w) for k, w in enumerate(self.ms.get_timeslots())]}
             )
         )
+
+    async def post(self):
+        # print(self.json_args)
+        try:
+            timeslot = models.TimeSlot(**self.json_args)
+        except TypeError as e:
+            await self.send_failed(str(e))
+        else:
+            self.ms.add_timeslot(timeslot)
+            await self.send_ok()

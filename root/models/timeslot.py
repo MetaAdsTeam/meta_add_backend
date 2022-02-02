@@ -19,4 +19,4 @@ class TimeSlot(models.Base):
     ):
         self.from_time = from_time
         self.to_time = to_time
-        self.locked = locked
+        self.locked = locked if isinstance(locked, bool) else locked.lower() != 'false'

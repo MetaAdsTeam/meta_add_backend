@@ -14,6 +14,7 @@ class UrlName(Enum):
     TIMESLOTS = 'timeslots'
     TIMESLOT_ID = 'timeslot_id'
     PLAYBACKS = 'playbacks'
+    ADD_PLAYBACK = 'add_playback'
     PLAYBACK_STATUS = 'playback_status'
     CREATIVES = 'creatives'
     CREATIVE_TYPES = 'creative_types'
