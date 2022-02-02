@@ -56,6 +56,7 @@ class Playback:
     locked: bool
     adspot_type_name: str
     publish_url: str
+    processed_at: datetime
 
 
 @dataclass

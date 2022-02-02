@@ -150,6 +150,7 @@ class MS:
                 row.TimeSlot.locked,
                 row.AdSpotType.name,
                 row.AdSpotType.publish_url,
+                row.Playback.processed_at,
             ) for row in rows
         ]
 
