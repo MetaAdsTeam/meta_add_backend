@@ -189,10 +189,11 @@ class MS:
                 models.AdSpotsStats.id == id_,
             )
         ).first()
-        return row and dc.Timeslot(
+        return row and dc.TimeSlot(
             row.TimeSlot.id,
             row.TimeSlot.from_time,
             row.TimeSlot.to_time,
+            row.TimeSlot.locked,
             row.Playback.play_price,
         )
 
@@ -230,5 +231,25 @@ class MS:
                 row.AdSpotType.id,
                 row.AdSpotType.name,
                 row.AdSpotType.publish_url,
+            ) for row in rows
+        ]
+
+    def get_timeslots(self) -> list['dc.TimeSlot']:
+        rows: list['models.TimeSlot'] = self.session.execute(
+            select(
+                models.TimeSlot,
+                models.Playback,
+            ).join(
+                models.Playback,
+                models.Playback.timeslot_id == models.TimeSlot.id,
+            )
+        ).all()
+        return [
+            dc.TimeSlot(
+                row.TimeSlot.id,
+                row.TimeSlot.from_time,
+                row.TimeSlot.to_time,
+                row.TimeSlot.locked,
+                row.Playback.play_price,
             ) for row in rows
         ]

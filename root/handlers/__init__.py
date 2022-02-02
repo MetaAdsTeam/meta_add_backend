@@ -3,7 +3,7 @@ from .main import MainHandler
 from .adspots import AdSpotsHandler
 from .adspot_id import AdSpotIdHandler
 from .adspot_types import AdSpotTypesHandler
-from .timeslot import TimeSlotHandler
+from .timeslot import TimeSlotsHandler
 from .timeslot_id import TimeSlotIdHandler
 from .playbacks import PlaybacksHandler
 from .playback_statuses import PlaybackStatusesHandler

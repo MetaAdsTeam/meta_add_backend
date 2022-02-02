@@ -75,21 +75,30 @@ class AdTaskConfig:
 
 
 @dataclass
-class Timeslot:
-    id: str
+class TimeSlot:
+    id: int
     from_time: int
     to_time: int
+    locked: bool
     price: float
 
 
 @dataclass
 class PlaybackStatuses:
-    id: str
+    id: int
     name: str
 
 
 @dataclass
 class AdSpotTypes:
-    id: str
+    id: int
     name: str
     publish_url: str
+
+
+# @dataclass
+# class TimeSlots:
+#     id: int
+#     from_time: int
+#     to_time: int
+#     locked: bool

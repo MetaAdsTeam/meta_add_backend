@@ -1,13 +1,17 @@
 import json
-from datetime import date
+from dataclasses import asdict
 
-from root import enums
+from root import models
 from root.handlers import BaseHandler
 
 
-class TimeSlotHandler(BaseHandler):
+class TimeSlotsHandler(BaseHandler):
     def set_default_headers(self):
         self.set_header("Content-Type", 'application/json')
 
     def get(self):
-        pass
+        self.write(
+            json.dumps(
+                {'data': [asdict(w) for k, w in enumerate(self.ms.get_timeslots())]}
+            )
+        )
