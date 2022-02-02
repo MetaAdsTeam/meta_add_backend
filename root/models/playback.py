@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, Boolean, Float
+from sqlalchemy import Column, Integer, String, ForeignKey, Boolean, Float, DateTime
 
 from root import models
 
@@ -13,6 +13,7 @@ class Playback(models.Base):
     status_id = Column(Integer, ForeignKey('playback_statuses.id'))
     smart_contract = Column(String)
     play_price = Column(Float)
+    processed_at = Column(DateTime)
 
     def __init__(
             self,
@@ -22,6 +23,7 @@ class Playback(models.Base):
             status_id,
             smart_contract,
             play_price,
+            processed_at,
     ):
         self.adspot_id = adspot_id
         self.timeslot_id = timeslot_id
@@ -29,3 +31,4 @@ class Playback(models.Base):
         self.status_id = status_id
         self.smart_contract = smart_contract
         self.play_price = play_price
+        self.processed_at = processed_at
