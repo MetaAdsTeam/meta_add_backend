@@ -71,7 +71,7 @@ class AdSpotStats:
 @dataclass
 class AdTaskConfig:
     name: str
-    start_date: datetime.datetime
+    from_date: datetime.datetime
     end_date: datetime.datetime
 
 
