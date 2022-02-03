@@ -25,10 +25,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/AdSpot"
-                  }
+                  "$ref": "#/components/schemas/inline_response_200"
                 }
               }
             }
@@ -123,10 +120,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/AdSpotTypes"
-                  }
+                  "$ref": "#/components/schemas/inline_response_200_1"
                 }
               }
             }
@@ -147,10 +141,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/TimeSlot"
-                  }
+                  "$ref": "#/components/schemas/inline_response_200_2"
                 }
               }
             }
@@ -208,10 +199,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Playback"
-                  }
+                  "$ref": "#/components/schemas/inline_response_200_3"
                 }
               }
             }
@@ -373,10 +361,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Creative"
-                  }
+                  "$ref": "#/components/schemas/inline_response_200_4"
                 }
               }
             }
@@ -597,6 +582,61 @@
           },
           "publish_url": {
             "type": "string"
+          }
+        }
+      },
+      "inline_response_200": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AdSpot"
+            }
+          }
+        }
+      },
+      "inline_response_200_1": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AdSpotTypes"
+            }
+          }
+        }
+      },
+      "inline_response_200_2": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TimeSlot"
+            }
+          }
+        }
+      },
+      "inline_response_200_3": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Playback"
+            }
+          }
+        }
+      },
+      "inline_response_200_4": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Creative"
+            }
           }
         }
       }
