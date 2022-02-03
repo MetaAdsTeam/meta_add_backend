@@ -1,3 +1,5 @@
+import sys
+from contextlib import suppress
 from datetime import datetime, date
 import pickle
 from typing import Optional, Awaitable, Any
@@ -8,11 +10,14 @@ from tornado.template import Loader
 from tornado.web import RequestHandler
 from tornado.escape import json_decode
 from tornado.concurrent import Future
+import jwt
 
 from root import Context
 import root.db_controller as db_controller
 import root.main_section as main_section
+import root.data_classes as dc
 import root.utils as utils
+import root.exceptions as exceptions
 from root.log_lib import get_logger
 
 
@@ -30,6 +35,10 @@ class BaseHandler(RequestHandler):
     def data_received(self, chunk: bytes) -> Optional[Awaitable[None]]:
         pass
 
+    @property
+    def logger(self):
+        return self.settings['logger']
+
     def prepare(self):
         self._prepare_json_args()
         self.context = self.settings['context']
@@ -40,6 +49,26 @@ class BaseHandler(RequestHandler):
             self.remote_ip,
             self.request.uri.removeprefix('/api'),
         )
+
+    def get_current_user(self) -> 'dc.UserWeb':
+        auth: str = self.request.headers.get('Authorization')
+        if auth:
+            token = auth.removeprefix('Bearer ')
+            with suppress(Exception):
+                user_dict = jwt.decode(
+                    token,
+                    self.context.api_secret,
+                    algorithms=[self.context.jwt_algorithm]
+                )
+                user = dc.UserWeb.init_from_dict(user_dict)
+
+                if datetime.fromisoformat(user.session_exp) < datetime.utcnow():
+                    raise exceptions.UnauthorizedError(
+                        'Your session has expired'
+                    )
+                return user
+
+        raise exceptions.UnauthorizedError()
 
     def _prepare_json_args(self):
         content_type = self.request.headers.get('Content-Type', '')
@@ -80,6 +109,38 @@ class BaseHandler(RequestHandler):
         return self.request.headers.get("X-Real-Ip") or \
                self.request.headers.get("X-Forwarded-For") or \
                self.request.remote_ip
+
+    def write_error(self, status_code: int, **kwargs):
+        reason: Optional[str] = kwargs.get('reason', None)
+        error_type: Optional[str] = None
+        if 'exc_info' in kwargs:
+            _, err, _ = kwargs['exc_info']
+            if isinstance(err, exceptions.APIError):
+                self.set_status(err.code)
+                status_code = err.code
+                reason = err.message
+                if hasattr(err, 'error_type'):
+                    error_type = err.error_type
+        if reason is None:
+            if self._reason:
+                reason = self._reason
+            else:
+                reason = f'Web server error {status_code}.'
+
+        if status_code == 500:
+            status_code = 400
+            self.set_status(400)
+            if sys.exc_info()[0] == KeyError:
+                reason = f'Argument `{sys.exc_info()[1].args[0]}` is required but not specified.'
+            else:
+                reason = repr(sys.exc_info()[1])
+
+        self.logger.warning(f'Handler error! Status: {status_code}, reason: {reason}')
+        self.set_header('Content-Type', 'application/json')
+        if error_type:
+            self.finish(escape.json_encode({'msg': reason, 'type': error_type}))
+        else:
+            self.finish(escape.json_encode({'msg': reason}))
 
     async def send_no_data(self):
         await self.send_json({'msg': 'No data'}, 404)

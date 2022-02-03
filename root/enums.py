@@ -5,6 +5,7 @@ class UrlName(Enum):
     """
     Project URLs names
     """
+    LOGIN = "login"
     MAIN = "main"
     ADPLACES = 'adplaces'
     ADSPOT_TYPES = 'adspot_types'

@@ -10,7 +10,7 @@ from .playback_statuses import PlaybackStatusesHandler
 from .creatives import CreativesHandler
 from .creative_type import CreativeTypeHandler
 from .publisher import PublisherHandler
-from .advertiser import AdvertiserHandler
+from .advertiser import AdvertiserHandler, LoginHandler
 from .adspot_stats_id import AdSpotStatsIdHandler
 from .timeslots_by_adspot_id import TimeslotsByAdspotId
 from .add_playback import AddPlaybackHandler

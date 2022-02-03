@@ -16,6 +16,8 @@ def all_handlers():
     return [
         # tornado.web.url(fr"{root.context.uri_prefix}/",
         #                 MainHandler, name=enums.UrlName.MAIN.value),
+        tornado.web.url(fr"{root.context.uri_prefix}/login",
+                        LoginHandler, name=enums.UrlName.LOGIN.value),
         tornado.web.url(fr"{root.context.uri_prefix}/adspots",
                         AdSpotsHandler, name=enums.UrlName.ADSPOTS.value),
         tornado.web.url(fr"{root.context.uri_prefix}/adspot/id/([0-9]+)",
@@ -91,6 +93,7 @@ def start(port: int = 5000):
         # 'executor': root.context.executor,
         'log_function': log_function,
         'context': root.context,
+        'logger': logger,
     })
 
     # Base SIG handlers

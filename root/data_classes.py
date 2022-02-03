@@ -1,9 +1,11 @@
 import datetime
 from dataclasses import dataclass, field
 
+from deeply import Deeply
+
 
 @dataclass
-class DBConfig:
+class DBConfig(Deeply):
     server: str
     port: int
     name: str
@@ -19,7 +21,7 @@ class DBConfig:
 
 
 @dataclass
-class AdSpot:
+class AdSpot(Deeply):
     id: int
     name: str
     description: str
@@ -30,7 +32,7 @@ class AdSpot:
 
 
 @dataclass
-class Creative:
+class Creative(Deeply):
     id: int
     type: str
     nft_ref: str
@@ -39,7 +41,7 @@ class Creative:
 
 
 @dataclass
-class Playback:
+class Playback(Deeply):
     id: int
     adspot_name: str
     from_time: int
@@ -60,7 +62,7 @@ class Playback:
 
 
 @dataclass
-class AdSpotStats:
+class AdSpotStats(Deeply):
     id: int
     likes: int
     views_amount: int
@@ -69,21 +71,21 @@ class AdSpotStats:
 
 
 @dataclass
-class AdTaskConfig:
+class AdTaskConfig(Deeply):
     name: str
     start_date: datetime.datetime
     end_date: datetime.datetime
 
 
 @dataclass
-class AdTask:
+class AdTask(Deeply):
     playback_id: int
     api_url: str
     config: 'AdTaskConfig'
 
 
 @dataclass
-class TimeSlot:
+class TimeSlot(Deeply):
     id: int
     from_time: int
     to_time: int
@@ -92,13 +94,13 @@ class TimeSlot:
 
 
 @dataclass
-class PlaybackStatuses:
+class PlaybackStatuses(Deeply):
     id: int
     name: str
 
 
 @dataclass
-class AdSpotTypes:
+class AdSpotTypes(Deeply):
     id: int
     name: str
     publish_url: str
@@ -110,3 +112,12 @@ class AdSpotTypes:
 #     from_time: int
 #     to_time: int
 #     locked: bool
+
+
+@dataclass
+class UserWeb(Deeply):
+    id: int
+    login: str
+    name: str
+    wallet_ref: str
+    session_exp: str

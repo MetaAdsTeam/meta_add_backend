@@ -6,12 +6,13 @@ from sqlalchemy.orm import Session
 from logging import Logger
 import root
 import root.log_lib as log_lib
+import root.exceptions as exceptions
 import root.models as models
 import root.data_classes as dc
 
 
 class MS:
-    __logger: 'log_lib' = None
+    __logger: 'log_lib.Logger' = None
 
     def __init__(self, session_: Session, context_: 'root.Context' = None):
         self.session = session_
@@ -320,3 +321,23 @@ class MS:
             self.session.commit()
         else:
             self.session.rollback()
+
+    def authorize(self, login: str, password: str) -> 'dc.UserWeb':
+        advertiser = self.session.query(
+            models.Advertiser
+        ).filter(
+            models.Advertiser.login == login
+        ).first()
+        if not advertiser or advertiser.password != password:
+            raise exceptions.UnauthorizedError(
+                'Invalid username/password combination'
+            )
+        session_till = datetime.datetime.utcnow() + datetime.timedelta(
+            hours=self.context.user_session_timeout)
+        return dc.UserWeb(
+            advertiser.id,
+            advertiser.login,
+            advertiser.name,
+            advertiser.wallet_ref,
+            session_till.isoformat()
+        )

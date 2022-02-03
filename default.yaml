@@ -1,3 +1,6 @@
+api_secret: '' # Should be
+jwt_algorithm: 'HS256'
+user_session_timeout: 168
 debug_mode: False
 
 uri_prefix: ''
