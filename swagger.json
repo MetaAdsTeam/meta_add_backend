@@ -1,0 +1,605 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "MetaAds front",
+    "description": "Meta ads front-end API",
+    "version": "1.0"
+  },
+  "servers": [
+    {
+      "url": "https://metaads.team/tornado",
+      "description": "MetaAds API"
+    }
+  ],
+  "paths": {
+    "/adspots": {
+      "get": {
+        "tags": [
+          "developers"
+        ],
+        "summary": "get all adspots",
+        "description": "Get all AdSpot joined with AdSpotType\n",
+        "responses": {
+          "200": {
+            "description": "list of AdSpot joined with AdSpotType",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AdSpot"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/adspot/id/{id}": {
+      "get": {
+        "tags": [
+          "developers"
+        ],
+        "summary": "get adspot",
+        "description": "Get by{id} AdSpot joined with AdSpotType",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Numeric ID of the AdSpot to get",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "get AdSpot by{id}",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AdSpot"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/adspot_stats/id/{id}": {
+      "get": {
+        "tags": [
+          "developers"
+        ],
+        "summary": "get AdSpotStats",
+        "description": "Get AdSpotStats by {id}",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Numeric ID of the AdSpotStats to get",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "list of AdSpotStats",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AdSpotStats"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/adspot_types": {
+      "get": {
+        "tags": [
+          "developers"
+        ],
+        "summary": "get all AdSpotType's",
+        "description": "Get all AdSpotType's",
+        "responses": {
+          "200": {
+            "description": "list of available AdSpotType's",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AdSpotTypes"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/timeslots": {
+      "get": {
+        "tags": [
+          "developers"
+        ],
+        "summary": "get all TimeSlot's",
+        "description": "Get all TimeSlot's",
+        "responses": {
+          "200": {
+            "description": "list of available TimeSlot's",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TimeSlot"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/timeslots_by_adspot/id/{id}": {
+      "get": {
+        "tags": [
+          "developers"
+        ],
+        "summary": "get TimeSlot",
+        "description": "Get TimeSlot by {id}",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Numeric ID of the TimeSlot to get",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "list of TimeSlot",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TimeSlot"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/playbacks": {
+      "get": {
+        "tags": [
+          "developers"
+        ],
+        "summary": "get all Playback's",
+        "description": "Get all Playback's joined by Creative, Advertiser, TimeSlot, AdSpot\n",
+        "responses": {
+          "200": {
+            "description": "list of Playback's'",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Playback"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "developers"
+        ],
+        "summary": "add new Playback",
+        "description": "Add Playback",
+        "requestBody": {
+          "description": "Playback item to add",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Playback"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "item created"
+          },
+          "400": {
+            "description": "invalid input, object invalid"
+          }
+        }
+      }
+    },
+    "/add_playback": {
+      "post": {
+        "tags": [
+          "developers"
+        ],
+        "summary": "add new Playback with Timeslot data in one request",
+        "description": "Add Playback with Timeslot",
+        "parameters": [
+          {
+            "name": "from_time",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "to_time",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "locked",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "adspot_id",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "timeslot_id",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "creative_id",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "status_id",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "smart_contract",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "play_price",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "processed_at",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "item created"
+          }
+        }
+      }
+    },
+    "/creatives": {
+      "get": {
+        "tags": [
+          "developers"
+        ],
+        "summary": "get all Creatives",
+        "description": "Get all Creatives",
+        "responses": {
+          "200": {
+            "description": "list of available Creatives",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Creative"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "developers"
+        ],
+        "summary": "add new Creative",
+        "description": "Add Creative",
+        "requestBody": {
+          "description": "Creative item to add",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Creative"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "item created"
+          },
+          "400": {
+            "description": "invalid input, object invalid"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AdSpot": {
+        "required": [
+          "id",
+          "name",
+          "price",
+          "publisher_id",
+          "spot_type"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1
+          },
+          "name": {
+            "type": "string",
+            "example": "TV Adspot"
+          },
+          "description": {
+            "type": "string",
+            "example": ""
+          },
+          "publisher_id": {
+            "type": "integer",
+            "example": 1
+          },
+          "spot_type": {
+            "type": "integer",
+            "example": 1
+          },
+          "price": {
+            "type": "integer",
+            "example": 1
+          },
+          "spot_metadata": {
+            "type": "string"
+          }
+        }
+      },
+      "Creative": {
+        "required": [
+          "id"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1
+          },
+          "type": {
+            "type": "string"
+          },
+          "nft_ref": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "Playback": {
+        "required": [
+          "id"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1
+          },
+          "adspot_name": {
+            "type": "string"
+          },
+          "from_time": {
+            "type": "integer"
+          },
+          "to_time": {
+            "type": "integer"
+          },
+          "advert_id": {
+            "type": "integer"
+          },
+          "creative_name": {
+            "type": "string"
+          },
+          "creative_description": {
+            "type": "string"
+          },
+          "creative_url": {
+            "type": "string"
+          },
+          "creative_path": {
+            "type": "string"
+          },
+          "status_name": {
+            "type": "string"
+          },
+          "smart_contract": {
+            "type": "string"
+          },
+          "spot_price": {
+            "type": "integer"
+          },
+          "play_price": {
+            "type": "number",
+            "format": "float"
+          },
+          "locked": {
+            "type": "boolean"
+          },
+          "adspot_type_name": {
+            "type": "string"
+          },
+          "publish_url": {
+            "type": "string"
+          },
+          "processed_at": {
+            "type": "string"
+          }
+        }
+      },
+      "AdSpotStats": {
+        "required": [
+          "id"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "likes": {
+            "type": "integer"
+          },
+          "views_amount": {
+            "type": "integer"
+          },
+          "average_time": {
+            "type": "integer"
+          },
+          "max_traffic": {
+            "type": "integer"
+          }
+        }
+      },
+      "TimeSlot": {
+        "required": [
+          "id"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "from_time": {
+            "type": "integer"
+          },
+          "to_time": {
+            "type": "integer"
+          },
+          "locked": {
+            "type": "boolean"
+          },
+          "price": {
+            "type": "number",
+            "format": "float"
+          }
+        }
+      },
+      "AdSpotTypes": {
+        "required": [
+          "id"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "publish_url": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

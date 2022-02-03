@@ -21,7 +21,6 @@ class CreativesHandler(BaseHandler):
         )
 
     async def post(self):
-        # print(self.json_args)
         try:
             creative = models.Creative(**self.json_args)
         except TypeError as e:

@@ -106,14 +106,6 @@ class AdSpotTypes(Deeply):
     publish_url: str
 
 
-# @dataclass
-# class TimeSlots:
-#     id: int
-#     from_time: int
-#     to_time: int
-#     locked: bool
-
-
 @dataclass
 class UserWeb(Deeply):
     id: int
