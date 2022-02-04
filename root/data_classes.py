@@ -77,6 +77,7 @@ class AdTaskConfig(Deeply):
         ordinal = super().to_web()
         ordinal['from_time'] = self.start_date.timestamp()
         ordinal['to_time'] = self.end_date.timestamp()
+        return ordinal
 
 
 @dataclass
