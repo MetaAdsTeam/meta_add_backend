@@ -28,6 +28,8 @@ class AdSpot(Deeply):
     publisher_name: str
     spot_type: str
     price: float
+    preview_url: str
+    preview_thumb_url: str
     spot_metadata: str
     likes: int
     views_amount: int
