@@ -138,7 +138,7 @@ class MS:
             q = q.filter(models.Creative.advert_id == self.user.id)
 
         row: models.Creative = self.session.execute(q).first()
-        return dc.Creative(
+        return row and dc.Creative(
             row.Creative.id,
             row.CreativeType.name,
             row.Creative.nft_ref,
@@ -259,7 +259,7 @@ class MS:
             q = q.filter(models.Advertiser.id == self.user.id)
 
         row: models.Playback = self.session.execute(q).first()
-        return dc.Playback(
+        return row and dc.Playback(
             row.Playback.id,
             row.AdSpot.name,
             row.TimeSlot.from_time,
@@ -345,7 +345,7 @@ class MS:
             row.AdSpotsStats.max_traffic,
         )
 
-    def get_timeslots_by_adspot_id(self, id_: int) -> 'dc.Timeslot':
+    def get_timeslots_by_adspot_id(self, id_: int) -> 'dc.TimeSlot':
         row: models.TimeSlot = self.session.execute(
             select(
                 models.Playback,
@@ -391,6 +391,7 @@ class MS:
         self.session.commit()
 
     def get_playback_statuses(self) -> list['dc.PlaybackStatuses']:
+        q = select(models.PlaybackStatus)
         rows: list[models.PlaybackStatus] = self.session.execute(q).all()
         return [
             dc.PlaybackStatuses(
