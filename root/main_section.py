@@ -320,7 +320,7 @@ class MS:
         ).all()
 
         def get_call_time(task_row):
-            if task_row.taken_at is None:
+            if task_row.Playback.taken_at is None:
                 return task_row.TimeSlot.from_time - datetime.timedelta(
                     seconds=task_row.AdSpotType.delay_before_publish)
             return task_row.TimeSlot.to_time
@@ -328,7 +328,7 @@ class MS:
         tasks: list['dc.AdTask'] = []
         expires_dt_by_ap: dict[int, datetime.datetime] = {}
         for row in sorted(rows, key=get_call_time):
-            primarily = row.taken_at is None
+            primarily = row.Playback.taken_at is None
             call_at = get_call_time(row)
             if primarily:
                 api_url = row.AdSpotType.publish_url
