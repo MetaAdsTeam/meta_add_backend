@@ -287,6 +287,7 @@ class MS:
             select(
                 models.Playback.id,
                 models.Playback.taken_at,
+                models.Playback.adspot_id,
                 models.Creative.path,
                 models.TimeSlot.from_time,
                 models.TimeSlot.to_time,
@@ -321,36 +322,36 @@ class MS:
         ).all()
 
         def get_call_time(task_row):
-            if task_row.Playback.taken_at is None:
-                return task_row.TimeSlot.from_time - datetime.timedelta(
-                    seconds=task_row.AdSpotType.delay_before_publish)
-            return task_row.TimeSlot.to_time
+            if task_row.taken_at is None:
+                return task_row.from_time - datetime.timedelta(
+                    seconds=task_row.delay_before_publish)
+            return task_row.to_time
 
         tasks: list['dc.AdTask'] = []
         expires_dt_by_ap: dict[int, datetime.datetime] = {}
         for row in sorted(rows, key=get_call_time):
-            primarily = row.Playback.taken_at is None
+            primarily = row.taken_at is None
             call_at = get_call_time(row)
             if primarily:
-                api_url = row.AdSpotType.publish_url
-                expires_dt_by_ap[row.AdSpot.id] = row.TimeSlot.to_time
+                api_url = row.publish_url
+                expires_dt_by_ap[row.adspot_id] = row.to_time
             else:
-                api_url = row.AdSpotType.stop_url
-                if ex_dt := expires_dt_by_ap.get(row.AdSpot.id):
+                api_url = row.stop_url
+                if ex_dt := expires_dt_by_ap.get(row.adspot_id):
                     # filter simultaneous requests
                     if ex_dt > call_at:
                         continue
             tasks.append(
                 dc.AdTask(
-                    row.Playback.id,
-                    models.AdSpot.id,
+                    row.id,
+                    row.adspot_id,
                     api_url,
                     call_at,
                     primarily,
                     dc.AdTaskConfig(
-                        row.Creative.path,
-                        row.TimeSlot.from_time,
-                        row.TimeSlot.to_time,
+                        row.path,
+                        row.from_time,
+                        row.to_time,
                     )
                 )
             )
