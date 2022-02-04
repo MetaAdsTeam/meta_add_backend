@@ -286,6 +286,7 @@ class MS:
         rows: list['models.Playback'] = self.session.execute(
             select(
                 models.Playback.id,
+                models.Playback.taken_at,
                 models.Creative.path,
                 models.TimeSlot.from_time,
                 models.TimeSlot.to_time,
