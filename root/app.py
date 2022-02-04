@@ -32,6 +32,8 @@ def all_handlers():
         #                 TimeSlotIdHandler, name=enums.UrlName.TIMESLOT_ID.value),
         tornado.web.url(fr"{root.context.uri_prefix}/playbacks",
                         PlaybacksHandler, name=enums.UrlName.PLAYBACKS.value),
+        tornado.web.url(fr"{root.context.uri_prefix}/playback/id/([0-9]+)",
+                        PlaybackHandler, name=enums.UrlName.PLAYBACK.value),
         tornado.web.url(fr"{root.context.uri_prefix}/add_playback",
                         AddPlaybackHandler, name=enums.UrlName.ADD_PLAYBACK.value),
         # tornado.web.url(fr"{root.context.uri_prefix}/playback_status",
