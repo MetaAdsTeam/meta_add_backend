@@ -399,11 +399,7 @@
     "schemas": {
       "AdSpot": {
         "required": [
-          "id",
-          "name",
-          "price",
-          "publisher_id",
-          "spot_type"
+          "id"
         ],
         "type": "object",
         "properties": {
@@ -419,9 +415,9 @@
             "type": "string",
             "example": ""
           },
-          "publisher_id": {
-            "type": "integer",
-            "example": 1
+          "publisher_name": {
+            "type": "string",
+            "example": "Nmae"
           },
           "spot_type": {
             "type": "integer",
@@ -431,8 +427,30 @@
             "type": "integer",
             "example": 1
           },
+          "preview_url": {
+            "type": "string"
+          },
+          "preview_thumb_url": {
+            "type": "string"
+          },
           "spot_metadata": {
             "type": "string"
+          },
+          "likes": {
+            "type": "integer",
+            "example": 1
+          },
+          "views_amount": {
+            "type": "integer",
+            "example": 1
+          },
+          "average_time": {
+            "type": "integer",
+            "example": 1
+          },
+          "max_traffic": {
+            "type": "integer",
+            "example": 1
           }
         }
       },
