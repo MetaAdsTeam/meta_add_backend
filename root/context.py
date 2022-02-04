@@ -26,7 +26,8 @@ class Context:
         else:
             with open(config_path, 'w+') as f:
                 yaml.dump(self.config, f, default_flow_style=False)
-        self.debug_mode: str = self.config.get('debug_mode', False)
+        self.debug_mode: bool = self.config.get('debug_mode', False)
+        self.static_path: str = self.config['static_path']
         self.uri_prefix: str = self.config.get('uri_prefix', '')
         self.api_secret: str = self.config['api_secret']
         self.jwt_algorithm: str = self.config['jwt_algorithm']

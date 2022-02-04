@@ -2,6 +2,7 @@ api_secret: '' # Should be
 jwt_algorithm: 'HS256'
 user_session_timeout: 168
 debug_mode: False
+static_path: '/home/backdev/data/'
 
 uri_prefix: ''
 

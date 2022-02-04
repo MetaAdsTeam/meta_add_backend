@@ -5,6 +5,7 @@ import pickle
 from typing import Optional, Awaitable, Any
 
 from deeply import Deeply
+import sqlalchemy.exc as sa_exc
 from sqlalchemy.orm import Session
 from tornado import escape
 from tornado.template import Loader
@@ -140,12 +141,24 @@ class BaseHandler(RequestHandler):
         if status_code == 500:
             status_code = 400
             self.set_status(400)
-            if sys.exc_info()[0] == KeyError:
-                reason = f'Argument `{sys.exc_info()[1].args[0]}` is required but not specified.'
+            exc_info = sys.exc_info()
+            if exc_info[0] == KeyError:
+                reason = f'Argument `{exc_info[1].args[0]}` is required but not specified.'
+            elif exc_info[0] == TypeError:
+                if '__init__' in exc_info[1].args[0]:
+                    reason = f'Missed arguments: {exc_info[1].args[0].split(": ")[-1]}'
+                else:
+                    reason = exc_info[1].args[0]
             else:
-                reason = repr(sys.exc_info()[1])
+                reason = repr(exc_info[1])
+                try:
+                    if isinstance(exc_info[1], sa_exc.DatabaseError):
+                        reason = exc_info[1].orig.args[0].split('\n')[0]
+                except:
+                    pass
 
         self.logger.warning(f'Handler error! Status: {status_code}, reason: {reason}')
+        reason = reason.replace('"', '`').capitalize()
         self.set_header('Content-Type', 'application/json')
         if error_type:
             self.finish(escape.json_encode({'msg': reason, 'type': error_type}))

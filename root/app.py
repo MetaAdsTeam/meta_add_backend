@@ -64,10 +64,10 @@ def stop():
 
 def make_app():
     app_settings = {
-        # 'static_path': root.context.static_path,
+        'static_path': root.context.static_path,
         # 'template_path': root.context.templates_path,
         # 'cookie_secret': root.context.api_secret,
-        # 'debug': root.context.debug_mode,
+        'debug': root.context.debug_mode,
         # 'login_url': "/login",
     }
     return tornado.web.Application(all_handlers(), **app_settings)

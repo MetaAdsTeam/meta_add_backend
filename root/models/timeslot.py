@@ -1,4 +1,6 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, Boolean
+from datetime import datetime
+
+from sqlalchemy import Column, Integer, DateTime, ForeignKey, Boolean
 
 from root import models
 
@@ -7,16 +9,16 @@ class TimeSlot(models.Base):
     __tablename__ = 'timeslots'
 
     id = Column(Integer, primary_key=True, nullable=False, autoincrement=True)
-    from_time = Column(Integer, nullable=False)
-    to_time = Column(Integer, nullable=False)
+    from_time = Column(DateTime, nullable=False)
+    to_time = Column(DateTime, nullable=False)
     locked = Column(Boolean, nullable=False)
 
     def __init__(
             self,
-            from_time,
-            to_time,
-            locked,
+            from_time: int,
+            to_time: int,
+            locked: bool,
     ):
-        self.from_time = from_time
-        self.to_time = to_time
-        self.locked = locked if isinstance(locked, bool) else locked.lower() != 'false'
+        self.from_time = datetime.fromtimestamp(from_time)
+        self.to_time = datetime.fromtimestamp(to_time)
+        self.locked = locked

@@ -202,8 +202,8 @@ class MS:
             dc.Playback(
                 row.Playback.id,
                 row.AdSpot.name,
-                row.TimeSlot.from_time,
-                row.TimeSlot.to_time,
+                row.TimeSlot.from_time.timestamp(),
+                row.TimeSlot.to_time.timestamp(),
                 row.Creative.advert_id,
                 row.Creative.name,
                 row.Creative.description,
@@ -262,8 +262,8 @@ class MS:
         return row and dc.Playback(
             row.Playback.id,
             row.AdSpot.name,
-            row.TimeSlot.from_time,
-            row.TimeSlot.to_time,
+            row.TimeSlot.from_time.timestamp(),
+            row.TimeSlot.to_time.timestamp(),
             row.Creative.advert_id,
             row.Creative.name,
             row.Creative.description,
@@ -310,8 +310,8 @@ class MS:
                 row.AdSpotType.publish_url,
                 dc.AdTaskConfig(
                     row.Creative.path,
-                    row.TimeSlot.from_time,
-                    row.TimeSlot.to_time,
+                    row.TimeSlot.from_time.timestamp(),
+                    row.TimeSlot.to_time.timestamp(),
                 )
             ) for row in rows
         ]
@@ -367,8 +367,8 @@ class MS:
         ).first()
         return row and dc.TimeSlot(
             row.TimeSlot.id,
-            row.TimeSlot.from_time,
-            row.TimeSlot.to_time,
+            row.TimeSlot.from_time.timestamp(),
+            row.TimeSlot.to_time.timestamp(),
             row.TimeSlot.locked,
             row.Playback.play_price,  # TODO: recheck
         )
@@ -427,8 +427,8 @@ class MS:
         return [
             dc.TimeSlot(
                 row.TimeSlot.id,
-                row.TimeSlot.from_time,
-                row.TimeSlot.to_time,
+                row.TimeSlot.from_time.timestamp(),
+                row.TimeSlot.to_time.timestamp(),
                 row.TimeSlot.locked,
                 row.Playback.play_price,
             ) for row in rows
