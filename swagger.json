@@ -196,7 +196,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/TimeSlot"
+                  "$ref": "#/components/schemas/inline_response_200_2"
                 }
               }
             }
