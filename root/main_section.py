@@ -311,7 +311,7 @@ class MS:
                         models.TimeSlot.from_time.between(from_dt, to_dt)
                     ),
                     sa.and_(
-                        models.Playback.taken_at.isnot_(None),
+                        models.Playback.taken_at.isnot(None),
                         models.Playback.processed_at.is_(None),
                         models.TimeSlot.to_time.between(from_dt, to_dt)
                     )
