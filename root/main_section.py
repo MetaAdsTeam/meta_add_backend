@@ -425,14 +425,24 @@ class MS:
 
     def delete_playback(self, id_):
         _id = int(id_)
-        q = delete(models.Playback).where(models.Playback.id == _id)
         if self.user:
             user_sub_q = select(
                 models.Creative.id
             ).filter(
                 models.Creative.advert_id == self.user.id
             ).subquery()
-            q = q.filter(models.Playback.creative_id.in_(user_sub_q))
+            q = delete(
+                models.Playback
+            ).filter(
+                models.Playback.creative_id.in_(user_sub_q),
+                models.Playback.id == _id,
+            )
+        else:
+            q = delete(
+                models.Playback
+            ).filter(
+                models.Playback.id == _id,
+            )
         self.session.execute(q)
         self.session.commit()
 

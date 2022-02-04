@@ -38,6 +38,15 @@ class AdSpot(Deeply):
 
 
 @dataclass
+class AdSpotStats(Deeply):
+    id: int
+    likes: int
+    views_amount: int
+    average_time: int
+    max_traffic: int
+
+
+@dataclass
 class Creative(Deeply):
     id: int
     type: str
