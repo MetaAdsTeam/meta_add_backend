@@ -1,7 +1,7 @@
 import datetime
 from typing import Any, Optional
 
-from sqlalchemy import select, insert, delete, update
+from sqlalchemy import select, delete, update
 from sqlalchemy.orm import Session
 from logging import Logger
 import root
@@ -102,15 +102,17 @@ class MS:
         )
 
     def get_creatives(self) -> list['dc.Creative']:
-        rows: list['models.Creative'] = self.session.execute(
-            select(
-                models.Creative,
-                models.CreativeType,
-            ).join(
-                models.CreativeType,
-                models.Creative.creative_type_id == models.CreativeType.id,
-            )
-        ).all()
+        q = select(
+            models.Creative,
+            models.CreativeType,
+        ).join(
+            models.CreativeType,
+            models.Creative.creative_type_id == models.CreativeType.id,
+        )
+        if self.user:
+            q = q.filter(models.Creative.advert_id == self.user.id)
+
+        rows: list['models.Creative'] = self.session.execute(q).all()
         return [
             dc.Creative(
                 row.Creative.id,
@@ -127,45 +129,52 @@ class MS:
 
     def delete_creative(self, id_):
         _id = int(id_)
-        self.session.execute(
-            delete(models.Creative).where(models.Creative.id == _id)
+        q = delete(
+            models.Creative
+        ).filter(
+            models.Creative.id == _id
         )
+        if self.user:
+            q = q.filter(models.Creative.advert_id == self.user.id)
+        self.session.execute(q)
         self.session.commit()
 
     def get_playbacks(self) -> list['dc.Playback']:
-        rows: list['models.Playback'] = self.session.execute(
-            select(
-                models.Playback,
-                models.Creative,
-                models.CreativeType,
-                models.Advertiser,
-                models.TimeSlot,
-                models.PlaybackStatus,
-                models.AdSpot,
-                models.AdSpotType
-            ).join(
-                models.Creative,
-                models.Playback.creative_id == models.Creative.id,
-            ).join(
-                models.CreativeType,
-                models.Creative.creative_type_id == models.CreativeType.id,
-            ).join(
-                models.Advertiser,
-                models.Creative.advert_id == models.Advertiser.id,
-            ).join(
-                models.TimeSlot,
-                models.Playback.timeslot_id == models.TimeSlot.id,
-            ).join(
-                models.PlaybackStatus,
-                models.Playback.status_id == models.PlaybackStatus.id,
-            ).join(
-                models.AdSpot,
-                models.Playback.adspot_id == models.AdSpot.id,
-            ).join(
-                models.AdSpotType,
-                models.AdSpot.spot_type_id == models.AdSpotType.id,
-            )
-        ).all()
+        q = select(
+            models.Playback,
+            models.Creative,
+            models.CreativeType,
+            models.Advertiser,
+            models.TimeSlot,
+            models.PlaybackStatus,
+            models.AdSpot,
+            models.AdSpotType
+        ).join(
+            models.Creative,
+            models.Playback.creative_id == models.Creative.id,
+        ).join(
+            models.CreativeType,
+            models.Creative.creative_type_id == models.CreativeType.id,
+        ).join(
+            models.Advertiser,
+            models.Creative.advert_id == models.Advertiser.id,
+        ).join(
+            models.TimeSlot,
+            models.Playback.timeslot_id == models.TimeSlot.id,
+        ).join(
+            models.PlaybackStatus,
+            models.Playback.status_id == models.PlaybackStatus.id,
+        ).join(
+            models.AdSpot,
+            models.Playback.adspot_id == models.AdSpot.id,
+        ).join(
+            models.AdSpotType,
+            models.AdSpot.spot_type_id == models.AdSpotType.id,
+        )
+        if self.user:
+            q = q.filter(models.Advertiser.id == self.user.id)
+
+        rows: list['models.Playback'] = self.session.execute(q).all()
         return [
             dc.Playback(
                 row.Playback.id,
@@ -279,7 +288,7 @@ class MS:
             row.TimeSlot.from_time,
             row.TimeSlot.to_time,
             row.TimeSlot.locked,
-            row.Playback.play_price,
+            row.Playback.play_price,  # TODO: recheck
         )
 
     def add_playback(self, playback):
@@ -288,17 +297,19 @@ class MS:
 
     def delete_playback(self, id_):
         _id = int(id_)
-        self.session.execute(
-            delete(models.Creative).where(models.Creative.id == _id)
-        )
+        q = delete(models.Playback).where(models.Playback.id == _id)
+        if self.user:
+            user_sub_q = select(
+                models.Creative.id
+            ).filter(
+                models.Creative.advert_id == self.user.id
+            ).subquery()
+            q = q.filter(models.Playback.creative_id.in_(user_sub_q))
+        self.session.execute(q)
         self.session.commit()
 
     def get_playback_statuses(self) -> list['dc.PlaybackStatuses']:
-        rows: list[models.PlaybackStatus] = self.session.execute(
-            select(
-                models.PlaybackStatus,
-            )
-        ).all()
+        rows: list[models.PlaybackStatus] = self.session.execute(q).all()
         return [
             dc.PlaybackStatuses(
                 row.PlaybackStatus.id,
