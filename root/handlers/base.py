@@ -4,6 +4,7 @@ from datetime import datetime, date
 import pickle
 from typing import Optional, Awaitable, Any
 
+from deeply import Deeply
 from sqlalchemy.orm import Session
 from tornado import escape
 from tornado.template import Loader
@@ -39,9 +40,13 @@ class BaseHandler(RequestHandler):
     def logger(self):
         return self.settings['logger']
 
+    def check_auth(self):
+        assert self.current_user
+
     def prepare(self):
         self._prepare_json_args()
         self.context = self.settings['context']
+        self.check_auth()
 
     def _request_summary(self) -> str:
         return "%s [%s] %s " % (
@@ -54,19 +59,19 @@ class BaseHandler(RequestHandler):
         auth: str = self.request.headers.get('Authorization')
         if auth:
             token = auth.removeprefix('Bearer ')
-            with suppress(Exception):
-                user_dict = jwt.decode(
-                    token,
-                    self.context.api_secret,
-                    algorithms=[self.context.jwt_algorithm]
-                )
-                user = dc.UserWeb.init_from_dict(user_dict)
 
-                if datetime.fromisoformat(user.session_exp) < datetime.utcnow():
-                    raise exceptions.UnauthorizedError(
-                        'Your session has expired'
-                    )
-                return user
+            user_dict = jwt.decode(
+                token,
+                self.context.api_secret,
+                algorithms=[self.context.jwt_algorithm]
+            )
+            user = dc.UserWeb.init_from_dict(user_dict)
+
+            if datetime.fromisoformat(user.session_exp) < datetime.utcnow():
+                raise exceptions.UnauthorizedError(
+                    'Your session has expired'
+                )
+            return user
 
         raise exceptions.UnauthorizedError()
 
@@ -90,7 +95,7 @@ class BaseHandler(RequestHandler):
     @property
     def ms(self) -> 'main_section.MS':
         if self.__ms is None:
-            self.__ms = main_section.MS(self.session)
+            self.__ms = main_section.MS(self.session, self.context, self.current_user)
         return self.__ms
 
     @property
@@ -148,12 +153,27 @@ class BaseHandler(RequestHandler):
     async def send_ok(self, status: int = 200):
         await self.send_json({'msg': 'ok'}, status)
 
-    async def send_failed(self, msg: str = 'failed'):
-        await self.send_json({'msg': msg}, 400)
+    async def send_failed(self, msg: str = 'failed', status: int = 400):
+        await self.send_json({'msg': msg}, status)
 
     async def send_json(self, data, status: int = 200) -> None:
+        if data is None:
+            return await self.send_failed('Not found', 404)
         self.set_header('Content-Type', 'application/json')
         self.set_status(status)
         if self.__sc is not None:
             self.__sc.close()
-        await self.finish(escape.json_encode(data))
+        if isinstance(data, list):
+            data = {'data': data}
+        try:
+            body = escape.json_encode(data)
+        except TypeError:
+            data = Deeply._Deeply__deep_dict(data, Deeply.rules)  # noqa
+            body = escape.json_encode(data)
+        await self.finish(body)
+
+
+def non_authorized(cls):
+    cls.check_auth = lambda _: ...
+    cls.get_current_user = lambda _: ...
+    return cls

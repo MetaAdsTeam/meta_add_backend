@@ -1,24 +1,11 @@
-import json
-from dataclasses import asdict
-
-from deeply import Deeply
-from tornado.web import authenticated
-
-from root import enums, models
+from root import models
 from root.handlers import BaseHandler
 
 
 class CreativesHandler(BaseHandler):
-    def set_default_headers(self):
-        self.set_header("Content-Type", 'application/json')
 
-    @authenticated
     async def get(self):
-        await self.send_json(
-            {
-                'data': list(map(Deeply.to_web, self.ms.get_creatives()))
-            }
-        )
+        await self.send_json(self.ms.get_creatives())
 
     async def post(self):
         try:

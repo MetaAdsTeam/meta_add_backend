@@ -1,5 +1,5 @@
 import datetime
-from typing import Any
+from typing import Any, Optional
 
 from sqlalchemy import select, insert, delete, update
 from sqlalchemy.orm import Session
@@ -14,11 +14,14 @@ import root.data_classes as dc
 class MS:
     __logger: 'log_lib.Logger' = None
 
-    def __init__(self, session_: Session, context_: 'root.Context' = None):
+    def __init__(
+            self, session_: Session,
+            context_: Optional['root.Context'] = None,
+            user: Optional['dc.UserWeb'] = None
+    ):
         self.session = session_
-        if context_ is None:
-            context_ = root.context
-        self.context = context_
+        self.context = context_ or root.context
+        self.user = user
 
     @property
     def logger(self) -> Logger:

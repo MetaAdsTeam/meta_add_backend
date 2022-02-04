@@ -6,15 +6,8 @@ from root.handlers import BaseHandler
 
 
 class PlaybacksHandler(BaseHandler):
-    def set_default_headers(self):
-        self.set_header("Content-Type", 'application/json')
-
-    def get(self):
-        self.write(
-            json.dumps(
-                {'data': [asdict(w) for k, w in enumerate(self.ms.get_playbacks())]}
-            )
-        )
+    async def get(self):
+        await self.send_json(self.ms.get_playbacks())
 
     async def post(self):
         # print(self.json_args)

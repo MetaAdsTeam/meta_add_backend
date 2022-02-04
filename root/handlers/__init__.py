@@ -1,5 +1,4 @@
-from .base import BaseHandler
-from .main import MainHandler
+from .base import BaseHandler, non_authorized
 from .adspots import AdSpotsHandler
 from .adspot_id import AdSpotIdHandler
 from .adspot_types import AdSpotTypesHandler

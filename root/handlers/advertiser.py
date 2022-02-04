@@ -1,12 +1,9 @@
-import json
-from datetime import date
-
 import jwt
 
-from root import enums
-from root.handlers import BaseHandler
+from root.handlers import BaseHandler, non_authorized
 
 
+@non_authorized
 class LoginHandler(BaseHandler):
     async def post(self):
         user = self.ms.authorize(**self.json_args)
@@ -21,8 +18,6 @@ class LoginHandler(BaseHandler):
 
 
 class AdvertiserHandler(BaseHandler):
-    def set_default_headers(self):
-        self.set_header("Content-Type", 'application/json')
 
     def get(self):
         pass

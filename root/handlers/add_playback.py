@@ -6,8 +6,6 @@ from root.handlers import BaseHandler
 
 
 class AddPlaybackHandler(BaseHandler):
-    def set_default_headers(self):
-        self.set_header("Content-Type", 'application/json')
 
     # def get(self):
     #     self.write(
