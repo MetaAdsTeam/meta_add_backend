@@ -11,17 +11,44 @@
       "description": "MetaAds API"
     }
   ],
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
   "paths": {
-    "/adspots": {
-      "get": {
+    "/login": {
+      "post": {
         "tags": [
-          "developers"
+          "auth"
         ],
-        "summary": "get all adspots",
-        "description": "Get all AdSpot joined with AdSpotType\n",
+        "summary": "get authorise key",
+        "description": "Get authorise key",
+        "parameters": [
+          {
+            "name": "login",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "password",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
-            "description": "list of AdSpot joined with AdSpotType",
+            "description": "JWT key",
             "content": {
               "application/json": {
                 "schema": {
@@ -96,10 +123,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/AdSpotStats"
-                  }
+                  "$ref": "#/components/schemas/inline_response_200_1"
                 }
               }
             }
@@ -606,11 +630,9 @@
       "inline_response_200": {
         "type": "object",
         "properties": {
-          "data": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/AdSpot"
-            }
+          "Authorization": {
+            "type": "string",
+            "example": "\"Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwibG9naW4iOiJhZG1pbiIsIm5hbWUiOiJBZG1pbiIsIndhbGxldF9yZWYiOiJodHRwczovL2FkbWluLnJlZi8iLCJzZXNzaW9uX2V4cCI6IjIwMjItMDItMTFUMTI6MTM6MTAuNzIwNzkwIn0.9O_7nvDOR2dGaG3ShOR3p_Se\"\n"
           }
         }
       },
@@ -657,6 +679,13 @@
             }
           }
         }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
       }
     }
   }
