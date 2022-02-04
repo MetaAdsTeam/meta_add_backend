@@ -123,6 +123,29 @@ class MS:
             ) for row in rows
         ]
 
+    def get_creative(self, id_) -> 'dc.Creative':
+        _id = int(id_)
+        q = select(
+            models.Creative,
+            models.CreativeType,
+        ).join(
+            models.CreativeType,
+            models.Creative.creative_type_id == models.CreativeType.id,
+        ).where(
+            models.Creative.id == _id,
+        )
+        if self.user:
+            q = q.filter(models.Creative.advert_id == self.user.id)
+
+        row: models.Creative = self.session.execute(q).first()
+        return dc.Creative(
+            row.Creative.id,
+            row.CreativeType.name,
+            row.Creative.nft_ref,
+            row.Creative.url,
+            row.Creative.name,
+        )
+
     def add_creative(self, creative):
         self.session.add(creative)
         self.session.commit()
