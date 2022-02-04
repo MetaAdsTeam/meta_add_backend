@@ -36,6 +36,11 @@ class BaseHandler(RequestHandler):
     def data_received(self, chunk: bytes) -> Optional[Awaitable[None]]:
         pass
 
+    async def options(self, *_, **__):
+        # no body
+        self.set_status(204)
+        await self.finish()
+
     @property
     def logger(self):
         return self.settings['logger']
