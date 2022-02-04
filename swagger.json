@@ -230,7 +230,7 @@
         "tags": [
           "developers"
         ],
-        "summary": "get TimeSlot",
+        "summary": "get Playback",
         "description": "get Playback by {id}",
         "parameters": [
           {
@@ -247,7 +247,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Playback",
+            "description": "Playback added",
             "content": {
               "application/json": {
                 "schema": {
@@ -255,6 +255,31 @@
                 }
               }
             }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "developers"
+        ],
+        "summary": "delete Playback",
+        "description": "delete Playback by {id}",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "get Playback by {id}",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Playback deleted"
           }
         }
       }
@@ -394,23 +419,146 @@
             }
           }
         }
+      }
+    },
+    "/creative/id/{id}": {
+      "get": {
+        "tags": [
+          "developers"
+        ],
+        "summary": "get Creative",
+        "description": "get Creative by {id}",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "get Creative by {id}",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Creative added",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Playback"
+                }
+              }
+            }
+          }
+        }
       },
+      "delete": {
+        "tags": [
+          "developers"
+        ],
+        "summary": "delete Creative",
+        "description": "delete Creative by {id}",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "get Creative by {id}",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Creative deleted"
+          }
+        }
+      }
+    },
+    "/creative": {
       "post": {
         "tags": [
           "developers"
         ],
         "summary": "add new Creative",
         "description": "Add Creative",
-        "requestBody": {
-          "description": "Creative item to add",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Creative"
-              }
+        "parameters": [
+          {
+            "name": "advert_id",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "content_type_id",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "nft_ref",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "description",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "url",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "path",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
             }
           }
-        },
+        ],
         "responses": {
           "201": {
             "description": "item created"
@@ -563,29 +711,6 @@
           },
           "processed_at": {
             "type": "string"
-          }
-        }
-      },
-      "AdSpotStats": {
-        "required": [
-          "id"
-        ],
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "likes": {
-            "type": "integer"
-          },
-          "views_amount": {
-            "type": "integer"
-          },
-          "average_time": {
-            "type": "integer"
-          },
-          "max_traffic": {
-            "type": "integer"
           }
         }
       },
