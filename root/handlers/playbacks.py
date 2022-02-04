@@ -8,4 +8,3 @@ from root.handlers import BaseHandler
 class PlaybacksHandler(BaseHandler):
     async def get(self):
         await self.send_json(self.ms.get_playbacks())
-

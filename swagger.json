@@ -66,7 +66,7 @@
           "developers"
         ],
         "summary": "get adspot",
-        "description": "Get by{id} AdSpot joined with AdSpotType",
+        "description": "Get by {id} AdSpot joined with AdSpotType",
         "parameters": [
           {
             "name": "id",
@@ -86,10 +86,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/AdSpot"
-                  }
+                  "$ref": "#/components/schemas/AdSpot"
                 }
               }
             }
@@ -123,7 +120,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/inline_response_200_1"
+                  "$ref": "#/components/schemas/AdSpotTypes"
                 }
               }
             }
@@ -199,10 +196,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/TimeSlot"
-                  }
+                  "$ref": "#/components/schemas/TimeSlot"
                 }
               }
             }
@@ -229,34 +223,43 @@
             }
           }
         }
-      },
-      "post": {
+      }
+    },
+    "/playback/id/{id}": {
+      "get": {
         "tags": [
           "developers"
         ],
-        "summary": "add new Playback",
-        "description": "Add Playback",
-        "requestBody": {
-          "description": "Playback item to add",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Playback"
-              }
+        "summary": "get TimeSlot",
+        "description": "get Playback by {id}",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "get Playback by {id}",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer"
             }
           }
-        },
+        ],
         "responses": {
-          "201": {
-            "description": "item created"
-          },
-          "400": {
-            "description": "invalid input, object invalid"
+          "200": {
+            "description": "Playback",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Playback"
+                }
+              }
+            }
           }
         }
       }
     },
-    "/add_playback": {
+    "/playback": {
       "post": {
         "tags": [
           "developers"
@@ -632,7 +635,7 @@
         "properties": {
           "Authorization": {
             "type": "string",
-            "example": "\"Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwibG9naW4iOiJhZG1pbiIsIm5hbWUiOiJBZG1pbiIsIndhbGxldF9yZWYiOiJodHRwczovL2FkbWluLnJlZi8iLCJzZXNzaW9uX2V4cCI6IjIwMjItMDItMTFUMTI6MTM6MTAuNzIwNzkwIn0.9O_7nvDOR2dGaG3ShOR3p_Se\"\n"
+            "example": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwibG9naW4iOiJhZG1pbiIsIm5hbWUiOiJBZG1pbiIsIndhbGxldF9yZWYiOiJodHRwczovL2FkbWluLnJlZi8iLCJzZXNzaW9uX2V4cCI6IjIwMjItMDItMTFUMTI6MTM6MTAuNzIwNzkwIn0.9O_7nvDOR2dGaG3ShOR3p_Se\n"
           }
         }
       },
