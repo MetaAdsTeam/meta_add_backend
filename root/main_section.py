@@ -459,7 +459,7 @@ class MS:
     def get_adspot_types(self) -> list['dc.AdSpotTypes']:
         rows: list[models.AdSpotType] = self.session.execute(
             select(
-                models.PlaybackStatus,
+                models.AdSpotType,
             )
         ).all()
         return [
