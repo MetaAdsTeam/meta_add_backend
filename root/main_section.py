@@ -197,6 +197,65 @@ class MS:
             ) for row in rows
         ]
 
+    def get_playback(self, id_) -> 'dc.Playback':
+        _id = int(id_)
+        q = select(
+            models.Playback,
+            models.Creative,
+            models.CreativeType,
+            models.Advertiser,
+            models.TimeSlot,
+            models.PlaybackStatus,
+            models.AdSpot,
+            models.AdSpotType
+        ).join(
+            models.Creative,
+            models.Playback.creative_id == models.Creative.id,
+        ).join(
+            models.CreativeType,
+            models.Creative.creative_type_id == models.CreativeType.id,
+        ).join(
+            models.Advertiser,
+            models.Creative.advert_id == models.Advertiser.id,
+        ).join(
+            models.TimeSlot,
+            models.Playback.timeslot_id == models.TimeSlot.id,
+        ).join(
+            models.PlaybackStatus,
+            models.Playback.status_id == models.PlaybackStatus.id,
+        ).join(
+            models.AdSpot,
+            models.Playback.adspot_id == models.AdSpot.id,
+        ).join(
+            models.AdSpotType,
+            models.AdSpot.spot_type_id == models.AdSpotType.id,
+        ).where(
+            models.Playback.id == _id
+        )
+        if self.user:
+            q = q.filter(models.Advertiser.id == self.user.id)
+
+        row: models.Playback = self.session.execute(q).first()
+        return dc.Playback(
+            row.Playback.id,
+            row.AdSpot.name,
+            row.TimeSlot.from_time,
+            row.TimeSlot.to_time,
+            row.Creative.advert_id,
+            row.Creative.name,
+            row.Creative.description,
+            row.Creative.url,
+            row.Creative.path,
+            row.PlaybackStatus.name,
+            row.Playback.smart_contract,
+            row.AdSpot.price,
+            row.Playback.play_price,
+            row.TimeSlot.locked,
+            row.AdSpotType.name,
+            row.AdSpotType.publish_url,
+            row.Playback.processed_at,
+        )
+
     def allocate_pending_playbacks(self) -> list['dc.AdTask']:
         rows: list['models.Playback'] = self.session.execute(
             select(
