@@ -64,19 +64,19 @@ class BaseHandler(RequestHandler):
         auth: str = self.request.headers.get('Authorization')
         if auth:
             token = auth.removeprefix('Bearer ')
-
-            user_dict = jwt.decode(
-                token,
-                self.context.api_secret,
-                algorithms=[self.context.jwt_algorithm]
-            )
-            user = dc.UserWeb.init_from_dict(user_dict)
-
-            if datetime.fromisoformat(user.session_exp) < datetime.utcnow():
-                raise exceptions.UnauthorizedError(
-                    'Your session has expired'
+            with suppress(Exception):
+                user_dict = jwt.decode(
+                    token,
+                    self.context.api_secret,
+                    algorithms=[self.context.jwt_algorithm]
                 )
-            return user
+                user = dc.UserWeb.init_from_dict(user_dict)
+
+                if datetime.fromisoformat(user.session_exp) < datetime.utcnow():
+                    raise exceptions.UnauthorizedError(
+                        'Your session has expired'
+                    )
+                return user
 
         raise exceptions.UnauthorizedError()
 
@@ -151,6 +151,10 @@ class BaseHandler(RequestHandler):
             self.finish(escape.json_encode({'msg': reason, 'type': error_type}))
         else:
             self.finish(escape.json_encode({'msg': reason}))
+
+    def log_exception(self, typ, value, tb):
+        if not isinstance(value, exceptions.UnauthorizedError):
+            super().log_exception(typ, value, tb)
 
     async def send_no_data(self):
         await self.send_json({'msg': 'No data'}, 404)
