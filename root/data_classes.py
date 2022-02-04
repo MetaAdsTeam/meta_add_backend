@@ -25,10 +25,14 @@ class AdSpot(Deeply):
     id: int
     name: str
     description: str
-    publisher_id: int
+    publisher_name: str
     spot_type: str
     price: float
     spot_metadata: str
+    likes: int
+    views_amount: int
+    average_time: int
+    max_traffic: int
 
 
 @dataclass
@@ -59,15 +63,6 @@ class Playback(Deeply):
     adspot_type_name: str
     publish_url: str
     processed_at: datetime
-
-
-@dataclass
-class AdSpotStats(Deeply):
-    id: int
-    likes: int
-    views_amount: int
-    average_time: int
-    max_traffic: int
 
 
 @dataclass

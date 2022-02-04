@@ -31,9 +31,17 @@ class MS:
             select(
                 models.AdSpot,
                 models.AdSpotType,
+                models.AdSpotsStats,
+                models.Publisher,
             ).join(
                 models.AdSpotType,
                 models.AdSpot.spot_type_id == models.AdSpotType.id,
+            ).join(
+                models.AdSpotsStats,
+                models.AdSpot.id == models.AdSpotsStats.spot_id
+            ).join(
+                models.Publisher,
+                models.AdSpot.publisher_id == models.Publisher.id
             )
         ).all()
         return [
@@ -41,10 +49,14 @@ class MS:
                 row.AdSpot.id,
                 row.AdSpotType.name,
                 row.AdSpot.description,
-                row.AdSpot.publisher_id,
+                row.Publisher.name,
                 row.AdSpotType.name,
                 row.AdSpot.price,
                 row.AdSpot.spot_metadata,
+                row.AdSpotsStats.likes,
+                row.AdSpotsStats.views_amount,
+                row.AdSpotsStats.average_time,
+                row.AdSpotsStats.max_traffic,
             ) for row in rows
         ]
 
@@ -53,9 +65,17 @@ class MS:
             select(
                 models.AdSpot,
                 models.AdSpotType,
+                models.AdSpotsStats,
+                models.Publisher,
             ).join(
                 models.AdSpotType,
                 models.AdSpot.spot_type_id == models.AdSpotType.id,
+            ).join(
+                models.AdSpotsStats,
+                models.AdSpot.id == models.AdSpotsStats.spot_id
+            ).join(
+                models.Publisher,
+                models.AdSpot.publisher_id == models.Publisher.id
             ).filter(
                 models.AdSpot.id == id_,
             )
@@ -64,10 +84,14 @@ class MS:
             row.AdSpot.id,
             row.AdSpotType.name,
             row.AdSpot.description,
-            row.AdSpot.publisher_id,
+            row.Publisher.name,
             row.AdSpotType.name,
             row.AdSpot.price,
             row.AdSpot.spot_metadata,
+            row.AdSpotsStats.likes,
+            row.AdSpotsStats.views_amount,
+            row.AdSpotsStats.average_time,
+            row.AdSpotsStats.max_traffic,
         )
 
     def get_creatives(self) -> list['dc.Creative']:
