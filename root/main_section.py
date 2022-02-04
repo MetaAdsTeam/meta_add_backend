@@ -391,8 +391,9 @@ class MS:
             row.AdSpotsStats.max_traffic,
         )
 
-    def get_timeslots_by_adspot_id(self, id_: int) -> 'dc.TimeSlot':
-        row: models.TimeSlot = self.session.execute(
+    def get_timeslots_by_adspot_id(self, id_: str) -> list['dc.TimeSlot']:
+        _id = int(id_)
+        rows: list['models.TimeSlot'] = self.session.execute(
             select(
                 models.Playback,
                 models.TimeSlot,
@@ -408,16 +409,18 @@ class MS:
                 models.AdSpotsStats,
                 models.AdSpotsStats.spot_id == models.AdSpot.id,
             ).filter(
-                models.AdSpotsStats.id == id_,
+                models.AdSpot.id == _id,
             )
-        ).first()
-        return row and dc.TimeSlot(
-            row.TimeSlot.id,
-            row.TimeSlot.from_time.timestamp(),
-            row.TimeSlot.to_time.timestamp(),
-            row.TimeSlot.locked,
-            row.Playback.play_price,  # TODO: recheck
-        )
+        ).all()
+        return [
+            dc.TimeSlot(
+                row.TimeSlot.id,
+                row.TimeSlot.from_time.timestamp(),
+                row.TimeSlot.to_time.timestamp(),
+                row.TimeSlot.locked,
+                row.Playback.play_price,  # TODO: recheck
+            ) for row in rows
+        ]
 
     def add_playback(self, playback):
         self.session.add(playback)
