@@ -13,6 +13,7 @@ class Playback(models.Base):
     status_id = Column(Integer, ForeignKey('playback_statuses.id'))
     smart_contract = Column(String)
     play_price = Column(Float)
+    taken_at = Column(DateTime)
     processed_at = Column(DateTime)
 
     def __init__(

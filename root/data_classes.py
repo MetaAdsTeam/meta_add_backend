@@ -63,7 +63,7 @@ class Playback(Deeply):
     play_price: float
     locked: bool
     adspot_type_name: str
-    publish_url: str
+    taken_at: datetime
     processed_at: datetime
 
 
@@ -77,7 +77,10 @@ class AdTaskConfig(Deeply):
 @dataclass
 class AdTask(Deeply):
     playback_id: int
+    ad_spot_id: int
     api_url: str
+    call_at: datetime.datetime
+    primarily: bool
     config: 'AdTaskConfig'
 
 
@@ -100,7 +103,6 @@ class PlaybackStatuses(Deeply):
 class AdSpotTypes(Deeply):
     id: int
     name: str
-    publish_url: str
 
 
 @dataclass

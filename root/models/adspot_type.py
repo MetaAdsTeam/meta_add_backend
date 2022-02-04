@@ -8,12 +8,9 @@ class AdSpotType(models.Base):
 
     id = Column(Integer, primary_key=True, nullable=False, autoincrement=True)
     name = Column(String, nullable=False)
-    publish_url = Column(String, nullable=False)
 
     def __init__(
             self,
             name,
-            publish_url,
     ):
         self.name = name
-        self.publish_url = publish_url

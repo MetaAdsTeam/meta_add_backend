@@ -3,6 +3,7 @@ from typing import Any, Optional
 
 from sqlalchemy import select, delete, update
 from sqlalchemy.orm import Session
+import sqlalchemy as sa
 from logging import Logger
 import root
 import root.log_lib as log_lib
@@ -215,7 +216,7 @@ class MS:
                 row.Playback.play_price,
                 row.TimeSlot.locked,
                 row.AdSpotType.name,
-                row.AdSpotType.publish_url,
+                row.Playback.taken_at,
                 row.Playback.processed_at,
             ) for row in rows
         ]
@@ -275,17 +276,22 @@ class MS:
             row.Playback.play_price,
             row.TimeSlot.locked,
             row.AdSpotType.name,
-            row.AdSpotType.publish_url,
+            row.Playback.taken_at,
             row.Playback.processed_at,
         )
 
     def allocate_pending_playbacks(self) -> list['dc.AdTask']:
+        from_dt = datetime.datetime.utcnow()
+        to_dt = from_dt + datetime.timedelta(seconds=15)
         rows: list['models.Playback'] = self.session.execute(
             select(
-                models.Playback,
-                models.Creative,
-                models.TimeSlot,
-                models.AdSpotType
+                models.Playback.id,
+                models.Creative.path,
+                models.TimeSlot.from_time,
+                models.TimeSlot.to_time,
+                models.AdSpot.publish_url,
+                models.AdSpot.stop_url,
+                models.AdSpot.delay_before_publish,
             ).select_from(
                 models.Playback
             ).join(
@@ -297,33 +303,71 @@ class MS:
             ).join(
                 models.AdSpot,
                 models.Playback.adspot_id == models.AdSpot.id,
-            ).join(
-                models.AdSpotType,
-                models.AdSpot.spot_type_id == models.AdSpotType.id,
             ).filter(
-                models.Playback.processed_at.is_(None)
+                sa.or_(
+                    sa.and_(
+                        models.Playback.taken_at.is_(None),
+                        models.Playback.processed_at.is_(None),
+                        models.TimeSlot.from_time.between(from_dt, to_dt)
+                    ),
+                    sa.and_(
+                        models.Playback.taken_at.isnot_(None),
+                        models.Playback.processed_at.is_(None),
+                        models.TimeSlot.to_time.between(from_dt, to_dt)
+                    )
+                )
             )
         ).all()
-        return [
-            dc.AdTask(
-                row.Playback.id,
-                row.AdSpotType.publish_url,
-                dc.AdTaskConfig(
-                    row.Creative.path,
-                    row.TimeSlot.from_time.timestamp(),
-                    row.TimeSlot.to_time.timestamp(),
-                )
-            ) for row in rows
-        ]
 
-    def mark_playback_processed(self, playback_id: int):
+        def get_call_time(task_row):
+            if task_row.taken_at is None:
+                return task_row.TimeSlot.from_time - datetime.timedelta(
+                    seconds=task_row.AdSpotType.delay_before_publish)
+            return task_row.TimeSlot.to_time
+
+        tasks: list['dc.AdTask'] = []
+        expires_dt_by_ap: dict[int, datetime.datetime] = {}
+        for row in sorted(rows, key=get_call_time):
+            primarily = row.taken_at is None
+            call_at = get_call_time(row)
+            if primarily:
+                api_url = row.AdSpotType.publish_url
+                expires_dt_by_ap[row.AdSpot.id] = row.TimeSlot.to_time
+            else:
+                api_url = row.AdSpotType.stop_url
+                if ex_dt := expires_dt_by_ap.get(row.AdSpot.id):
+                    # filter simultaneous requests
+                    if ex_dt > call_at:
+                        continue
+            tasks.append(
+                dc.AdTask(
+                    row.Playback.id,
+                    models.AdSpot.id,
+                    api_url,
+                    call_at,
+                    primarily,
+                    dc.AdTaskConfig(
+                        row.Creative.path,
+                        row.TimeSlot.from_time,
+                        row.TimeSlot.to_time,
+                    )
+                )
+            )
+        return tasks
+
+    def mark_task_complete(self, task: 'dc.AdTask'):
+        state_at = datetime.datetime.utcnow()
+        if task.primarily:
+            state = {models.Playback.taken_at.key: state_at}
+        else:
+            state = {models.Playback.processed_at.key: state_at}
         self.session.execute(
             update(
                 models.Playback
             ).where(
-                models.Playback.id == playback_id
+                models.Playback.id == task.playback_id
             ).values(
-                processed_at=datetime.datetime.utcnow()
+                **state
             ).execution_options(
                 synchronize_session="evaluate"
             )
@@ -410,7 +454,6 @@ class MS:
             dc.AdSpotTypes(
                 row.AdSpotType.id,
                 row.AdSpotType.name,
-                row.AdSpotType.publish_url,
             ) for row in rows
         ]
 

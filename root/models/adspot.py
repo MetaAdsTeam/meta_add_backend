@@ -15,6 +15,9 @@ class AdSpot(models.Base):
     preview_url = Column(String)
     preview_thumb_url = Column(String)
     spot_metadata = Column(String)
+    publish_url = Column(String, nullable=False)
+    stop_url = Column(String, nullable=False)
+    delay_before_publish = Column(Float, nullable=False, default=0, server_default='0')
 
     def __init__(
             self,
@@ -26,6 +29,9 @@ class AdSpot(models.Base):
             preview_url,
             preview_thumb_url,
             spot_metadata,
+            publish_url,
+            stop_url,
+            delay_before_publish,
     ):
         self.name = name
         self.description = description
@@ -35,3 +41,6 @@ class AdSpot(models.Base):
         self.preview_url = preview_url
         self.preview_thumb_url = preview_thumb_url
         self.spot_metadata = spot_metadata
+        self.publish_url = publish_url
+        self.stop_url = stop_url
+        self.delay_before_publish = delay_before_publish

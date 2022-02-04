@@ -1,5 +1,6 @@
 import signal
 import time
+from datetime import datetime
 from threading import Thread
 
 import requests
@@ -8,6 +9,8 @@ import root
 
 
 class PlaybackDispatcher:
+    ms: 'root.MS'
+
     def __init__(self):
         self.alive = False
         self.__loop_thread = Thread(
@@ -47,15 +50,16 @@ class PlaybackDispatcher:
 
     def component_iteration(self):
         with root.context.sc as sc:
-            ms = root.MS(sc.session)
-            ad_tasks = ms.allocate_pending_playbacks()
+            self.ms = root.MS(sc.session)
+            ad_tasks = self.ms.allocate_pending_playbacks()
             if ad_tasks:
                 self.logger.info(f'Fetched {len(ad_tasks)} ad tasks')
-                for ad_task in ad_tasks:
-                    self.send_ad_task(ad_task)
-                    ms.mark_playback_processed(ad_task.playback_id)
+            for ad_task in ad_tasks:
+                while datetime.utcnow() < ad_task.call_at:
+                    time.sleep(.1)
+                self.process_task(ad_task)
 
-    def send_ad_task(self, ad_task: 'root.dc.AdTask'):
+    def process_task(self, ad_task: 'root.dc.AdTask'):
         r: 'requests.Response' = requests.post(
             ad_task.api_url,
             json=ad_task.config.__dict__
@@ -65,6 +69,7 @@ class PlaybackDispatcher:
                 f'Playback {ad_task.playback_id} was sent to {ad_task.api_url}.'
                 f'File: {ad_task.config.name}'
             )
+            self.ms.mark_task_complete(ad_task)
         else:
             self.logger.warning(
                 f'Failed to sent task to {ad_task.api_url}. '
