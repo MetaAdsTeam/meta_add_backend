@@ -9,5 +9,5 @@ class PlaybackHandler(BaseHandler):
 
     async def delete(self, id_):
         print(type(id_))
-        self.ms.delete_playbacks(id_)
+        self.ms.delete_playback(id_)
         await self.send_ok()

@@ -125,9 +125,10 @@ class MS:
         self.session.add(creative)
         self.session.commit()
 
-    def delete_creatives(self, id_s):
+    def delete_creative(self, id_):
+        _id = int(id_)
         self.session.execute(
-            delete(models.Creative).where(models.Creative.id.in_(id_s))
+            delete(models.Creative).where(models.Creative.id == _id)
         )
         self.session.commit()
 
@@ -285,9 +286,8 @@ class MS:
         self.session.add(playback)
         self.session.commit()
 
-    def delete_playbacks(self, id_):
+    def delete_playback(self, id_):
         _id = int(id_)
-        print(type(_id, id_))
         self.session.execute(
             delete(models.Creative).where(models.Creative.id == _id)
         )

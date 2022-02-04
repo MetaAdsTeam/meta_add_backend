@@ -19,6 +19,7 @@ class UrlName(Enum):
     ADD_PLAYBACK = 'add_playback'
     PLAYBACK_STATUS = 'playback_status'
     CREATIVES = 'creatives'
+    CREATIVE = 'creative'
     CREATIVE_TYPES = 'creative_types'
     PUBLISHER = 'publisher'
     ADVERTISER = 'advertiser'

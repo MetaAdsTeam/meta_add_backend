@@ -40,6 +40,8 @@ def all_handlers():
         #                 PlaybackStatusHandler, name=enums.UrlName.PLAYBACK_STATUS.value),
         tornado.web.url(fr"{root.context.uri_prefix}/creatives",
                         CreativesHandler, name=enums.UrlName.CREATIVES.value),
+        tornado.web.url(fr"{root.context.uri_prefix}/creative/id/([0-9]+)",
+                        CreativeHandler, name=enums.UrlName.CREATIVE.value),
         # tornado.web.url(fr"{root.context.uri_prefix}/creatives_types",
         #                 CreativeTypeHandler, name=enums.UrlName.CREATIVE_TYPES.value),
         # tornado.web.url(fr"{root.context.uri_prefix}/publisher",
