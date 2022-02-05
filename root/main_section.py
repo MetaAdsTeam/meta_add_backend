@@ -452,14 +452,14 @@ class MS:
             ).subquery()
             q = delete(
                 models.Playback
-            ).filter(
+            ).where(
                 models.Playback.creative_id.in_(user_sub_q),
                 models.Playback.id == _id,
-            )
+            ).execution_options(synchronize_session="fetch")
         else:
             q = delete(
                 models.Playback
-            ).filter(
+            ).where(
                 models.Playback.id == _id,
             )
         self.session.execute(q)
