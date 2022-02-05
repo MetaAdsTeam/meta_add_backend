@@ -397,8 +397,6 @@ class MS:
             select(
                 models.Playback,
                 models.TimeSlot,
-                models.AdSpot,
-                models.AdSpotsStats,
             ).join(
                 models.TimeSlot,
                 models.Playback.timeslot_id == models.TimeSlot.id,
