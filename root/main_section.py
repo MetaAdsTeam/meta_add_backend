@@ -227,7 +227,6 @@ class MS:
             models.Playback,
             models.Creative,
             models.CreativeType,
-            models.Advertiser,
             models.TimeSlot,
             models.PlaybackStatus,
             models.AdSpot,
