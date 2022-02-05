@@ -60,6 +60,27 @@
         }
       }
     },
+    "/adspots": {
+      "get": {
+        "tags": [
+          "developers"
+        ],
+        "summary": "get all adspots",
+        "description": "Get all AdSpot joined with AdSpotType, AdsPotStats",
+        "responses": {
+          "200": {
+            "description": "get AdSpot",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_200_1"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/adspot/id/{id}": {
       "get": {
         "tags": [
@@ -97,7 +118,7 @@
     "/adspot_stats/id/{id}": {
       "get": {
         "tags": [
-          "developers"
+          "not_used"
         ],
         "summary": "get AdSpotStats",
         "description": "Get AdSpotStats by {id}",
@@ -141,7 +162,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/inline_response_200_1"
+                  "$ref": "#/components/schemas/inline_response_200_2"
                 }
               }
             }
@@ -162,7 +183,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/inline_response_200_2"
+                  "$ref": "#/components/schemas/inline_response_200_3"
                 }
               }
             }
@@ -196,7 +217,41 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/inline_response_200_2"
+                  "$ref": "#/components/schemas/inline_response_200_3"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/timeslots/date/{date}": {
+      "get": {
+        "tags": [
+          "developers"
+        ],
+        "summary": "get TimeSlot",
+        "description": "Get TimeSlots by {date}",
+        "parameters": [
+          {
+            "name": "date",
+            "in": "path",
+            "description": "Date strinf like '2022-02-04' for the TimeSlot's to get",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "list of TimeSlot",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_200_3"
                 }
               }
             }
@@ -217,7 +272,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/inline_response_200_3"
+                  "$ref": "#/components/schemas/inline_response_200_4"
                 }
               }
             }
@@ -413,7 +468,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/inline_response_200_4"
+                  "$ref": "#/components/schemas/inline_response_200_5"
                 }
               }
             }
@@ -770,7 +825,7 @@
           "data": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/AdSpotTypes"
+              "$ref": "#/components/schemas/AdSpot"
             }
           }
         }
@@ -781,7 +836,7 @@
           "data": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/TimeSlot"
+              "$ref": "#/components/schemas/AdSpotTypes"
             }
           }
         }
@@ -792,12 +847,23 @@
           "data": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/Playback"
+              "$ref": "#/components/schemas/TimeSlot"
             }
           }
         }
       },
       "inline_response_200_4": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Playback"
+            }
+          }
+        }
+      },
+      "inline_response_200_5": {
         "type": "object",
         "properties": {
           "data": {

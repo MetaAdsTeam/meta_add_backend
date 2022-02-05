@@ -13,6 +13,7 @@ class UrlName(Enum):
     ADSPOT_ID = 'adspot_id'
     ADSPOT_STATS_ID = 'adspot_stats_id'
     TIMESLOTS = 'timeslots'
+    TIMESLOTS_DATE = 'timeslots_date'
     TIMESLOT_ID = 'timeslot_id'
     PLAYBACKS = 'playbacks'
     PLAYBACK_ID = 'playback_id'

@@ -1,7 +1,7 @@
 import datetime
 from typing import Any, Optional
 
-from sqlalchemy import select, delete, update
+from sqlalchemy import select, delete, update, Date, cast
 from sqlalchemy.orm import Session
 import sqlalchemy as sa
 from logging import Logger
@@ -419,6 +419,25 @@ class MS:
                 row.TimeSlot.to_time.timestamp(),
                 row.TimeSlot.locked,
                 row.Playback.play_price,  # TODO: recheck
+            ) for row in rows
+        ]
+
+    def get_timeslots_by_date(self, date_: str) -> list['dc.TimeSlot']:
+        _date = datetime.datetime.fromisoformat(date_).date()
+        rows: list['models.TimeSlot'] = self.session.execute(
+            select(
+                models.TimeSlot,
+            ).filter(
+                cast(models.TimeSlot.from_time, Date) == _date,
+            )
+        ).all()
+        return [
+            dc.TimeSlot(
+                row.TimeSlot.id,
+                row.TimeSlot.from_time.timestamp(),
+                row.TimeSlot.to_time.timestamp(),
+                row.TimeSlot.locked,
+                0
             ) for row in rows
         ]
 

@@ -28,6 +28,8 @@ def all_handlers():
                         AdSpotTypesHandler, name=enums.UrlName.ADSPOT_TYPES.value),
         tornado.web.url(fr"{root.context.uri_prefix}/timeslots",
                         TimeSlotsHandler, name=enums.UrlName.TIMESLOTS.value),
+        tornado.web.url(fr"{root.context.uri_prefix}" + r"/timeslots/date/([0-9]{4}-[0-9]{2}-[0-9]{2})",
+                        TimeSlotsDateHandler, name=enums.UrlName.TIMESLOTS_DATE.value),
         # tornado.web.url(fr"{root.context.uri_prefix}/timeslot/id/([0-9]+)",
         #                 TimeSlotIdHandler, name=enums.UrlName.TIMESLOT_ID.value),
         tornado.web.url(fr"{root.context.uri_prefix}/playbacks",
