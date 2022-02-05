@@ -449,13 +449,13 @@ class MS:
                 models.Creative.id
             ).filter(
                 models.Creative.advert_id == self.user.id
-            ).subquery()
+            ).scalar_subquery()
             q = delete(
                 models.Playback
             ).where(
                 models.Playback.creative_id.in_(user_sub_q),
                 models.Playback.id == _id,
-            ).execution_options(synchronize_session="fetch")
+            ).execution_options(synchronize_session=False)
         else:
             q = delete(
                 models.Playback
