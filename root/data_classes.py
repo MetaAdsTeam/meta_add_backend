@@ -59,8 +59,8 @@ class Creative(Deeply):
 class Playback(Deeply):
     id: int
     adspot_name: str
-    from_time: int
-    to_time: int
+    from_time: str
+    to_time: str
     advert_id: int
     creative_name: str
     creative_description: str

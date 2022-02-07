@@ -399,7 +399,7 @@
             "style": "form",
             "explode": true,
             "schema": {
-              "type": "integer"
+              "type": "string"
             }
           },
           {
@@ -409,7 +409,7 @@
             "style": "form",
             "explode": true,
             "schema": {
-              "type": "integer"
+              "type": "string"
             }
           },
           {
@@ -767,10 +767,10 @@
             "type": "string"
           },
           "from_time": {
-            "type": "integer"
+            "type": "string"
           },
           "to_time": {
-            "type": "integer"
+            "type": "string"
           },
           "advert_id": {
             "type": "integer"
@@ -824,10 +824,12 @@
             "type": "integer"
           },
           "from_time": {
-            "type": "integer"
+            "type": "string",
+            "example": "2022-02-15T08:34:15"
           },
           "to_time": {
-            "type": "integer"
+            "type": "string",
+            "example": "2022-02-16T08:34:15"
           },
           "locked": {
             "type": "boolean"

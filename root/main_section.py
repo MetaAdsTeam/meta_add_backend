@@ -197,8 +197,8 @@ class MS:
             dc.Playback(
                 row.Playback.id,
                 row.AdSpot.name,
-                row.TimeSlot.from_time.timestamp(),
-                row.TimeSlot.to_time.timestamp(),
+                row.TimeSlot.from_time.isoformat(),
+                row.TimeSlot.to_time.isoformat(),
                 row.Creative.advert_id,
                 row.Creative.name,
                 row.Creative.description,
@@ -352,8 +352,8 @@ class MS:
         return [
             dc.TimeSlot(
                 row.TimeSlot.id,
-                row.TimeSlot.from_time.timestamp(),
-                row.TimeSlot.to_time.timestamp(),
+                row.TimeSlot.from_time.isoformat(),
+                row.TimeSlot.to_time.isoformat(),
                 row.TimeSlot.locked,
                 row.Playback.play_price,  # TODO: recheck
             ) for row in rows
@@ -371,8 +371,8 @@ class MS:
         return [
             dc.TimeSlot(
                 row.TimeSlot.id,
-                row.TimeSlot.from_time.timestamp(),
-                row.TimeSlot.to_time.timestamp(),
+                row.TimeSlot.from_time.isoformat(),
+                row.TimeSlot.to_time.isoformat(),
                 row.TimeSlot.locked,
                 0
             ) for row in rows
@@ -440,8 +440,8 @@ class MS:
         return [
             dc.TimeSlot(
                 row.TimeSlot.id,
-                row.TimeSlot.from_time.timestamp(),
-                row.TimeSlot.to_time.timestamp(),
+                row.TimeSlot.from_time.isoformat(),
+                row.TimeSlot.to_time.isoformat(),
                 row.TimeSlot.locked,
                 row.Playback.play_price,
             ) for row in rows
