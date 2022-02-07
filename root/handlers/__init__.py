@@ -1,5 +1,5 @@
 from .base import BaseHandler, non_authorized
-from .adspots import AdSpotsHandler
+from .adspots import AdSpotsHandler, AdSpotStreamHandler
 from .adspot_types import AdSpotTypesHandler
 from .timeslot import TimeSlotsHandler
 from .timeslot_id import TimeSlotIdHandler
