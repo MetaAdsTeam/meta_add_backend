@@ -163,7 +163,7 @@ class MS:
         self.session.execute(q)
         self.session.commit()
 
-    def get_playbacks(self) -> list['dc.Playback']:
+    def get_playbacks(self, ids: Optional[list[int]] = None) -> list['dc.Playback']:
         q = select(
             models.Playback,
             models.Creative,
@@ -195,6 +195,8 @@ class MS:
             models.AdSpotType,
             models.AdSpot.spot_type_id == models.AdSpotType.id,
         )
+        if ids is not None:
+            q = q.filter(models.Playback.id.in_(ids))
         if self.user:
             q = q.filter(models.Advertiser.id == self.user.id)
 
@@ -221,63 +223,9 @@ class MS:
             ) for row in rows
         ]
 
-    def get_playback(self, id_) -> 'dc.Playback':
-        _id = int(id_)
-        q = select(
-            models.Playback,
-            models.Creative,
-            models.CreativeType,
-            models.TimeSlot,
-            models.PlaybackStatus,
-            models.AdSpot,
-            models.AdSpotType
-        ).join(
-            models.Creative,
-            models.Playback.creative_id == models.Creative.id,
-        ).join(
-            models.CreativeType,
-            models.Creative.creative_type_id == models.CreativeType.id,
-        ).join(
-            models.Advertiser,
-            models.Creative.advert_id == models.Advertiser.id,
-        ).join(
-            models.TimeSlot,
-            models.Playback.timeslot_id == models.TimeSlot.id,
-        ).join(
-            models.PlaybackStatus,
-            models.Playback.status_id == models.PlaybackStatus.id,
-        ).join(
-            models.AdSpot,
-            models.Playback.adspot_id == models.AdSpot.id,
-        ).join(
-            models.AdSpotType,
-            models.AdSpot.spot_type_id == models.AdSpotType.id,
-        ).where(
-            models.Playback.id == _id
-        )
-        if self.user:
-            q = q.filter(models.Advertiser.id == self.user.id)
-
-        row: models.Playback = self.session.execute(q).first()
-        return row and dc.Playback(
-            row.Playback.id,
-            row.AdSpot.name,
-            row.TimeSlot.from_time.timestamp(),
-            row.TimeSlot.to_time.timestamp(),
-            row.Creative.advert_id,
-            row.Creative.name,
-            row.Creative.description,
-            row.Creative.url,
-            row.Creative.path,
-            row.PlaybackStatus.name,
-            row.Playback.smart_contract,
-            row.AdSpot.price,
-            row.Playback.play_price,
-            row.TimeSlot.locked,
-            row.AdSpotType.name,
-            row.Playback.taken_at,
-            row.Playback.processed_at,
-        )
+    def get_playback(self, id_: int) -> 'dc.Playback':
+        playbacks = self.get_playbacks([id_])
+        return playbacks[0] if playbacks else None
 
     def allocate_pending_playbacks(self) -> list['dc.AdTask']:
         from_dt = datetime.datetime.utcnow()
@@ -442,8 +390,7 @@ class MS:
         self.session.add(playback)
         self.session.commit()
 
-    def delete_playback(self, id_):
-        _id = int(id_)
+    def delete_playback(self, id_: int):
         if self.user:
             user_sub_q = select(
                 models.Creative.id
@@ -454,13 +401,13 @@ class MS:
                 models.Playback
             ).where(
                 models.Playback.creative_id.in_(user_sub_q),
-                models.Playback.id == _id,
+                models.Playback.id == id_,
             ).execution_options(synchronize_session=False)
         else:
             q = delete(
                 models.Playback
             ).where(
-                models.Playback.id == _id,
+                models.Playback.id == id_,
             )
         self.session.execute(q)
         self.session.commit()

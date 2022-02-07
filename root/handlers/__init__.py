@@ -6,8 +6,6 @@ from .timeslot import TimeSlotsHandler
 from .timeslot_id import TimeSlotIdHandler
 from .timeslot_date import TimeSlotsDateHandler
 from .playbacks import PlaybacksHandler
-from .playback_id import PlaybackIdHandler
-from .playback import PlaybackHandler
 from .playback_statuses import PlaybackStatusesHandler
 from .creatives import CreativesHandler
 from .creative import CreativeHandler
