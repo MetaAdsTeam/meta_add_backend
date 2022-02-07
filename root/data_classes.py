@@ -127,3 +127,9 @@ class UserWeb(Deeply):
     name: str
     wallet_ref: str
     session_exp: str
+
+
+@dataclass
+class StreamWeb(Deeply):
+    url: str
+    is_image: bool

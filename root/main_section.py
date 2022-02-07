@@ -71,7 +71,7 @@ class MS:
         adspots = self.get_adspots([id_])
         return adspots[0] if adspots else None
 
-    def get_adspot_stream(self, id_: int) -> Optional[str]:
+    def get_adspot_stream(self, id_: int) -> Optional[dc.StreamWeb]:
         stream_path: Optional[str] = self.session.execute(
             select(
                 models.Creative.path
@@ -90,8 +90,18 @@ class MS:
         if not stream_path:
             return None
 
-        stream_filename = stream_path[0].removeprefix(self.context.static_path)
-        return self.context.static_url + stream_filename
+        stream_filename: str = stream_path[0].removeprefix(self.context.static_path)
+        stream_url = self.context.static_url + stream_filename
+
+        is_image = stream_filename.rsplit('.', 1)[-1] in [
+            'jpg', 'jpeg', 'jfif', 'pjpeg', 'pjp', 'apng', 'png',
+            'svg', 'webp', 'gif', 'bmp', 'ico', 'tif', 'tiff'
+        ]
+
+        return dc.StreamWeb(
+            stream_url,
+            is_image
+        )
 
     def get_creatives(self, ids: Optional[list[int]] = None) -> list['dc.Creative']:
         q = select(

@@ -14,8 +14,8 @@ class AdSpotsHandler(BaseHandler):
 @non_authorized
 class AdSpotStreamHandler(BaseHandler):
     async def get(self, id_: str):
-        stream_url = self.ms.get_adspot_stream(int(id_))
-        if stream_url:
-            self.redirect(stream_url)
+        stream = self.ms.get_adspot_stream(int(id_))
+        if stream:
+            await self.send_json(stream)
         else:
             await self.send_failed('There are no stream now', 404)
