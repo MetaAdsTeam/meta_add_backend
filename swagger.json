@@ -259,6 +259,51 @@
         }
       }
     },
+    "/timeslots_by_adspot/id/{id}/date/{date}": {
+      "get": {
+        "tags": [
+          "developers"
+        ],
+        "summary": "get TimeSlot",
+        "description": "Get TimeSlot by {id} and {date}",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Numeric ID of the TimeSlot to get",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "date",
+            "in": "path",
+            "description": "Date to filter",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "list of TimeSlot",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_200_3"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/playbacks": {
       "get": {
         "tags": [
