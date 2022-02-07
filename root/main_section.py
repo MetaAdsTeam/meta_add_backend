@@ -72,9 +72,12 @@ class MS:
         return adspots[0] if adspots else None
 
     def get_adspot_stream(self, id_: int) -> Optional[dc.StreamWeb]:
-        stream_path: Optional[str] = self.session.execute(
+        stream_data: Optional[str] = self.session.execute(
             select(
-                models.Creative.path
+                models.Creative.path,
+                models.TimeSlot.from_time,
+                models.TimeSlot.to_time,
+                models.Playback.play_price,
             ).join(
                 models.Playback,
                 models.Playback.creative_id == models.Creative.id
@@ -87,10 +90,10 @@ class MS:
                 models.TimeSlot.to_time >= datetime.datetime.utcnow(),
             )
         ).first()
-        if not stream_path:
+        if not stream_data:
             return None
 
-        stream_filename: str = stream_path[0].removeprefix(self.context.static_path)
+        stream_filename: str = stream_data.path.removeprefix(self.context.static_path)
         stream_url = self.context.static_url + stream_filename
 
         is_image = stream_filename.rsplit('.', 1)[-1] in [
@@ -100,7 +103,10 @@ class MS:
 
         return dc.StreamWeb(
             stream_url,
-            is_image
+            is_image,
+            stream_data.from_time,
+            stream_data.to_time,
+            stream_data.play_price,
         )
 
     def get_creatives(self, ids: Optional[list[int]] = None) -> list['dc.Creative']:
