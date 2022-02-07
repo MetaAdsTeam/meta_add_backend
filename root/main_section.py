@@ -331,7 +331,6 @@ class MS:
         )
 
     def get_timeslots_by_adspot_id(self, id_: int, date_: 'Optional[datetime]' = None) -> list['dc.TimeSlot']:
-        _date = datetime.datetime.fromisoformat(date_).date()
         q = select(
                 models.Playback,
                 models.TimeSlot,
@@ -348,7 +347,7 @@ class MS:
                 models.AdSpot.id == id_,
             )
         if date_ is not None:
-            q = q.filter(cast(models.TimeSlot.from_time, Date) == _date)
+            q = q.filter(cast(models.TimeSlot.from_time, Date) == date_)
         rows: list['models.TimeSlot'] = self.session.execute(q).all()
         return [
             dc.TimeSlot(
