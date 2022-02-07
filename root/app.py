@@ -20,6 +20,8 @@ def all_handlers():
                         LoginHandler, name=enums.UrlName.LOGIN.value),
         tornado.web.url(fr"{root.context.uri_prefix}/adspots",
                         AdSpotsHandler, name=enums.UrlName.ADSPOTS.value),
+        tornado.web.url(fr"{root.context.uri_prefix}/adspot/id/([0-9]+)/stream",
+                        AdSpotStreamHandler, name=enums.UrlName.ADSPOT_STREAM.value),
         tornado.web.url(fr"{root.context.uri_prefix}/adspot/id/([0-9]+)",
                         AdSpotsHandler, name=enums.UrlName.ADSPOT_ID.value),
         tornado.web.url(fr"{root.context.uri_prefix}/adspot_stats/id/([0-9]+)",

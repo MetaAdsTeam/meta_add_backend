@@ -127,3 +127,12 @@ class UserWeb(Deeply):
     name: str
     wallet_ref: str
     session_exp: str
+
+
+@dataclass
+class StreamWeb(Deeply):
+    url: str
+    is_image: bool
+    from_time: datetime.datetime
+    to_time: datetime.datetime
+    play_price: float
