@@ -1,5 +1,5 @@
 import datetime
-from typing import Any, Optional
+from typing import Any, Optional, Union
 
 from sqlalchemy import select, delete, update, Date, cast
 from sqlalchemy.orm import Session
@@ -30,9 +30,8 @@ class MS:
             self.__logger = root.log_lib.get_logger(self.__class__.__name__)
         return self.__logger
 
-    def get_adspots(self) -> list['dc.AdSpot']:
-        rows: list[Any['models.AdSpot', models.AdSpotType]] = self.session.execute(
-            select(
+    def get_adspots(self, ids: Optional[list[int]] = None) -> list['dc.AdSpot']:
+        q = select(
                 models.AdSpot,
                 models.AdSpotType,
                 models.AdSpotsStats,
@@ -47,7 +46,9 @@ class MS:
                 models.Publisher,
                 models.AdSpot.publisher_id == models.Publisher.id
             )
-        ).all()
+        if ids is not None:
+            q = q.filter(models.AdSpot.id.in_(ids))
+        rows: list[Union['models.AdSpot', models.AdSpotType]] = self.session.execute(q).all()
         return [
             dc.AdSpot(
                 row.AdSpot.id,
@@ -67,40 +68,8 @@ class MS:
         ]
 
     def get_adspot(self, id_: int) -> 'dc.AdSpot':
-        row: Any['models.AdSpot', models.AdSpotType] = self.session.execute(
-            select(
-                models.AdSpot,
-                models.AdSpotType,
-                models.AdSpotsStats,
-                models.Publisher,
-            ).join(
-                models.AdSpotType,
-                models.AdSpot.spot_type_id == models.AdSpotType.id,
-            ).join(
-                models.AdSpotsStats,
-                models.AdSpot.id == models.AdSpotsStats.spot_id
-            ).join(
-                models.Publisher,
-                models.AdSpot.publisher_id == models.Publisher.id
-            ).filter(
-                models.AdSpot.id == id_,
-            )
-        ).first()
-        return row and dc.AdSpot(
-            row.AdSpot.id,
-            row.AdSpotType.name,
-            row.AdSpot.description,
-            row.Publisher.name,
-            row.AdSpotType.name,
-            row.AdSpot.price,
-            row.AdSpot.preview_url,
-            row.AdSpot.preview_thumb_url,
-            row.AdSpot.spot_metadata,
-            row.AdSpotsStats.likes,
-            row.AdSpotsStats.views_amount,
-            row.AdSpotsStats.average_time,
-            row.AdSpotsStats.max_traffic,
-        )
+        adspots = self.get_adspots([id_])
+        return adspots[0] if adspots else None
 
     def get_creatives(self) -> list['dc.Creative']:
         q = select(
