@@ -15,10 +15,10 @@ class TimeSlot(models.Base):
 
     def __init__(
             self,
-            from_time: int,
-            to_time: int,
+            from_time: str,
+            to_time: str,
             locked: bool,
     ):
-        self.from_time = datetime.fromtimestamp(from_time)
-        self.to_time = datetime.fromtimestamp(to_time)
+        self.from_time = datetime.fromisoformat(from_time)
+        self.to_time = datetime.fromisoformat(to_time)
         self.locked = locked
