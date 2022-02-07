@@ -1,5 +1,3 @@
-import json
-from dataclasses import asdict
 from typing import Optional
 
 from root import models
@@ -12,10 +10,6 @@ class PlaybacksHandler(BaseHandler):
             await self.send_json(self.ms.get_playback(int(id_)))
         else:
             await self.send_json(self.ms.get_playbacks())
-
-    async def delete(self, id_: str):
-        self.ms.delete_playback(int(id_))
-        await self.send_ok()
 
     async def post(self):
         timeslot = models.TimeSlot(
@@ -33,4 +27,8 @@ class PlaybacksHandler(BaseHandler):
             None,
         )
         self.ms.add_playback_timeslot(timeslot, creative)
+        await self.send_ok()
+
+    async def delete(self, id_: str):
+        self.ms.delete_playback(int(id_))
         await self.send_ok()

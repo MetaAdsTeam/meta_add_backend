@@ -100,8 +100,10 @@ class MS:
         return creatives[0] if creatives else None
 
     def add_creative(self, creative):
-        self.session.add(creative)
-        self.session.commit()
+        if self.user:
+            creative.advert_id = self.user.id
+            self.session.add(creative)
+            self.session.commit()
 
     def delete_creative(self, id_):
         _id = int(id_)

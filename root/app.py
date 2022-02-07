@@ -46,8 +46,6 @@ def all_handlers():
                         CreativesHandler, name=enums.UrlName.CREATIVE.value),
         tornado.web.url(fr"{root.context.uri_prefix}/creative/id/([0-9]+)",
                         CreativesHandler, name=enums.UrlName.CREATIVE_ID.value),
-        # tornado.web.url(fr"{root.context.uri_prefix}/creatives_types",
-        #                 CreativeTypeHandler, name=enums.UrlName.CREATIVE_TYPES.value),
         # tornado.web.url(fr"{root.context.uri_prefix}/publisher",
         #                 PublisherHandler, name=enums.UrlName.PUBLISHER.value),
         # tornado.web.url(fr"{root.context.uri_prefix}/advertiser",
