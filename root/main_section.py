@@ -71,7 +71,7 @@ class MS:
         adspots = self.get_adspots([id_])
         return adspots[0] if adspots else None
 
-    def get_creatives(self) -> list['dc.Creative']:
+    def get_creatives(self, ids: Optional[list[int]] = None) -> list['dc.Creative']:
         q = select(
             models.Creative,
             models.CreativeType,
@@ -79,6 +79,8 @@ class MS:
             models.CreativeType,
             models.Creative.creative_type_id == models.CreativeType.id,
         )
+        if ids is not None:
+            q = q.filter(models.Creative.id.in_(ids))
         if self.user:
             q = q.filter(models.Creative.advert_id == self.user.id)
 
@@ -93,28 +95,9 @@ class MS:
             ) for row in rows
         ]
 
-    def get_creative(self, id_) -> 'dc.Creative':
-        _id = int(id_)
-        q = select(
-            models.Creative,
-            models.CreativeType,
-        ).join(
-            models.CreativeType,
-            models.Creative.creative_type_id == models.CreativeType.id,
-        ).where(
-            models.Creative.id == _id,
-        )
-        if self.user:
-            q = q.filter(models.Creative.advert_id == self.user.id)
-
-        row: models.Creative = self.session.execute(q).first()
-        return row and dc.Creative(
-            row.Creative.id,
-            row.CreativeType.name,
-            row.Creative.nft_ref,
-            row.Creative.url,
-            row.Creative.name,
-        )
+    def get_creative(self, id_: int) -> 'dc.Creative':
+        creatives = self.get_creatives([id_])
+        return creatives[0] if creatives else None
 
     def add_creative(self, creative):
         self.session.add(creative)

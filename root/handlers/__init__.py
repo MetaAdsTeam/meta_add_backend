@@ -8,7 +8,6 @@ from .playbacks import PlaybacksHandler
 from .playback_statuses import PlaybackStatusesHandler
 from .creatives import CreativesHandler
 from .creative import CreativeHandler
-from .creative_id import CreativeIdHandler
 from .creative_type import CreativeTypeHandler
 from .publisher import PublisherHandler
 from .advertiser import AdvertiserHandler, LoginHandler
