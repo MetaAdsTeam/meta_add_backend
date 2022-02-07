@@ -330,7 +330,7 @@ class MS:
             row.AdSpotsStats.max_traffic,
         )
 
-    def get_timeslots_by_adspot_id(self, id_: int, date_: Optional[datetime] = None) -> list['dc.TimeSlot']:
+    def get_timeslots_by_adspot_id(self, id_: int, date_: 'Optional[datetime]' = None) -> list['dc.TimeSlot']:
         _date = datetime.datetime.fromisoformat(date_).date()
         q = select(
                 models.Playback,
