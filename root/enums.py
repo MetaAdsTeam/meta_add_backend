@@ -27,3 +27,4 @@ class UrlName(Enum):
     PUBLISHER = 'publisher'
     ADVERTISER = 'advertiser'
     TIMESLOTS_BY_ADSPOT_ID = 'timeslots_by_adspot_id'
+    TIMESLOTS_BY_ADSPOT_ID_DATE = 'timeslots_by_adspot_id_date'

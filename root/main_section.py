@@ -330,10 +330,9 @@ class MS:
             row.AdSpotsStats.max_traffic,
         )
 
-    def get_timeslots_by_adspot_id(self, id_: str) -> list['dc.TimeSlot']:
-        _id = int(id_)
-        rows: list['models.TimeSlot'] = self.session.execute(
-            select(
+    def get_timeslots_by_adspot_id(self, id_: int, date_: Optional[datetime] = None) -> list['dc.TimeSlot']:
+        _date = datetime.datetime.fromisoformat(date_).date()
+        q = select(
                 models.Playback,
                 models.TimeSlot,
             ).join(
@@ -346,9 +345,11 @@ class MS:
                 models.AdSpotsStats,
                 models.AdSpotsStats.spot_id == models.AdSpot.id,
             ).filter(
-                models.AdSpot.id == _id,
+                models.AdSpot.id == id_,
             )
-        ).all()
+        if date_ is not None:
+            q = q.filter(cast(models.TimeSlot.from_time, Date) == _date)
+        rows: list['models.TimeSlot'] = self.session.execute(q).all()
         return [
             dc.TimeSlot(
                 row.TimeSlot.id,
