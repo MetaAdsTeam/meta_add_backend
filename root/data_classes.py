@@ -1,5 +1,6 @@
 import datetime
 from dataclasses import dataclass, field
+from typing import Optional
 
 from deeply import Deeply
 
@@ -101,11 +102,14 @@ class AdTask(Deeply):
 
 @dataclass
 class TimeSlot(Deeply):
-    id: int
-    from_time: int
-    to_time: int
+    id: Optional[int]
+    from_time: datetime.datetime
+    to_time: datetime.datetime
     locked: bool
     price: float
+
+    def __contains__(self, item: datetime.datetime):
+        return self.from_time <= item <= self.to_time
 
 
 @dataclass

@@ -15,7 +15,7 @@ class PlaybacksHandler(BaseHandler):
         timeslot = models.TimeSlot(
             self.json_args['from_time'],
             self.json_args['to_time'],
-            self.json_args['locked'],
+            True
         )
         creative = models.Playback(
             self.json_args['adspot_id'],

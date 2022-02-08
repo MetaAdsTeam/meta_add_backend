@@ -350,7 +350,7 @@ class MS:
         if date_ is not None:
             q = q.filter(cast(models.TimeSlot.from_time, Date) == date_)
         rows: list['models.TimeSlot'] = self.session.execute(q).all()
-        return [
+        db_time_slots = [
             dc.TimeSlot(
                 row.TimeSlot.id,
                 row.TimeSlot.from_time,
@@ -359,6 +359,30 @@ class MS:
                 row.Playback.play_price,  # TODO: recheck
             ) for row in rows
         ]
+        if date_ is None:
+            return db_time_slots
+
+        adspot_price = self.session.query(
+            models.AdSpot.price
+        ).filter(
+            models.AdSpot.id == id_
+        ).first().price
+
+        time_slots = []
+        for i in range(24 * 60):
+            dt = datetime.datetime.combine(date_, datetime.time(i // 60, i % 60))
+            locked_ts = next((ts for ts in db_time_slots if dt in ts), None)
+            if locked_ts:
+                time_slots.append(locked_ts)
+            else:
+                time_slots.append(dc.TimeSlot(
+                    None,
+                    dt,
+                    dt + datetime.timedelta(minutes=1),
+                    False,
+                    adspot_price
+                ))
+        return time_slots
 
     def get_timeslots_by_date(self, date_: str) -> list['dc.TimeSlot']:
         _date = datetime.datetime.fromisoformat(date_).date()
