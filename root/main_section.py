@@ -108,6 +108,7 @@ class MS:
             stream_data.from_time,
             stream_data.to_time,
             stream_data.play_price,
+            'ok',
         )
 
     def get_creatives(self, ids: Optional[list[int]] = None) -> list['dc.Creative']:
