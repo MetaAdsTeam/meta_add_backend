@@ -2,6 +2,7 @@ import datetime
 from typing import Any, Optional, Union
 
 from sqlalchemy import select, delete, update, Date, cast
+from sqlalchemy.engine import Row
 from sqlalchemy.orm import Session
 import sqlalchemy as sa
 from logging import Logger
@@ -72,7 +73,7 @@ class MS:
         return adspots[0] if adspots else None
 
     def get_adspot_stream(self, id_: int) -> Optional[dc.StreamWeb]:
-        stream_data: Optional[str] = self.session.execute(
+        stream_row: Optional[Row] = self.session.execute(
             select(
                 models.Creative.path,
                 models.TimeSlot.from_time,
@@ -90,9 +91,9 @@ class MS:
                 models.TimeSlot.to_time >= datetime.datetime.utcnow(),
             )
         ).first()
-        if not stream_data:
+        if not stream_row:
             return None
-
+        stream_data = dc.StreamData(**stream_row)
         stream_filename: str = stream_data.path.removeprefix(self.context.static_path)
         stream_url = self.context.static_url + stream_filename
 

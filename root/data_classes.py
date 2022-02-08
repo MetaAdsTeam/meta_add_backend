@@ -130,6 +130,14 @@ class UserWeb(Deeply):
 
 
 @dataclass
+class StreamData(Deeply):
+    path: str
+    from_time: datetime.datetime
+    to_time: datetime.datetime
+    play_price: float
+
+
+@dataclass
 class StreamWeb(Deeply):
     url: str
     is_image: bool
