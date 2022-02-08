@@ -1,5 +1,5 @@
 import datetime
-from typing import Any, Optional, Union
+from typing import Optional, Union
 
 from sqlalchemy import select, delete, update, Date, cast
 from sqlalchemy.engine import Row
@@ -8,7 +8,6 @@ import sqlalchemy as sa
 from logging import Logger
 import root
 import root.log_lib as log_lib
-import root.exceptions as exceptions
 import root.models as models
 import root.data_classes as dc
 

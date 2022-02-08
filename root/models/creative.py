@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, LargeBinary, ForeignKey
+from sqlalchemy import Column, Integer, String, ForeignKey
 
 from root import models
 

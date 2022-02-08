@@ -2,7 +2,6 @@ from sqlalchemy import Column, Integer, String
 import sqlalchemy_utils.types.password as pwd
 
 from root import models
-import root.data_classes as dc
 
 
 class Advertiser(models.Base):
