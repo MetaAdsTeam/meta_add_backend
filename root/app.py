@@ -14,8 +14,6 @@ loop = tornado.ioloop.IOLoop.current()
 
 def all_handlers():
     return [
-        # tornado.web.url(fr"{root.context.uri_prefix}/",
-        #                 MainHandler, name=enums.UrlName.MAIN.value),
         tornado.web.url(fr"{root.context.uri_prefix}/login",
                         LoginHandler, name=enums.UrlName.LOGIN.value),
         tornado.web.url(fr"{root.context.uri_prefix}/adspots",
@@ -32,8 +30,6 @@ def all_handlers():
                         TimeSlotsHandler, name=enums.UrlName.TIMESLOTS.value),
         tornado.web.url(fr"{root.context.uri_prefix}" + r"/timeslots/date/([0-9]{4}-[0-9]{2}-[0-9]{2})",
                         TimeSlotsDateHandler, name=enums.UrlName.TIMESLOTS_DATE.value),
-        # tornado.web.url(fr"{root.context.uri_prefix}/timeslot/id/([0-9]+)",
-        #                 TimeSlotIdHandler, name=enums.UrlName.TIMESLOT_ID.value),
         tornado.web.url(fr"{root.context.uri_prefix}/timeslots_by_adspot/id/([0-9]+)",
                         TimeslotsByAdspotId, name=enums.UrlName.TIMESLOTS_BY_ADSPOT_ID.value),
         tornado.web.url(fr"{root.context.uri_prefix}" +
@@ -45,18 +41,12 @@ def all_handlers():
                         PlaybacksHandler, name=enums.UrlName.PLAYBACK.value),
         tornado.web.url(fr"{root.context.uri_prefix}/playback/id/([0-9]+)",
                         PlaybacksHandler, name=enums.UrlName.PLAYBACK_ID.value),
-        # tornado.web.url(fr"{root.context.uri_prefix}/playback_status",
-        #                 PlaybackStatusHandler, name=enums.UrlName.PLAYBACK_STATUS.value),
         tornado.web.url(fr"{root.context.uri_prefix}/creatives",
                         CreativesHandler, name=enums.UrlName.CREATIVES.value),
         tornado.web.url(fr"{root.context.uri_prefix}/creative",
                         CreativesHandler, name=enums.UrlName.CREATIVE.value),
         tornado.web.url(fr"{root.context.uri_prefix}/creative/id/([0-9]+)",
                         CreativesHandler, name=enums.UrlName.CREATIVE_ID.value),
-        # tornado.web.url(fr"{root.context.uri_prefix}/publisher",
-        #                 PublisherHandler, name=enums.UrlName.PUBLISHER.value),
-        # tornado.web.url(fr"{root.context.uri_prefix}/advertiser",
-        #                 AdvertiserHandler, name=enums.UrlName.ADVERTISER.value),
     ]
 
 
