@@ -6,7 +6,10 @@ from root.handlers import BaseHandler, non_authorized
 @non_authorized
 class LoginHandler(BaseHandler):
     async def post(self):
-        user = self.ms.authorize(**self.json_args)
+        user = self.ms.authorize(
+            self.json_args['login'],
+            self.json_args['password'],
+        )
 
         token = jwt.encode(
             user.to_web(),

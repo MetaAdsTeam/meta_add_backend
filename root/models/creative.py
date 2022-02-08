@@ -12,7 +12,7 @@ class Creative(models.Base):
     nft_ref = Column(String, nullable=False)
     name = Column(String, nullable=False)
     description = Column(String)
-    url = Column(String, nullable=False)
+    url = Column(String)
     path = Column(String, nullable=False)
 
     def __init__(
