@@ -136,3 +136,4 @@ class StreamWeb(Deeply):
     from_time: datetime.datetime
     to_time: datetime.datetime
     play_price: float
+    msg: str
