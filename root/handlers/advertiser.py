@@ -8,7 +8,7 @@ class LoginHandler(BaseHandler):
     async def post(self):
         user = self.ms.authorize(
             self.json_args['login'],
-            self.json_args['password'],
+            self.json_args.get('password'),
         )
 
         token = jwt.encode(
