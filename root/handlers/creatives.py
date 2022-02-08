@@ -20,7 +20,7 @@ class CreativesHandler(BaseHandler):
             self.json_args['name'],
             self.json_args.get('description'),
             self.json_args.get('url'),
-            self.json_args['path'],
+            self.json_args.get('path'),
         )
         self.ms.add_creative(creative)
         await self.send_ok()

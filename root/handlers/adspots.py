@@ -3,6 +3,7 @@ from typing import Optional
 from root.handlers import BaseHandler, non_authorized
 
 
+@non_authorized
 class AdSpotsHandler(BaseHandler):
     async def get(self, id_: Optional[str] = None):
         if id_ is not None:
