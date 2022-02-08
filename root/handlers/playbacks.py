@@ -21,9 +21,9 @@ class PlaybacksHandler(BaseHandler):
             self.json_args['adspot_id'],
             None,
             self.json_args['creative_id'],
-            self.json_args.get('status_id'),
-            self.json_args.get('smart_contract'),
-            self.json_args.get('play_price'),
+            self.json_args['status_id'],
+            self.json_args['smart_contract'],
+            self.json_args['play_price'],
             None,
         )
         self.ms.add_playback_timeslot(timeslot, creative)
