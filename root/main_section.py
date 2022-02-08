@@ -464,16 +464,32 @@ class MS:
         else:
             self.session.rollback()
 
-    def authorize(self, login: str, password: str) -> 'dc.UserWeb':
+    def register_advertiser(self, login: str):
+        advertiser = models.Advertiser(login, '', login, login)
+        self.session.add(advertiser)
+        self.session.flush()
+        return advertiser
+
+    def authorize(self, login: str, password: str = None) -> 'dc.UserWeb':
+        # Password logic is temporary disabled
         advertiser = self.session.query(
             models.Advertiser
         ).filter(
             models.Advertiser.login == login
         ).first()
-        if not advertiser or advertiser.password != password:
-            raise exceptions.UnauthorizedError(
-                'Invalid username/password combination'
-            )
+
+        #
+        # TODO: Decide what to do with authorization
+        #
+        # if not advertiser or advertiser.password != password:
+        #     raise exceptions.UnauthorizedError(
+        #         'Invalid username/password combination'
+        #     )
+        #
+
+        if advertiser is None:
+            advertiser = self.register_advertiser(login)
+
         session_till = datetime.datetime.utcnow() + datetime.timedelta(
             hours=self.context.user_session_timeout)
         return dc.UserWeb(
