@@ -30,6 +30,8 @@ class Context:
         self.static_path: str = self.config['static_path']
         self.static_url: str = self.config['static_url']
         self.uri_prefix: str = self.config.get('uri_prefix', '')
+        self.nft_api_url: str = self.config['nft_api_url']
+        self.nft_api_key: str = self.config['nft_api_key']
         self.api_secret: str = self.config['api_secret']
         self.jwt_algorithm: str = self.config['jwt_algorithm']
         self.user_session_timeout: int = self.config['user_session_timeout']

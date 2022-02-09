@@ -1,8 +1,12 @@
+import asyncio
 import base64
 import datetime
+import json
 import os
 from typing import Optional, Union
 
+import aiofiles
+import aiohttp
 from sqlalchemy import select, delete, update, Date, cast
 from sqlalchemy.engine import Row
 from sqlalchemy.orm import Session
@@ -141,7 +145,26 @@ class MS:
         creatives = self.get_creatives([id_])
         return creatives[0] if creatives else None
 
-    def add_creative(
+    async def upload_file_to_nft_storage(self, filepath):
+        async with aiofiles.open(filepath, mode='r') as f:
+            file_content = await f.read()
+        await f.close()
+        headers = {'Authorization': f'Bearer {self.context.nft_api_key}'}
+        if file_content:
+            async with aiohttp.ClientSession() as session:
+                async with session.post(
+                        self.context.nft_api_url,
+                        data=file_content,
+                        headers=headers
+                ) as resp:
+                    response = await resp.text()
+            if resp.status == 200:
+                json_response = json.loads(response)
+                return resp.status, json_response['value']['cid']
+            return resp.status, ''
+        return None, ''
+
+    async def add_creative(
             self,
             name: str,
             file: str,
@@ -155,9 +178,9 @@ class MS:
             f.write(base64.b64decode(file).decode())
         url = self.context.static_url + filename
 
-        # TODO: @viacheslav.sabadash
-        # nft_ref = self.upload_file_to_tft_storage(filepath)
-        nft_ref = ''
+        status, nft_ref = await self.upload_file_to_nft_storage(filepath)
+        if status != 200:
+            return status
 
         creative = models.Creative(
             advert_id,
@@ -170,6 +193,8 @@ class MS:
         )
         self.session.add(creative)
         self.session.commit()
+
+        return status
 
     def delete_creative(self, id_):
         _id = int(id_)

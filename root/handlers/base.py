@@ -144,6 +144,8 @@ class BaseHandler(RequestHandler):
             exc_info = sys.exc_info()
             if exc_info[0] == KeyError:
                 reason = f'Argument `{exc_info[1].args[0]}` is required but not specified.'
+            # elif exc_info[0] == ValueError:
+            #     reason = f'Argument `{exc_info[1].args[0]}` - {exc_info[0]}'
             elif exc_info[0] == TypeError:
                 if '__init__' in exc_info[1].args[0]:
                     reason = f'Missed arguments: {exc_info[1].args[0].split(": ")[-1]}'
