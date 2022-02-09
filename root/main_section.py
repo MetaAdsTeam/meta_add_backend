@@ -174,8 +174,8 @@ class MS:
         advert_id = self.user.id
         filename = f'{datetime.datetime.utcnow().timestamp()}_{filename}'
         filepath = os.path.join(self.context.static_path, filename)
-        with open(filepath, 'w') as f:
-            f.write(base64.b64decode(file).decode())
+        with open(filepath, 'wb') as f:
+            f.write(base64.b64decode(file))
         url = self.context.static_url + filename
 
         status, nft_ref = await self.upload_file_to_nft_storage(filepath)
