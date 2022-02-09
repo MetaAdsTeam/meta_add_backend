@@ -54,6 +54,7 @@ class Creative(Deeply):
     nft_ref: str
     url: str
     name: str
+    description: str
 
 
 @dataclass

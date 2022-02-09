@@ -1,4 +1,6 @@
+import base64
 import datetime
+import os
 from typing import Optional, Union
 
 from sqlalchemy import select, delete, update, Date, cast
@@ -131,6 +133,7 @@ class MS:
                 row.Creative.nft_ref,
                 row.Creative.url,
                 row.Creative.name,
+                row.Creative.description,
             ) for row in rows
         ]
 
@@ -138,11 +141,35 @@ class MS:
         creatives = self.get_creatives([id_])
         return creatives[0] if creatives else None
 
-    def add_creative(self, creative):
-        if self.user:
-            creative.advert_id = self.user.id
-            self.session.add(creative)
-            self.session.commit()
+    def add_creative(
+            self,
+            name: str,
+            file: str,
+            filename: str,
+            description: str,
+    ):
+        advert_id = self.user.id
+        filename = f'{datetime.datetime.utcnow().timestamp()}_{filename}'
+        filepath = os.path.join(self.context.static_path, filename)
+        with open(filepath, 'w') as f:
+            f.write(base64.b64decode(file).decode())
+        url = self.context.static_url + filename
+
+        # TODO: @viacheslav.sabadash
+        # nft_ref = self.upload_file_to_tft_storage(filepath)
+        nft_ref = ''
+
+        creative = models.Creative(
+            advert_id,
+            None,  # TODO: remove useless field
+            nft_ref,
+            name,
+            description,
+            url,
+            filepath
+        )
+        self.session.add(creative)
+        self.session.commit()
 
     def delete_creative(self, id_):
         _id = int(id_)

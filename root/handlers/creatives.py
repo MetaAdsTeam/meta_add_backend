@@ -13,17 +13,13 @@ class CreativesHandler(BaseHandler):
             await self.send_json(self.ms.get_creatives())
 
     async def post(self):
-        creative = models.Creative(
-            self.json_args['advert_id'],
-            self.json_args['content_type_id'],
-            self.json_args['nft_ref'],
+        self.ms.add_creative(
             self.json_args['name'],
+            self.json_args['file'],
+            self.json_args['filename'],
             self.json_args.get('description'),
-            self.json_args.get('url'),
-            self.json_args.get('path'),
         )
-        self.ms.add_creative(creative)
-        await self.send_ok()
+        await self.send_json(self.ms.get_creatives())
 
     async def delete(self, id_):
         self.ms.delete_creative(id_)
