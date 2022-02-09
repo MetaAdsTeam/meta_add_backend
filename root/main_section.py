@@ -146,15 +146,12 @@ class MS:
         return creatives[0] if creatives else None
 
     async def upload_file_to_nft_storage(self, filepath):
-        async with aiofiles.open(filepath, mode='r') as f:
-            file_content = await f.read()
-        await f.close()
         headers = {'Authorization': f'Bearer {self.context.nft_api_key}'}
-        if file_content:
+        async with aiofiles.open(filepath, mode='rb') as f:
             async with aiohttp.ClientSession() as session:
                 async with session.post(
                         self.context.nft_api_url,
-                        data=file_content,
+                        data={'file': f},
                         headers=headers
                 ) as resp:
                     response = await resp.text()
@@ -162,7 +159,6 @@ class MS:
                 json_response = json.loads(response)
                 return resp.status, json_response['value']['cid']
             return resp.status, ''
-        return None, ''
 
     async def add_creative(
             self,
