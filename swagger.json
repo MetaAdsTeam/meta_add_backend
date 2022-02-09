@@ -673,9 +673,6 @@
             "type": "integer",
             "example": 1
           },
-          "type": {
-            "type": "string"
-          },
           "nft_ref": {
             "type": "string"
           },

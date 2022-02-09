@@ -50,7 +50,6 @@ class AdSpotStats(Deeply):
 @dataclass
 class Creative(Deeply):
     id: int
-    type: str
     nft_ref: str
     url: str
     name: str

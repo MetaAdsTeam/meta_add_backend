@@ -119,10 +119,6 @@ class MS:
     def get_creatives(self, ids: Optional[list[int]] = None) -> list['dc.Creative']:
         q = select(
             models.Creative,
-            models.CreativeType,
-        ).join(
-            models.CreativeType,
-            models.Creative.creative_type_id == models.CreativeType.id,
         )
         if ids is not None:
             q = q.filter(models.Creative.id.in_(ids))
@@ -133,7 +129,6 @@ class MS:
         return [
             dc.Creative(
                 row.Creative.id,
-                row.CreativeType.name,
                 row.Creative.nft_ref,
                 row.Creative.url,
                 row.Creative.name,
