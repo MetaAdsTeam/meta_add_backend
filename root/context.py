@@ -35,6 +35,7 @@ class Context:
         self.api_secret: str = self.config['api_secret']
         self.jwt_algorithm: str = self.config['jwt_algorithm']
         self.user_session_timeout: int = self.config['user_session_timeout']
+        self.max_timeslot_duration: int = self.config.get('max_timeslot_duration', 60)
         db: dict[str, Any] = self.config['db']
         self.db_config = dc.DBConfig(**db)
         self.__db_controller: Optional['DBController'] = None

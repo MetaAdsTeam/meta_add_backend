@@ -521,6 +521,9 @@ class MS:
         return timeslot.id
 
     def add_playback_timeslot(self, timeslot, playback):
+        if (timeslot.to_time - timeslot.from_time).seconds > self.context.max_timeslot_duration:
+            raise ValueError(f'ValueError: to_time - from_time is must be '
+                             f'smaller than {self.context.max_timeslot_duration} sec')
         self.session.add(timeslot)
         self.session.flush()
         if timeslot.id:

@@ -4,10 +4,10 @@ user_session_timeout: 168
 debug_mode: False
 static_path: '/home/backdev/data/'
 static_url: 'https://metaads.team/data/'
-
 uri_prefix: ''
 nft_api_url: 'https://api.nft.storage/upload'
 nft_api_key: ''
+max_timeslot_duration: 60
 
 db:
   server: "localhost"

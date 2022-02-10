@@ -26,8 +26,12 @@ class PlaybacksHandler(BaseHandler):
             self.json_args.get('play_price'),
             None,
         )
-        self.ms.add_playback_timeslot(timeslot, creative)
-        await self.send_ok()
+        try:
+            self.ms.add_playback_timeslot(timeslot, creative)
+        except ValueError as e:
+            await self.send_failed(str(e), 400)
+        else:
+            await self.send_ok()
 
     async def delete(self, id_: str):
         self.ms.delete_playback(int(id_))
