@@ -6,6 +6,7 @@ from typing import Optional, Union
 
 import aiofiles
 import aiohttp
+from aiohttp.web import HTTPException
 from sqlalchemy import select, delete, update, Date, cast
 from sqlalchemy.engine import Row
 from sqlalchemy.orm import Session
@@ -150,10 +151,10 @@ class MS:
                         headers=headers
                 ) as resp:
                     response = await resp.text()
-            if resp.status == 200:
-                json_response = json.loads(response)
-                return resp.status, json_response['value']['cid']
-            return resp.status, ''
+            if resp.status != 200:
+                raise exc.APIError(resp.reason, resp.status)
+            json_response = json.loads(response)
+            return resp.status, json_response['value']['cid']
 
     async def add_creative(
             self,
@@ -169,23 +170,26 @@ class MS:
             f.write(base64.b64decode(file))
         url = self.context.static_url + filename
 
-        status, nft_ref = await self.upload_file_to_nft_storage(filepath)
-        if status != 200:
-            return status
-
-        creative = models.Creative(
-            advert_id,
-            None,  # TODO: remove useless field
-            nft_ref,
-            name,
-            description,
-            url,
-            filepath
-        )
-        self.session.add(creative)
-        self.session.commit()
-
-        return status
+        try:
+            status, nft_ref = await self.upload_file_to_nft_storage(filepath)
+        except IOError:
+            exc.APIError(f'Could not read file: {filepath}')
+        except HTTPException as e:
+            exc.APIError(e.reason)
+        except exc.APIError as e:
+            exc.APIError(e.message)
+        else:
+            creative = models.Creative(
+                advert_id,
+                None,  # TODO: remove useless field
+                nft_ref,
+                name,
+                description,
+                url,
+                filepath
+            )
+            self.session.add(creative)
+            self.session.commit()
 
     def delete_creative(self, id_):
         _id = int(id_)
