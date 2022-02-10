@@ -2,6 +2,7 @@ from typing import Optional
 
 from root import models
 from root.handlers import BaseHandler
+import root.exceptions as exc
 
 
 class PlaybacksHandler(BaseHandler):
@@ -28,8 +29,8 @@ class PlaybacksHandler(BaseHandler):
         )
         try:
             self.ms.add_playback_timeslot(timeslot, creative)
-        except ValueError as e:
-            await self.send_failed(str(e), 400)
+        except exc.APIError as e:
+            await self.send_failed(e.message, e.code)
         else:
             await self.send_ok()
 

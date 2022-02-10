@@ -18,4 +18,3 @@ class LoginHandler(BaseHandler):
         )
         resp = {'Authorization': f'Bearer {token}'}
         await self.send_json(resp)
-

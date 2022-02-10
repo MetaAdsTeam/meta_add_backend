@@ -1,4 +1,3 @@
-import asyncio
 import base64
 import datetime
 import json
@@ -16,6 +15,7 @@ import root
 import root.log_lib as log_lib
 import root.models as models
 import root.data_classes as dc
+import root.exceptions as exc
 
 
 class MS:
@@ -522,8 +522,8 @@ class MS:
 
     def add_playback_timeslot(self, timeslot, playback):
         if (timeslot.to_time - timeslot.from_time).seconds > self.context.max_timeslot_duration:
-            raise ValueError(f'ValueError: to_time - from_time is must be '
-                             f'smaller than {self.context.max_timeslot_duration} sec')
+            raise exc.APIError(f'APIError: period from_time-to_time is must be '
+                               f'smaller than {self.context.max_timeslot_duration} sec')
         self.session.add(timeslot)
         self.session.flush()
         if timeslot.id:
