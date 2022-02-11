@@ -517,7 +517,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Playback"
+                  "$ref": "#/components/schemas/Creative"
                 }
               }
             }
@@ -701,6 +701,9 @@
             "type": "string"
           },
           "description": {
+            "type": "string"
+          },
+          "blockchain_ref": {
             "type": "string"
           }
         }
