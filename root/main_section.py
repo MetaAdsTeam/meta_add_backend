@@ -548,6 +548,18 @@ class MS:
         if (timeslot.to_time - timeslot.from_time).seconds > self.context.max_timeslot_duration:
             raise exc.APIError(f'APIError: period from_time-to_time is must be '
                                f'smaller than {self.context.max_timeslot_duration} sec')
+
+        q = select(
+            models.Creative.blockchain_ref
+        ).where(
+            models.Creative.id == playback.creative_id
+        )
+        creative = self.session.execute(q).first()
+        if not creative:
+            raise exc.APIError(f'Current creative.id={playback.creative_id} is unavailable.')
+        elif not creative.blockchain_ref:
+            raise exc.APIError('Current creative.blockchain_ref is empty.')
+
         self.session.add(timeslot)
         self.session.flush()
         if timeslot.id:

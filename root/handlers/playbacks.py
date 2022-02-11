@@ -19,12 +19,12 @@ class PlaybacksHandler(BaseHandler):
             True
         )
         creative = models.Playback(
-            self.json_args['adspot_id'],
+            int(self.json_args['adspot_id']),
             None,
-            self.json_args['creative_id'],
-            self.json_args.get('status_id'),
+            int(self.json_args['creative_id']),
+            int(self.json_args.get('status_id')),
             self.json_args.get('smart_contract'),
-            self.json_args.get('play_price'),
+            float(self.json_args.get('play_price')),
             None,
         )
         try:
