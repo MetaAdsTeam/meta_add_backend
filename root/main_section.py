@@ -134,6 +134,7 @@ class MS:
                 row.Creative.url,
                 row.Creative.name,
                 row.Creative.description,
+                row.Creative.blockchain_ref,
             ) for row in rows
         ]
 

@@ -54,6 +54,7 @@ class Creative(Deeply):
     url: str
     name: str
     description: str
+    blockchain_ref: str
 
 
 @dataclass
