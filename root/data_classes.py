@@ -27,6 +27,7 @@ class AdSpot(Deeply):
     name: str
     description: str
     publisher_name: str
+    publisher_wallet_ref: str
     spot_type: str
     price: float
     preview_url: str

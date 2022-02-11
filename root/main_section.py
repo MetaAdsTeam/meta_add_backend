@@ -62,6 +62,7 @@ class MS:
                 row.AdSpotType.name,
                 row.AdSpot.description,
                 row.Publisher.name,
+                row.Publisher.wallet_ref,
                 row.AdSpotType.name,
                 row.AdSpot.price,
                 row.AdSpot.preview_url,
@@ -87,10 +88,10 @@ class MS:
                 models.Playback.play_price,
             ).join(
                 models.Playback,
-                models.Playback.creative_id == models.Creative.id
+                models.Playback.creative_id == models.Creative.id,
             ).join(
                 models.TimeSlot,
-                models.TimeSlot.id == models.Playback.timeslot_id
+                models.TimeSlot.id == models.Playback.timeslot_id,
             ).filter(
                 models.Playback.adspot_id == id_,
                 models.TimeSlot.from_time <= datetime.datetime.utcnow(),
