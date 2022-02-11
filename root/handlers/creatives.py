@@ -20,8 +20,10 @@ class CreativesHandler(BaseHandler):
                 self.json_args['filename'],
                 self.json_args.get('description'),
             )
+        except KeyError as e:
+            await self.send_failed(f'Argument \'{e.args[0]}\' is required but not specified.')
         except exc.APIError as e:
-            await self.send_failed()
+            await self.send_failed(e.message)
         else:
             await self.send_json(self.ms.get_creatives())
 
@@ -32,6 +34,8 @@ class CreativesHandler(BaseHandler):
     async def put(self, id_):
         try:
             self.ms.set_blockchain_ref(id_, self.json_args['blockchain_ref'])
+        except KeyError as e:
+            await self.send_failed(f'Argument \'{e.args[0]}\' is required but not specified.')
         except exc.APIError as e:
             await self.send_failed(e.message)
         else:
