@@ -117,10 +117,12 @@ class MS:
             'ok',
         )
 
-    def get_creatives(self, ids: Optional[list[int]] = None) -> list['dc.Creative']:
+    def get_creatives(self, ids: Optional[list[int]] = None, mint: bool = False) -> list['dc.Creative']:
         q = select(
             models.Creative,
         )
+        if mint:
+            q = q.filter(models.Creative.blockchain_ref.isnot(None))
         if ids is not None:
             q = q.filter(models.Creative.id.in_(ids))
         if self.user:
