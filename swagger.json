@@ -659,6 +659,10 @@
             "type": "string",
             "example": "Nmae"
           },
+          "publisher_wallet_ref": {
+            "type": "string",
+            "example": "Nmae"
+          },
           "spot_type": {
             "type": "integer",
             "example": 1
