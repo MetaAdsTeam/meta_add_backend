@@ -10,6 +10,7 @@ class Creative(models.Base):
     advert_id = Column(Integer, ForeignKey('advertisers.id'))
     creative_type_id = Column(Integer, ForeignKey('creative_types.id'))
     nft_ref = Column(String, nullable=False)
+    blockchain_ref = Column(String)
     name = Column(String, nullable=False)
     description = Column(String)
     url = Column(String)
@@ -20,6 +21,7 @@ class Creative(models.Base):
             advert_id,
             content_type_id,
             nft_ref,
+            blockchain_ref,
             name,
             description,
             url,
@@ -28,6 +30,7 @@ class Creative(models.Base):
         self.advert_id = advert_id
         self.content_type_id = content_type_id
         self.nft_ref = nft_ref
+        self.blockchain_ref = blockchain_ref
         self.name = name
         self.description = description
         self.url = url

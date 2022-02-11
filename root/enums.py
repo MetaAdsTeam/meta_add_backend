@@ -19,5 +19,6 @@ class UrlName(Enum):
     CREATIVES = 'creatives'
     CREATIVE = 'creative'
     CREATIVE_ID = 'creative_id'
+    CREATIVE_ID_REF = 'creative_id_ref'
     TIMESLOTS_BY_ADSPOT_ID = 'timeslots_by_adspot_id'
     TIMESLOTS_BY_ADSPOT_ID_DATE = 'timeslots_by_adspot_id_date'

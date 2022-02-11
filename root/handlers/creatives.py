@@ -28,3 +28,11 @@ class CreativesHandler(BaseHandler):
     async def delete(self, id_):
         self.ms.delete_creative(id_)
         await self.send_ok()
+
+    async def put(self, id_):
+        try:
+            self.ms.set_blockchain_ref(id_, self.json_args['blockchain_ref'])
+        except exc.APIError as e:
+            await self.send_failed(e.message)
+        else:
+            await self.send_ok()

@@ -183,10 +183,11 @@ class MS:
                 advert_id,
                 None,  # TODO: remove useless field
                 nft_ref,
+                None,
                 name,
                 description,
                 url,
-                filepath
+                filepath,
             )
             self.session.add(creative)
             self.session.commit()
@@ -201,6 +202,24 @@ class MS:
         if self.user:
             q = q.filter(models.Creative.advert_id == self.user.id)
         self.session.execute(q)
+        self.session.commit()
+
+    def set_blockchain_ref(self, id_, blockchain_ref):
+        _id = int(id_)
+        q = update(
+            models.Creative
+        ).where(
+            models.Creative.id == _id
+        ).values(
+            blockchain_ref=blockchain_ref
+        ).returning(
+            models.Creative.id
+        )
+        if self.user:
+            q = q.filter(models.Creative.advert_id == self.user.id)
+        updated = self.session.execute(q)
+        if not updated.rowcount:
+            raise exc.APIError('Creative not found.')
         self.session.commit()
 
     def get_playbacks(self, ids: Optional[list[int]] = None) -> list['dc.Playback']:

@@ -524,6 +524,42 @@
           }
         }
       },
+      "put": {
+        "tags": [
+          "developers"
+        ],
+        "summary": "update Creative blockchain_ref value",
+        "description": "update Creative blockchain_ref value by {id}",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "get Creative by {id}",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Create new Creative",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/id_id_body"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Creative deleted"
+          }
+        }
+      },
       "delete": {
         "tags": [
           "developers"
@@ -559,32 +595,14 @@
         "description": "Add Creative",
         "requestBody": {
           "description": "Create new Creative",
-          "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "required": [
-                  "name",
-                  "filename",
-                  "file"
-                ],
-                "properties": {
-                  "name": {
-                    "type": "string"
-                  },
-                  "file": {
-                    "type": "string"
-                  },
-                  "filename": {
-                    "type": "string"
-                  },
-                  "description": {
-                    "type": "string"
-                  }
-                }
+                "$ref": "#/components/schemas/creative_body"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -852,6 +870,37 @@
             "items": {
               "$ref": "#/components/schemas/Creative"
             }
+          }
+        }
+      },
+      "id_id_body": {
+        "required": [
+          "blockchain_ref"
+        ],
+        "properties": {
+          "blockchain_ref": {
+            "type": "string"
+          }
+        }
+      },
+      "creative_body": {
+        "required": [
+          "file",
+          "filename",
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "file": {
+            "type": "string"
+          },
+          "filename": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
           }
         }
       }
