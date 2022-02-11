@@ -477,6 +477,19 @@
         ],
         "summary": "get all Creatives",
         "description": "Get all Creatives",
+        "parameters": [
+          {
+            "name": "mint",
+            "in": "query",
+            "description": "get Creative by {id}",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "list of available Creatives",
