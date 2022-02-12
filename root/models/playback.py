@@ -1,6 +1,7 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, Float, DateTime
+from sqlalchemy import Column, Integer, String, ForeignKey, Float, DateTime, Enum
 
 from root import models
+import root.enums as enums
 
 
 class Playback(models.Base):
@@ -10,7 +11,7 @@ class Playback(models.Base):
     adspot_id = Column(Integer, ForeignKey('adspots.id'), nullable=False)
     timeslot_id = Column(Integer, ForeignKey('timeslots.id'), nullable=False)
     creative_id = Column(Integer, ForeignKey('creatives.id'), nullable=False)
-    status_id = Column(Integer, ForeignKey('playback_statuses.id'))
+    status = Column(Enum(enums.PlaybackStatus))
     smart_contract = Column(String)
     play_price = Column(Float)
     taken_at = Column(DateTime)
@@ -21,7 +22,7 @@ class Playback(models.Base):
             adspot_id,
             timeslot_id,
             creative_id,
-            status_id,
+            status,
             smart_contract,
             play_price,
             processed_at,
@@ -29,7 +30,12 @@ class Playback(models.Base):
         self.adspot_id = adspot_id
         self.timeslot_id = timeslot_id
         self.creative_id = creative_id
-        self.status_id = status_id
+        if isinstance(status, enums.PlaybackStatus):
+            self.status = status
+        elif isinstance(status, str):
+            self.status = enums.PlaybackStatus(status.lower())
+        else:
+            self.status = None
         self.smart_contract = smart_contract
         self.play_price = play_price
         self.processed_at = processed_at

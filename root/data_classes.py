@@ -69,7 +69,7 @@ class Playback(Deeply):
     creative_description: str
     creative_url: str
     creative_path: str
-    status_name: str
+    status: str
     smart_contract: str
     spot_price: int
     play_price: float
@@ -112,12 +112,6 @@ class TimeSlot(Deeply):
 
     def __contains__(self, item: datetime.datetime):
         return self.from_time <= item <= self.to_time
-
-
-@dataclass
-class PlaybackStatuses(Deeply):
-    id: int
-    name: str
 
 
 @dataclass

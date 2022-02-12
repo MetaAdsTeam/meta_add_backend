@@ -17,6 +17,7 @@ import root.log_lib as log_lib
 import root.models as models
 import root.data_classes as dc
 import root.exceptions as exc
+from root import enums
 
 
 class MS:
@@ -233,7 +234,6 @@ class MS:
             models.CreativeType,
             models.Advertiser,
             models.TimeSlot,
-            models.PlaybackStatus,
             models.AdSpot,
             models.AdSpotType
         ).join(
@@ -248,9 +248,6 @@ class MS:
         ).join(
             models.TimeSlot,
             models.Playback.timeslot_id == models.TimeSlot.id,
-        ).join(
-            models.PlaybackStatus,
-            models.Playback.status_id == models.PlaybackStatus.id,
         ).join(
             models.AdSpot,
             models.Playback.adspot_id == models.AdSpot.id,
@@ -275,7 +272,7 @@ class MS:
                 row.Creative.description,
                 row.Creative.url,
                 row.Creative.path,
-                row.PlaybackStatus.name,
+                row.Playback.status and row.Playback.status.value,
                 row.Playback.smart_contract,
                 row.AdSpot.price,
                 row.Playback.play_price,
@@ -498,16 +495,6 @@ class MS:
             )
         self.session.execute(q)
         self.session.commit()
-
-    def get_playback_statuses(self) -> list['dc.PlaybackStatuses']:
-        q = select(models.PlaybackStatus)
-        rows: list[models.PlaybackStatus] = self.session.execute(q).all()
-        return [
-            dc.PlaybackStatuses(
-                row.PlaybackStatus.id,
-                row.PlaybackStatus.name,
-            ) for row in rows
-        ]
 
     def get_adspot_types(self) -> list['dc.AdSpotTypes']:
         rows: list[models.AdSpotType] = self.session.execute(

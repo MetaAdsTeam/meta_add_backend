@@ -22,3 +22,12 @@ class UrlName(Enum):
     CREATIVE_ID_REF = 'creative_id_ref'
     TIMESLOTS_BY_ADSPOT_ID = 'timeslots_by_adspot_id'
     TIMESLOTS_BY_ADSPOT_ID_DATE = 'timeslots_by_adspot_id_date'
+
+
+class PlaybackStatus(Enum):
+    preparing = 'preparing'
+    signed = 'signed'
+    minting = 'minting'
+    minted = 'minted'
+    performing = 'performing'
+    success = 'success'

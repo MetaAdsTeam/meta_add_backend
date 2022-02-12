@@ -759,7 +759,7 @@
           "creative_path": {
             "type": "string"
           },
-          "status_name": {
+          "status": {
             "type": "string"
           },
           "smart_contract": {
