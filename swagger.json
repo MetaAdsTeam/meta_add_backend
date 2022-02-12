@@ -433,13 +433,21 @@
             }
           },
           {
-            "name": "status_id",
+            "name": "status",
             "in": "query",
             "required": false,
             "style": "form",
             "explode": true,
             "schema": {
-              "type": "integer"
+              "type": "string",
+              "enum": [
+                "preparing",
+                "signed",
+                "minting",
+                "minted",
+                "performing",
+                "success"
+              ]
             }
           },
           {
@@ -449,7 +457,7 @@
             "style": "form",
             "explode": true,
             "schema": {
-              "type": "integer"
+              "type": "string"
             }
           },
           {
