@@ -209,7 +209,7 @@ class MS:
         self.session.execute(q)
         self.session.commit()
 
-    def set_blockchain_ref(self, id_, blockchain_ref):
+    def edit_creative(self, id_, blockchain_ref):
         _id = int(id_)
         q = update(
             models.Creative
@@ -224,7 +224,26 @@ class MS:
             q = q.filter(models.Creative.advert_id == self.user.id)
         updated = self.session.execute(q)
         if not updated.rowcount:
-            raise exc.APIError('Creative not found.')
+            raise exc.APIError(f'Creative id = {_id} not found.')
+        self.session.commit()
+
+    def edit_playback(self, id_, status, smart_contract):
+        _id = int(id_)
+        q = update(
+            models.Playback
+        ).where(
+            models.Playback.id == _id
+        ).values(
+            status=status,
+            smart_contract=smart_contract,
+        ).returning(
+            models.Playback.id
+        )
+        # if self.user:
+        #     q = q.filter(models.Creative.advert_id == self.user.id)
+        updated = self.session.execute(q)
+        if not updated.rowcount:
+            raise exc.APIError(f'Playback id = {_id} not found.')
         self.session.commit()
 
     def get_playbacks(self, ids: Optional[list[int]] = None) -> list['dc.Playback']:

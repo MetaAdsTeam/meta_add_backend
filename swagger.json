@@ -358,6 +358,42 @@
           }
         }
       },
+      "put": {
+        "tags": [
+          "developers"
+        ],
+        "summary": "edit Playback",
+        "description": "edit Playback by {id}",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "get Playback by {id}",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "edit Creative",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/id_id_body"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Playback deleted"
+          }
+        }
+      },
       "delete": {
         "tags": [
           "developers"
@@ -569,7 +605,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/id_id_body"
+                "$ref": "#/components/schemas/id_id_body_1"
               }
             }
           },
@@ -665,11 +701,11 @@
           },
           "publisher_name": {
             "type": "string",
-            "example": "Nmae"
+            "example": "string"
           },
           "publisher_wallet_ref": {
             "type": "string",
-            "example": "Nmae"
+            "example": "string"
           },
           "spot_type": {
             "type": "integer",
@@ -902,6 +938,20 @@
         }
       },
       "id_id_body": {
+        "required": [
+          "smart_contract",
+          "status"
+        ],
+        "properties": {
+          "status": {
+            "type": "string"
+          },
+          "smart_contract": {
+            "type": "string"
+          }
+        }
+      },
+      "id_id_body_1": {
         "required": [
           "blockchain_ref"
         ],

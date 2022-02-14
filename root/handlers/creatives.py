@@ -32,7 +32,7 @@ class CreativesHandler(BaseHandler):
 
     async def put(self, id_):
         try:
-            self.ms.set_blockchain_ref(id_, self.json_args['blockchain_ref'])
+            self.ms.edit_creative(id_, self.json_args['blockchain_ref'])
         except exc.APIError as e:
             await self.send_failed(e.message)
         else:

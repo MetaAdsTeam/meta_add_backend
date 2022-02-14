@@ -37,3 +37,15 @@ class PlaybacksHandler(BaseHandler):
     async def delete(self, id_: str):
         self.ms.delete_playback(int(id_))
         await self.send_ok()
+
+    async def put(self, id_):
+        try:
+            self.ms.edit_playback(
+                id_,
+                self.json_args['status'],
+                self.json_args['smart_contract'],
+            )
+        except exc.APIError as e:
+            await self.send_failed(e.message)
+        else:
+            await self.send_ok()
