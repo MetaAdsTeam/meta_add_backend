@@ -72,7 +72,6 @@ class Playback(Deeply):
     status: str
     smart_contract: str
     spot_price: int
-    play_price: float
     locked: bool
     adspot_type_name: str
     taken_at: datetime

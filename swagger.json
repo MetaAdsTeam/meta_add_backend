@@ -812,10 +812,6 @@
           "spot_price": {
             "type": "integer"
           },
-          "play_price": {
-            "type": "number",
-            "format": "float"
-          },
           "locked": {
             "type": "boolean"
           },

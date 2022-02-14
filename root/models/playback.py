@@ -13,7 +13,6 @@ class Playback(models.Base):
     creative_id = Column(Integer, ForeignKey('creatives.id'), nullable=False)
     status = Column(Enum(enums.PlaybackStatus))
     smart_contract = Column(String)
-    play_price = Column(Float)
     taken_at = Column(DateTime)
     processed_at = Column(DateTime)
 
@@ -24,7 +23,6 @@ class Playback(models.Base):
             creative_id,
             status,
             smart_contract,
-            play_price,
             processed_at,
     ):
         self.adspot_id = adspot_id
@@ -37,5 +35,4 @@ class Playback(models.Base):
         else:
             self.status = None
         self.smart_contract = smart_contract
-        self.play_price = play_price
         self.processed_at = processed_at

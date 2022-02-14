@@ -24,7 +24,6 @@ class PlaybacksHandler(BaseHandler):
             int(self.json_args['creative_id']),
             self.json_args.get('status'),
             self.json_args.get('smart_contract'),
-            float(self.json_args.get('play_price')),
             None,
         )
         try:

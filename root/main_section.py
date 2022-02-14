@@ -294,7 +294,6 @@ class MS:
                 row.Playback.status and row.Playback.status.value,
                 row.Playback.smart_contract,
                 row.AdSpot.price,
-                row.Playback.play_price,
                 row.TimeSlot.locked,
                 row.AdSpotType.name,
                 row.Playback.taken_at,
