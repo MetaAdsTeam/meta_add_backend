@@ -227,18 +227,34 @@ class MS:
 
     def edit_playback(self, id_, status, smart_contract):
         _id = int(id_)
-        q = update(
-            models.Playback
-        ).where(
-            models.Playback.id == _id
-        ).values(
-            status=status,
-            smart_contract=smart_contract,
-        ).returning(
-            models.Playback.id
-        )
-        # if self.user:
-        #     q = q.filter(models.Creative.advert_id == self.user.id)
+        if self.user:
+            user_sub_q = select(
+                models.Creative.id
+            ).filter(
+                models.Creative.advert_id == self.user.id
+            ).scalar_subquery()
+            q = update(
+                models.Playback
+            ).where(
+                models.Playback.creative_id.in_(user_sub_q),
+                models.Playback.id == _id
+            ).values(
+                status=status,
+                smart_contract=smart_contract,
+            ).returning(
+                models.Playback.id
+            )
+        else:
+            q = update(
+                models.Playback
+            ).where(
+                models.Playback.id == _id
+            ).values(
+                status=status,
+                smart_contract=smart_contract,
+            ).returning(
+                models.Playback.id
+            )
         updated = self.session.execute(q)
         if not updated.rowcount:
             raise exc.APIError(f'Playback id = {_id} not found.')
