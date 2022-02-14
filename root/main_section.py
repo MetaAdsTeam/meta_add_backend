@@ -531,9 +531,13 @@ class MS:
             select(
                 models.TimeSlot,
                 models.Playback,
+                models.AdSpot,
             ).join(
                 models.Playback,
                 models.Playback.timeslot_id == models.TimeSlot.id,
+            ).join(
+                models.AdSpot,
+                models.Playback.adspot_id == models.AdSpot.id,
             )
         ).all()
         return [
@@ -542,7 +546,7 @@ class MS:
                 row.TimeSlot.from_time,
                 row.TimeSlot.to_time,
                 row.TimeSlot.locked,
-                None,  # TODO: Remove this method at all
+                row.AdSpot.price
             ) for row in rows
         ]
 
