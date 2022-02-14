@@ -243,7 +243,7 @@ class MS:
                 smart_contract=smart_contract,
             ).returning(
                 models.Playback.id
-            )
+            ).execution_options(synchronize_session=False)
         else:
             q = update(
                 models.Playback
@@ -257,7 +257,7 @@ class MS:
             )
         updated = self.session.execute(q)
         if not updated.rowcount:
-            raise exc.APIError(f'Playback id = {_id} not found.')
+            raise exc.APIError(f'Playback id = {_id} not found or no rights to edit this id.')
         self.session.commit()
 
     def get_playbacks(self, ids: Optional[list[int]] = None) -> list['dc.Playback']:
