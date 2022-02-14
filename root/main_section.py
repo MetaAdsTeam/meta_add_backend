@@ -86,7 +86,6 @@ class MS:
                 models.Creative.path,
                 models.TimeSlot.from_time,
                 models.TimeSlot.to_time,
-                models.Playback.play_price,
             ).join(
                 models.Playback,
                 models.Playback.creative_id == models.Creative.id,
@@ -115,7 +114,6 @@ class MS:
             is_image,
             stream_data.from_time,
             stream_data.to_time,
-            stream_data.play_price,
             'ok',
         )
 
@@ -420,6 +418,7 @@ class MS:
         q = select(
                 models.Playback,
                 models.TimeSlot,
+                models.AdSpot,
             ).join(
                 models.TimeSlot,
                 models.Playback.timeslot_id == models.TimeSlot.id,
@@ -441,7 +440,7 @@ class MS:
                 row.TimeSlot.from_time,
                 row.TimeSlot.to_time,
                 row.TimeSlot.locked,
-                row.Playback.play_price,  # TODO: recheck
+                row.AdSpot.price
             ) for row in rows
         ]
         if date_ is None:
@@ -543,7 +542,7 @@ class MS:
                 row.TimeSlot.from_time,
                 row.TimeSlot.to_time,
                 row.TimeSlot.locked,
-                row.Playback.play_price,
+                None,  # TODO: Remove this method at all
             ) for row in rows
         ]
 

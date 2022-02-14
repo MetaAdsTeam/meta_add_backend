@@ -133,7 +133,6 @@ class StreamData(Deeply):
     path: str
     from_time: datetime.datetime
     to_time: datetime.datetime
-    play_price: float
 
 
 @dataclass
@@ -142,5 +141,4 @@ class StreamWeb(Deeply):
     is_image: bool
     from_time: datetime.datetime
     to_time: datetime.datetime
-    play_price: float
     msg: str
