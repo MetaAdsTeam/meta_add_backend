@@ -265,14 +265,13 @@ class MS:
             models.Playback,
             models.Creative,
             models.CreativeType,
-            models.Advertiser,
             models.TimeSlot,
             models.AdSpot,
             models.AdSpotType
         ).join(
             models.Creative,
             models.Playback.creative_id == models.Creative.id,
-        ).join(
+        ).outerjoin(
             models.CreativeType,
             models.Creative.creative_type_id == models.CreativeType.id,
         ).join(
