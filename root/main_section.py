@@ -55,13 +55,13 @@ class MS:
                 models.AdSpotType,
                 models.AdSpotsStats,
                 models.Publisher,
-            ).join(
+            ).outerjoin(
                 models.AdSpotType,
                 models.AdSpot.spot_type_id == models.AdSpotType.id,
-            ).join(
+            ).outerjoin(
                 models.AdSpotsStats,
                 models.AdSpot.id == models.AdSpotsStats.spot_id
-            ).join(
+            ).outerjoin(
                 models.Publisher,
                 models.AdSpot.publisher_id == models.Publisher.id
             )
@@ -80,10 +80,10 @@ class MS:
                 row.AdSpot.preview_url,
                 row.AdSpot.preview_thumb_url,
                 row.AdSpot.spot_metadata,
-                row.AdSpotsStats.likes,
-                row.AdSpotsStats.views_amount,
-                row.AdSpotsStats.average_time,
-                row.AdSpotsStats.max_traffic,
+                row.AdSpotsStats and row.AdSpotsStats.likes,
+                row.AdSpotsStats and row.AdSpotsStats.views_amount,
+                row.AdSpotsStats and row.AdSpotsStats.average_time,
+                row.AdSpotsStats and row.AdSpotsStats.max_traffic,
             ) for row in rows
         ]
 
