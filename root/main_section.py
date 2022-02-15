@@ -599,7 +599,7 @@ class MS:
                 playback.adspot_id,
                 playback.timeslot_id,
                 playback.creative_id,
-                playback.status.value,
+                playback.status and playback.status.value,
                 playback.smart_contract,
                 playback.processed_at,
             )
