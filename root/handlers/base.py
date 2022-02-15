@@ -62,7 +62,7 @@ class BaseHandler(RequestHandler):
     def get_current_user(self) -> 'dc.RequestUser':
         token: str = self.request.headers.get('Authorization')
         if token:
-            with suppress(RuntimeError):
+            with suppress(Exception):
                 wt = Web3Token(token)
                 signer = wt.get_signer(validate=True)
                 token_data = wt.get_data()
