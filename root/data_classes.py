@@ -79,6 +79,17 @@ class Playback(Deeply):
 
 
 @dataclass
+class PlaybackRaw(Deeply):
+    id: int
+    adspot_id: int
+    timeslot_id: int
+    creative_id: int
+    status: str
+    smart_contract: str
+    processed_at: datetime
+
+
+@dataclass
 class AdTaskConfig(Deeply):
     name: str
     start_date: datetime.datetime

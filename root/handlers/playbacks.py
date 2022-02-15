@@ -27,11 +27,9 @@ class PlaybacksHandler(BaseHandler):
             None,
         )
         try:
-            self.ms.add_playback_timeslot(timeslot, creative)
+            await self.send_json(self.ms.add_playback_timeslot(timeslot, creative))
         except exc.APIError as e:
             await self.send_failed(e.message, e.code)
-        else:
-            await self.send_ok()
 
     async def delete(self, id_: str):
         self.ms.delete_playback(int(id_))

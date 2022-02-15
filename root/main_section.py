@@ -593,6 +593,16 @@ class MS:
             playback.timeslot_id = timeslot.id
             self.session.add(playback)
             self.session.commit()
+            self.session.refresh(playback)
+            return dc.PlaybackRaw(
+                playback.id,
+                playback.adspot_id,
+                playback.timeslot_id,
+                playback.creative_id,
+                playback.status.value,
+                playback.smart_contract,
+                playback.processed_at,
+            )
         else:
             self.session.rollback()
 
