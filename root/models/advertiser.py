@@ -9,18 +9,10 @@ class Advertiser(models.Base):
 
     id = Column(Integer, primary_key=True, nullable=False, autoincrement=True)
     login = Column(String, nullable=False, unique=True)
-    password = Column(
-        pwd.PasswordType(
-            schemes=['pbkdf2_sha512', 'md5_crypt'],
-            deprecated=['md5_crypt']
-        ),
-        nullable=False
-    )
-    name = Column(String, nullable=False)
+    name = Column(String, nullable=True)
     wallet_ref = Column(String, nullable=False)
 
-    def __init__(self, login: str, password: str, name: str, wallet_ref: str):
+    def __init__(self, login: str, wallet_ref: str, name: str):
         self.login = login
-        self.password = password
         self.name = name
         self.wallet_ref = wallet_ref

@@ -131,12 +131,17 @@ class AdSpotTypes(Deeply):
 
 
 @dataclass
+class RequestUser(Deeply):
+    near: str
+    meta_mask: str
+
+
+@dataclass
 class UserWeb(Deeply):
     id: int
     login: str
     name: str
     wallet_ref: str
-    session_exp: str
 
 
 @dataclass

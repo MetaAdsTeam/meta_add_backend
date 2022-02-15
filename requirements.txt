@@ -11,6 +11,8 @@ requests~=2.27.1
 PyJWT~=2.3.0
 deeply~=1.0.3
 urllib3~=1.26.8
-
 aiohttp~=3.8.1
 aiofiles~=0.8.0
+
+web3~=5.28.0
+eth_account~=0.5.7

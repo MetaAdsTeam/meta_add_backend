@@ -1,8 +1,7 @@
 import sys
 from contextlib import suppress
-from datetime import datetime, date
-import pickle
-from typing import Optional, Awaitable, Any
+from datetime import datetime
+from typing import Optional, Awaitable
 
 from deeply import Deeply
 import sqlalchemy.exc as sa_exc
@@ -11,14 +10,13 @@ from tornado import escape
 from tornado.template import Loader
 from tornado.web import RequestHandler
 from tornado.escape import json_decode
-from tornado.concurrent import Future
 import jwt
 
+from web3_token import Web3Token
 from root import Context
 import root.db_controller as db_controller
 import root.main_section as main_section
 import root.data_classes as dc
-import root.utils as utils
 import root.exceptions as exceptions
 from root.log_lib import get_logger
 
@@ -61,22 +59,21 @@ class BaseHandler(RequestHandler):
             self.request.uri.removeprefix('/api'),
         )
 
-    def get_current_user(self) -> 'dc.UserWeb':
-        auth: str = self.request.headers.get('Authorization')
-        if auth:
-            token = auth.removeprefix('Bearer ')
-            with suppress(Exception):
-                user_dict = jwt.decode(
-                    token,
-                    self.context.api_secret,
-                    algorithms=[self.context.jwt_algorithm]
-                )
-                user = dc.UserWeb.init_from_dict(user_dict)
+    def get_current_user(self) -> 'dc.RequestUser':
+        token: str = self.request.headers.get('Authorization')
+        if token:
+            with suppress(RuntimeError):
+                wt = Web3Token(token)
+                signer = wt.get_signer(validate=True)
+                token_data = wt.get_data()
+                session_exp = datetime.fromisoformat(token_data['Expiration Time'].removesuffix('Z'))
 
-                if datetime.fromisoformat(user.session_exp) < datetime.utcnow():
+                if session_exp < datetime.utcnow():
                     raise exceptions.UnauthorizedError(
                         'Your session has expired'
                     )
+
+                user = dc.RequestUser(wt.statement, signer)
                 return user
 
         raise exceptions.UnauthorizedError()

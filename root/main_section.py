@@ -26,11 +26,22 @@ class MS:
     def __init__(
             self, session_: Session,
             context_: Optional['root.Context'] = None,
+            request_user: Optional['dc.RequestUser'] = None,
             user: Optional['dc.UserWeb'] = None
     ):
         self.session = session_
         self.context = context_ or root.context
-        self.user = user
+        self.__user = user
+        self.request_user = request_user
+
+    @property
+    def user(self) -> Optional['dc.UserWeb']:
+        if self.__user is None and self.request_user:
+            self.__user = self.authorize(
+                self.request_user.meta_mask,
+                self.request_user.near
+            )
+        return self.__user
 
     @property
     def logger(self) -> Logger:
@@ -605,38 +616,27 @@ class MS:
         else:
             self.session.rollback()
 
-    def register_advertiser(self, login: str):
-        advertiser = models.Advertiser(login, '', login, login)
+    def register_advertiser(self, login: str, wallet_ref: str, name: str = None):
+        advertiser = models.Advertiser(login, wallet_ref, name)
         self.session.add(advertiser)
         self.session.flush()
         return advertiser
 
-    def authorize(self, login: str, password: str = None) -> 'dc.UserWeb':
-        # Password logic is temporary disabled
+    def authorize(self, login: str, wallet_ref: str = None) -> 'dc.UserWeb':
         advertiser = self.session.query(
             models.Advertiser
         ).filter(
             models.Advertiser.login == login
         ).first()
 
-        #
-        # TODO: Decide what to do with authorization
-        #
-        # if not advertiser or advertiser.password != password:
-        #     raise exceptions.UnauthorizedError(
-        #         'Invalid username/password combination'
-        #     )
-        #
-
         if advertiser is None:
-            advertiser = self.register_advertiser(login)
+            advertiser = self.register_advertiser(login, wallet_ref, )
+        elif advertiser.wallet_ref != wallet_ref:
+            advertiser.wallet_ref = wallet_ref
 
-        session_till = datetime.datetime.utcnow() + datetime.timedelta(
-            hours=self.context.user_session_timeout)
         return dc.UserWeb(
             advertiser.id,
             advertiser.login,
             advertiser.name,
             advertiser.wallet_ref,
-            session_till.isoformat()
         )
