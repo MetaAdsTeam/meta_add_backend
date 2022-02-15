@@ -7,7 +7,7 @@ import root.exceptions as exc
 class CreativesHandler(BaseHandler):
 
     async def get(self, id_: Optional[str] = None):
-        mint = bool(self.json_args.get('mint') != 'false')
+        mint = bool(self.json_args.get('mint') == 'true')
         if id_ is not None:
             await self.send_json(self.ms.get_creative(int(id_)))
         else:
