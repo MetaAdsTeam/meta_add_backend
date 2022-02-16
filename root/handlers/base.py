@@ -10,12 +10,12 @@ from tornado import escape
 from tornado.template import Loader
 from tornado.web import RequestHandler
 from tornado.escape import json_decode
-import jwt
 
 from web3_token import Web3Token
 from root import Context
 import root.db_controller as db_controller
 import root.main_section as main_section
+import root.utils as utils
 import root.data_classes as dc
 import root.exceptions as exceptions
 from root.log_lib import get_logger
@@ -66,7 +66,7 @@ class BaseHandler(RequestHandler):
                 wt = Web3Token(token)
                 signer = wt.get_signer(validate=True)
                 token_data = wt.get_data()
-                session_exp = datetime.fromisoformat(token_data['Expiration Time'].removesuffix('Z'))
+                session_exp = utils.proper_utc_date(token_data['Expiration Time'])
 
                 if session_exp < datetime.utcnow():
                     raise exceptions.UnauthorizedError(

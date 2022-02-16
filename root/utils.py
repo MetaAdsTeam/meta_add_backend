@@ -1,14 +1,17 @@
 from datetime import datetime
 from pathlib import Path
-from pprint import pprint
-from typing import Optional, Union
-import urllib3
-import aiohttp
-import aiofiles
 
-import root.models as models
-import root.enums as enums
-import root.exceptions as exceptions
+import aiofiles
+import aiohttp
+import pytz
+
+
+def proper_utc_date(iso_string: str) -> datetime:
+    dt = datetime.fromisoformat(iso_string.removesuffix('Z'))
+    if dt.tzinfo is not None:
+        dt = dt.astimezone(pytz.UTC)
+        dt = dt.replace(tzinfo=None)
+    return dt
 
 
 async def file_download(url: str, dir_to_save: str):

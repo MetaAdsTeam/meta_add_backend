@@ -2,7 +2,7 @@ from datetime import datetime
 
 from sqlalchemy import Column, Integer, DateTime, Boolean
 
-from root import models
+from root import models, utils
 
 
 class TimeSlot(models.Base):
@@ -19,6 +19,6 @@ class TimeSlot(models.Base):
             to_time: str,
             locked: bool,
     ):
-        self.from_time = datetime.fromisoformat(from_time)
-        self.to_time = datetime.fromisoformat(to_time)
+        self.from_time = utils.proper_utc_date(from_time)
+        self.to_time = utils.proper_utc_date(to_time)
         self.locked = locked
