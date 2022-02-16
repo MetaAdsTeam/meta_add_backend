@@ -24,7 +24,7 @@ class Near:
         try:
             data = json.dumps({'playback_id': playback_id})
             command = f"near call {self.account_id} transfer_funds '{data}' --accountId  {self.account_id}"
-            self.logger.debug(f'Executing: "{command}"')
+            self.logger.info(f'Executing: "{command}"')
             stream = os.popen(command)
             output = stream.read()
             self.logger.info(f'Funds transferred. Output:\n{output}')

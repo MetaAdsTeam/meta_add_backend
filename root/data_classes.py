@@ -112,6 +112,10 @@ class AdTask(Deeply):
     primarily: bool
     config: 'AdTaskConfig'
 
+    def __post_init__(self):
+        if self.api_url == 'NULL':
+            self.api_url = None
+
 
 @dataclass
 class TimeSlot(Deeply):
