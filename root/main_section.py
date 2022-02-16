@@ -72,6 +72,7 @@ class MS:
             dc.AdSpot(
                 row.AdSpot.id,
                 row.AdSpot.name,
+                row.AdSpot.active,
                 row.AdSpot.description,
                 row.Publisher.name,
                 row.Publisher.wallet_ref,

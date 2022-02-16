@@ -25,6 +25,7 @@ class DBConfig(Deeply):
 class AdSpot(Deeply):
     id: int
     name: str
+    active: bool
     description: str
     publisher_name: str
     publisher_wallet_ref: str

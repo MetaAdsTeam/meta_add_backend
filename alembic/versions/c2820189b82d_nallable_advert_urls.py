@@ -1,7 +1,7 @@
 """nallable advert urls
 
 Revision ID: c2820189b82d
-Revises: 95ca4ee12c74
+Revises: bf4ef4bdd392
 Create Date: 2022-02-16 15:30:00.362442
 
 """
@@ -11,7 +11,7 @@ import sqlalchemy as sa
 
 # revision identifiers, used by Alembic.
 revision = 'c2820189b82d'
-down_revision = '95ca4ee12c74'
+down_revision = 'bf4ef4bdd392'
 branch_labels = None
 depends_on = None
 
