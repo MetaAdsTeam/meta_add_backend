@@ -71,7 +71,7 @@ class MS:
         return [
             dc.AdSpot(
                 row.AdSpot.id,
-                row.AdSpotType.name,
+                row.AdSpot.name,
                 row.AdSpot.description,
                 row.Publisher.name,
                 row.Publisher.wallet_ref,
