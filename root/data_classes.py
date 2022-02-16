@@ -106,7 +106,7 @@ class AdTaskConfig(Deeply):
 class AdTask(Deeply):
     playback_id: int
     ad_spot_id: int
-    api_url: str
+    api_url: Optional[str]
     call_at: datetime.datetime
     primarily: bool
     config: 'AdTaskConfig'

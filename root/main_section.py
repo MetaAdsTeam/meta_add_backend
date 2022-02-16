@@ -355,6 +355,7 @@ class MS:
                 models.AdSpot,
                 models.Playback.adspot_id == models.AdSpot.id,
             ).filter(
+                models.Playback.smart_contract.isnot(None),
                 sa.or_(
                     sa.and_(
                         models.Playback.taken_at.is_(None),

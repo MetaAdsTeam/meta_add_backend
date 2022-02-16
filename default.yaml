@@ -8,6 +8,8 @@ uri_prefix: ''
 nft_api_url: 'https://api.nft.storage/upload'
 nft_api_key: ''
 max_timeslot_duration: 60
+near_env: 'testnet'
+near_account_id: ''
 
 db:
   server: "localhost"

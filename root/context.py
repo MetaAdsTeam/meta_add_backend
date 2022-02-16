@@ -36,6 +36,8 @@ class Context:
         self.jwt_algorithm: str = self.config['jwt_algorithm']
         self.user_session_timeout: int = self.config['user_session_timeout']
         self.max_timeslot_duration: int = self.config.get('max_timeslot_duration', 60)
+        self.near_env: str = self.config['near_env']
+        self.near_account_id: str = self.config['near_account_id']
         db: dict[str, Any] = self.config['db']
         self.db_config = dc.DBConfig(**db)
         self.__db_controller: Optional['DBController'] = None

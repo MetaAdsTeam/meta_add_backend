@@ -18,6 +18,7 @@ class PlaybackDispatcher:
             name='PlaybackDispatcherLoop'
         )
         self.__logger = None
+        self.near = root.Near()
 
     @property
     def logger(self) -> 'root.log_lib.Logger':
@@ -60,23 +61,31 @@ class PlaybackDispatcher:
                 self.process_task(ad_task)
 
     def process_task(self, ad_task: 'root.dc.AdTask'):
+        ok = True
         try:
-            r: 'requests.Response' = requests.post(
-                ad_task.api_url,
-                json=ad_task.config.to_web()
-            )
-            if r.status_code < 400:
-                self.logger.info(
-                    f'Playback {ad_task.playback_id} was sent to {ad_task.api_url}.'
-                    f'File: {ad_task.config.name}'
+            if ad_task.api_url:
+                r: 'requests.Response' = requests.post(
+                    ad_task.api_url,
+                    json=ad_task.config.to_web()
                 )
-                self.ms.mark_task_complete(ad_task)
-            else:
-                self.logger.warning(
-                    f'Failed to sent task to {ad_task.api_url}. '
-                    f'Status: {r.status_code}. Response: {r.content}'
-                )
+                if r.status_code < 400:
+                    self.logger.info(
+                        f'Playback {ad_task.playback_id} was sent to {ad_task.api_url}.'
+                        f'File: {ad_task.config.name}'
+                    )
+                else:
+                    ok = False
+                    self.logger.warning(
+                        f'Failed to sent task to {ad_task.api_url}. '
+                        f'Status: {r.status_code}. Response: {r.content}'
+                    )
         except Exception as e:
+            ok = False
             self.logger.exception(
                 f'Failed to sent task to {ad_task.api_url}. {e}', exc_info=True
             )
+
+        if ok:
+            self.ms.mark_task_complete(ad_task)
+            if ad_task.primarily:
+                self.near.transfer_funds(ad_task.playback_id)
