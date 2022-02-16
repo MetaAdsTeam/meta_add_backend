@@ -87,5 +87,5 @@ class PlaybackDispatcher:
 
         if ok:
             self.ms.mark_task_complete(ad_task)
-            if ad_task.primarily:
+            if not ad_task.primarily:
                 self.near.transfer_funds(ad_task.playback_id)

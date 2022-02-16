@@ -391,7 +391,7 @@ class MS:
                 if ex_dt := expires_dt_by_ap.get(row.adspot_id):
                     # filter simultaneous requests
                     if ex_dt > call_at:
-                        continue
+                        api_url = None  # Do not send a request
             tasks.append(
                 dc.AdTask(
                     row.id,
