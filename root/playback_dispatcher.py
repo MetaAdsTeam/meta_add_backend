@@ -81,7 +81,7 @@ class PlaybackDispatcher:
                 raise Exception(r.text)
         except Exception as e:
             self.logger.exception(
-                f'Failed to ad defaulr to {ad_default.api_url}. {e}', exc_info=True
+                f'Failed to ad default to {ad_default.api_url}. {e}', exc_info=True
             )
 
     def process_task(self, ad_task: 'root.dc.AdTask'):

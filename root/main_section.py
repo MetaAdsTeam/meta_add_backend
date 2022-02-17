@@ -142,9 +142,9 @@ class MS:
         file_path = self.session.query(
             models.AdSpot.default_media
         ).filter(
-            models.AdSpot.default_media.isnot_(None),
+            models.AdSpot.default_media.isnot(None),
             models.AdSpot.id == id_
-        ).first()
+        ).first()[0]
 
         if not file_path:
             return None
@@ -164,7 +164,7 @@ class MS:
     def get_adspot_stream(self, id_: int) -> Optional[dc.StreamWeb]:
         stream_rows = self.get_actual_adspots_stream([id_])
         if not stream_rows:
-            return None
+            return self.get_adspot_default_stream(id_)
         stream_data = dc.StreamData(**stream_rows[0])
         stream_url, is_image = self.stream_file_meta(stream_data.path)
 
