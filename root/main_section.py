@@ -51,20 +51,23 @@ class MS:
 
     def get_adspots(self, ids: Optional[list[int]] = None) -> list['dc.AdSpot']:
         q = select(
-                models.AdSpot,
-                models.AdSpotType,
-                models.AdSpotsStats,
-                models.Publisher,
-            ).outerjoin(
-                models.AdSpotType,
-                models.AdSpot.spot_type_id == models.AdSpotType.id,
-            ).outerjoin(
-                models.AdSpotsStats,
-                models.AdSpot.id == models.AdSpotsStats.spot_id
-            ).outerjoin(
-                models.Publisher,
-                models.AdSpot.publisher_id == models.Publisher.id
-            )
+            models.AdSpot,
+            models.AdSpotType,
+            models.AdSpotsStats,
+            models.Publisher,
+        ).outerjoin(
+            models.AdSpotType,
+            models.AdSpot.spot_type_id == models.AdSpotType.id,
+        ).outerjoin(
+            models.AdSpotsStats,
+            models.AdSpot.id == models.AdSpotsStats.spot_id
+        ).outerjoin(
+            models.Publisher,
+            models.AdSpot.publisher_id == models.Publisher.id
+        ).order_by(
+            sa.desc(models.AdSpot.active),
+            models.AdSpot.spot_type_id
+        )
         if ids is not None:
             q = q.filter(models.AdSpot.id.in_(ids))
         rows: list[Union['models.AdSpot', models.AdSpotType]] = self.session.execute(q).all()
