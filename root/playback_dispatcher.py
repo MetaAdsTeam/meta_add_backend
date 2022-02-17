@@ -49,7 +49,7 @@ class PlaybackDispatcher:
         while self.alive:
             iteration_started = datetime.utcnow()
             self.component_iteration()
-            while datetime.utcnow() < iteration_started + timedelta(self.iter_time):
+            while datetime.utcnow() < iteration_started + timedelta(seconds=self.iter_time):
                 time.sleep(.1)
 
     def component_iteration(self):
