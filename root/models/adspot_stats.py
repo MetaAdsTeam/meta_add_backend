@@ -7,7 +7,7 @@ class AdSpotsStats(models.Base):
     __tablename__ = 'adspots_stats'
 
     id = Column(Integer, primary_key=True, nullable=False, autoincrement=True)
-    spot_id = Column(Integer, ForeignKey('adspots.id'))
+    spot_id = Column(Integer, ForeignKey('adspots.id'), nullable=False)
     likes = Column(Integer)
     views_amount = Column(Integer)
     average_time = Column(Integer)

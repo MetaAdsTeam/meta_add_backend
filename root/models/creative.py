@@ -7,7 +7,7 @@ class Creative(models.Base):
     __tablename__ = 'creatives'
 
     id = Column(Integer, primary_key=True, nullable=False, autoincrement=True)
-    advert_id = Column(Integer, ForeignKey('advertisers.id'))
+    advert_id = Column(Integer, ForeignKey('advertisers.id'), nullable=False)
     creative_type_id = Column(Integer, ForeignKey('creative_types.id'))
     nft_ref = Column(String, nullable=False)
     blockchain_ref = Column(String)

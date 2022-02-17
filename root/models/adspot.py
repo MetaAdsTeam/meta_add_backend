@@ -15,7 +15,7 @@ class AdSpot(models.Base):
     preview_url = Column(String)
     preview_thumb_url = Column(String)
     spot_metadata = Column(String)
-    publish_url = Column(String, )
+    publish_url = Column(String)
     stop_url = Column(String)
     jump_url = Column(String)
     delay_before_publish = Column(Float, nullable=False, default=0, server_default='0')
