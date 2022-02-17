@@ -457,9 +457,6 @@ class MS:
             ).join(
                 models.AdSpot,
                 models.Playback.adspot_id == models.AdSpot.id,
-            ).join(
-                models.AdSpotsStats,
-                models.AdSpotsStats.spot_id == models.AdSpot.id,
             ).filter(
                 models.AdSpot.id == id_,
             )

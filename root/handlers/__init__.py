@@ -8,4 +8,3 @@ from .playback_statuses import PlaybackStatusesHandler
 from .creatives import CreativesHandler
 from .adspot_stats_id import AdSpotStatsIdHandler
 from .timeslots_by_adspot_id import TimeslotsByAdspotId
-from .advertiser import LoginHandler

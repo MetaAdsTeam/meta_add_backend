@@ -14,8 +14,6 @@ loop = tornado.ioloop.IOLoop.current()
 
 def all_handlers():
     return [
-        tornado.web.url(fr"{root.context.uri_prefix}/login",
-                        LoginHandler, name=enums.UrlName.LOGIN.value),
         tornado.web.url(fr"{root.context.uri_prefix}/adspots",
                         AdSpotsHandler, name=enums.UrlName.ADSPOTS.value),
         tornado.web.url(fr"{root.context.uri_prefix}/adspot/id/([0-9]+)/stream",
