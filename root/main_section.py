@@ -80,6 +80,7 @@ class MS:
                 row.AdSpot.price,
                 row.AdSpot.preview_url,
                 row.AdSpot.preview_thumb_url,
+                row.AdSpot.jump_url,
                 row.AdSpot.spot_metadata,
                 row.AdSpotsStats and row.AdSpotsStats.likes,
                 row.AdSpotsStats and row.AdSpotsStats.views_amount,

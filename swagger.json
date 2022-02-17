@@ -721,6 +721,9 @@
           "preview_thumb_url": {
             "type": "string"
           },
+          "jump_url": {
+            "type": "string"
+          },
           "spot_metadata": {
             "type": "string"
           },

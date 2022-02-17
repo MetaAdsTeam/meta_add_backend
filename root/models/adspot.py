@@ -17,6 +17,7 @@ class AdSpot(models.Base):
     spot_metadata = Column(String)
     publish_url = Column(String)
     stop_url = Column(String)
+    jump_url = Column(String)
     delay_before_publish = Column(Float, nullable=False, default=0, server_default='0')
     active = Column(Boolean, default=True)
 
@@ -32,6 +33,7 @@ class AdSpot(models.Base):
             spot_metadata,
             publish_url,
             stop_url,
+            jump_url,
             delay_before_publish,
     ):
         self.name = name
@@ -44,4 +46,5 @@ class AdSpot(models.Base):
         self.spot_metadata = spot_metadata
         self.publish_url = publish_url
         self.stop_url = stop_url
+        self.jump_url = jump_url
         self.delay_before_publish = delay_before_publish
