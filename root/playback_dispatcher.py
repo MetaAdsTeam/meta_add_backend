@@ -20,6 +20,7 @@ class PlaybackDispatcher:
         self.__logger = None
         self.near = root.Near()
         self.iter_time = 15
+        self.sent_defaults: set[int] = set()
 
     @property
     def logger(self) -> 'root.log_lib.Logger':
@@ -60,10 +61,8 @@ class PlaybackDispatcher:
             ad_tasks = self.ms.allocate_pending_playbacks(from_dt, to_dt)
             task_ad_spot_ids = [t.ad_spot_id for t in ad_tasks]
             ad_defaults = self.ms.get_adspot_defaults(from_dt, to_dt, not_ids=task_ad_spot_ids)
-            if ad_defaults:
-                self.logger.info(f'Fetched {len(ad_tasks)} ad tasks')
-                for ad_default in ad_defaults:
-                    self.process_ad_default(ad_default)
+            for ad_default in ad_defaults:
+                self.process_ad_default(ad_default)
             if ad_tasks:
                 self.logger.info(f'Fetched {len(ad_tasks)} ad tasks')
             for ad_task in ad_tasks:
@@ -71,18 +70,27 @@ class PlaybackDispatcher:
                     time.sleep(.1)
                 self.process_task(ad_task)
 
-    def process_ad_default(self, ad_default: 'root.dc.AdSpotDefault'):
+    def process_ad_default(self, ad_default: 'root.dc.AdSpotDefault') -> bool:
+        if ad_default.ad_spot_id in self.sent_defaults:
+            return False
         try:
             r: 'requests.Response' = requests.post(
                 ad_default.api_url,
                 json=ad_default.config.to_web()
             )
-            if r.status_code < 400:
+            if r.status_code >= 400:
                 raise Exception(r.text)
+            self.sent_defaults.add(ad_default.ad_spot_id)
+            self.logger.info(
+                f'Default playback was sent to {ad_default.api_url}.\n'
+                f'File: {ad_default.config.name}'
+            )
+            return True
         except Exception as e:
             self.logger.exception(
                 f'Failed to ad default to {ad_default.api_url}. {e}', exc_info=True
             )
+        return False
 
     def process_task(self, ad_task: 'root.dc.AdTask'):
         ok = True
@@ -94,7 +102,7 @@ class PlaybackDispatcher:
                 )
                 if r.status_code < 400:
                     self.logger.info(
-                        f'Playback {ad_task.playback_id} was sent to {ad_task.api_url}.'
+                        f'Playback {ad_task.playback_id} was sent to {ad_task.api_url}.\n'
                         f'File: {ad_task.config.name}'
                     )
                 else:
@@ -112,4 +120,6 @@ class PlaybackDispatcher:
         if ok:
             self.ms.mark_task_complete(ad_task)
             if not ad_task.primarily:
+                if ad_task.ad_spot_id in self.sent_defaults:
+                    self.sent_defaults.remove(ad_task.ad_spot_id)
                 self.near.transfer_funds(ad_task.playback_id)

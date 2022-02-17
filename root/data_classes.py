@@ -96,6 +96,7 @@ class AdTaskConfig(Deeply):
     name: str
     start_date: datetime.datetime
     end_date: datetime.datetime
+    is_default: bool
 
     def to_web(self):
         ordinal = super().to_web()
@@ -169,6 +170,7 @@ class StreamData(Deeply):
 class StreamWeb(Deeply):
     url: str
     is_image: bool
+    is_default: bool
     from_time: datetime.datetime
     to_time: datetime.datetime
     msg: str

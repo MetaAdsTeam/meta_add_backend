@@ -127,7 +127,7 @@ class MS:
         stream_rows = self.session.execute(stream_q).all()
         return stream_rows
 
-    def stream_file_meta(self, stream_path) -> tuple[str, bool]:
+    def stream_file_meta(self, stream_path: str) -> tuple[str, bool]:
         stream_filename: str = stream_path.removeprefix(self.context.static_path)
         stream_url = self.context.static_url + stream_filename
 
@@ -156,6 +156,7 @@ class MS:
         return dc.StreamWeb(
             stream_url,
             is_image,
+            True,
             from_time,
             to_time,
             'ok',
@@ -171,6 +172,7 @@ class MS:
         return dc.StreamWeb(
             stream_url,
             is_image,
+            False,
             stream_data.from_time,
             stream_data.to_time,
             'ok',
@@ -412,7 +414,8 @@ class MS:
                 dc.AdTaskConfig(
                     row[2],
                     from_dt,
-                    to_dt
+                    to_dt,
+                    True
                 )
             )
             for row in default_rows
@@ -495,6 +498,7 @@ class MS:
                         row.path,
                         row.from_time,
                         row.to_time,
+                        False
                     )
                 )
             )
