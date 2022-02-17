@@ -7,7 +7,7 @@ with A NEAR Smart contract acts as an agreement between parties.
 
 Before we start, I would like to note that this software product is just a 
 backend. For full-fledged work, it will be necessary to install a [frontend](https://github.com/MetaAdsTeam) and 
-figure out how [Decentraland](https://decentraland.org/) and [Addreality](https://addreality.com/) work. I also recommend getting 
+figure out how [Decentraland](https://decentraland.org/) work. I also recommend getting 
 acquainted with the work of the NEAR cryptocurrency and the [MetaMask](https://metamask.io/) crypto wallet & gateway to blockchain apps. 
 Application use web3 token as [simpler way](https://medium.com/@bytesbay/you-dont-need-jwt-anymore-974aa6196976) to authenticate users using signed messages. Authorization takes place on a bundle of the frontend and the [MetaMask plugin](https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn).
 
