@@ -127,7 +127,7 @@ class TimeSlot(Deeply):
     price: float
 
     def __contains__(self, item: datetime.datetime):
-        return self.from_time <= item <= self.to_time
+        return self.from_time <= item < self.to_time
 
 
 @dataclass
