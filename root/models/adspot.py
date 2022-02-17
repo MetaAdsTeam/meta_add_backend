@@ -18,6 +18,7 @@ class AdSpot(models.Base):
     publish_url = Column(String)
     stop_url = Column(String)
     jump_url = Column(String)
+    default_media = Column(String)
     delay_before_publish = Column(Float, nullable=False, default=0, server_default='0')
     active = Column(Boolean, default=True)
 

@@ -96,34 +96,77 @@ class MS:
         adspots = self.get_adspots([id_])
         return adspots[0] if adspots else None
 
-    def get_adspot_stream(self, id_: int) -> Optional[dc.StreamWeb]:
-        stream_row: Optional[Row] = self.session.execute(
-            select(
-                models.Creative.path,
-                models.TimeSlot.from_time,
-                models.TimeSlot.to_time,
-            ).join(
-                models.Playback,
-                models.Playback.creative_id == models.Creative.id,
-            ).join(
-                models.TimeSlot,
-                models.TimeSlot.id == models.Playback.timeslot_id,
-            ).filter(
-                models.Playback.adspot_id == id_,
-                models.TimeSlot.from_time <= datetime.datetime.utcnow(),
-                models.TimeSlot.to_time >= datetime.datetime.utcnow(),
+    def get_actual_adspots_stream(
+            self,
+            adspot_ids: Optional[list[int]] = None,
+            moment: Optional['datetime.datetime'] = None,
+    ) -> list['Row']:
+        if moment is None:
+            moment = datetime.datetime.utcnow()
+        stream_q = select(
+            models.Playback.adspot_id,
+            models.Creative.path,
+            models.TimeSlot.from_time,
+            models.TimeSlot.to_time,
+        ).join(
+            models.Playback,
+            models.Playback.creative_id == models.Creative.id,
+        ).join(
+            models.TimeSlot,
+            models.TimeSlot.id == models.Playback.timeslot_id,
+        ).filter(
+            models.TimeSlot.from_time <= moment,
+            models.TimeSlot.to_time > moment,
+        )
+
+        if adspot_ids is not None:
+            stream_q = stream_q.filter(
+                models.Playback.adspot_id.in_(adspot_ids),
             )
-        ).first()
-        if not stream_row:
-            return None
-        stream_data = dc.StreamData(**stream_row)
-        stream_filename: str = stream_data.path.removeprefix(self.context.static_path)
+
+        stream_rows = self.session.execute(stream_q).all()
+        return stream_rows
+
+    def stream_file_meta(self, stream_path) -> tuple[str, bool]:
+        stream_filename: str = stream_path.removeprefix(self.context.static_path)
         stream_url = self.context.static_url + stream_filename
 
         is_image = stream_filename.rsplit('.', 1)[-1] in [
             'jpg', 'jpeg', 'jfif', 'pjpeg', 'pjp', 'apng', 'png',
             'svg', 'webp', 'gif', 'bmp', 'ico', 'tif', 'tiff'
         ]
+
+        return stream_url, is_image
+
+    def get_adspot_default_stream(self, id_: int) -> Optional[dc.StreamWeb]:
+        file_path = self.session.query(
+            models.AdSpot.default_media
+        ).filter(
+            models.AdSpot.default_media.isnot_(None),
+            models.AdSpot.id == id_
+        ).first()
+
+        if not file_path:
+            return None
+
+        stream_url, is_image = self.stream_file_meta(file_path)
+        from_time = datetime.datetime.utcnow()
+        to_time = from_time.replace(second=59)
+
+        return dc.StreamWeb(
+            stream_url,
+            is_image,
+            from_time,
+            to_time,
+            'ok',
+        )
+
+    def get_adspot_stream(self, id_: int) -> Optional[dc.StreamWeb]:
+        stream_rows = self.get_actual_adspots_stream([id_])
+        if not stream_rows:
+            return None
+        stream_data = dc.StreamData(**stream_rows[0])
+        stream_url, is_image = self.stream_file_meta(stream_data.path)
 
         return dc.StreamWeb(
             stream_url,
@@ -334,9 +377,53 @@ class MS:
         playbacks = self.get_playbacks([id_])
         return playbacks[0] if playbacks else None
 
-    def allocate_pending_playbacks(self) -> list['dc.AdTask']:
-        from_dt = datetime.datetime.utcnow()
-        to_dt = from_dt + datetime.timedelta(seconds=15)
+    def get_adspot_defaults(
+            self,
+            from_dt: datetime.datetime,
+            to_dt: datetime.datetime,
+            ids: Optional[list[int]] = None,
+            not_ids: Optional[list[int]] = None,
+    ) -> list['dc.AdSpotDefault']:
+        curr_streams = self.get_actual_adspots_stream(moment=from_dt)
+        active_ad_spot_ids = [s[0] for s in curr_streams]
+
+        defaults_q = select(
+            models.AdSpot.id,
+            models.AdSpot.publish_url,
+            models.AdSpot.default_media
+        ).filter(
+            models.AdSpot.id.notin_(active_ad_spot_ids),
+            models.AdSpot.active.is_(True),
+            models.AdSpot.publish_url.isnot(None),
+            models.AdSpot.default_media.isnot(None),
+        )
+
+        if ids is not None:
+            defaults_q = defaults_q.filter(models.AdSpot.id.in_(ids))
+        if not_ids is not None:
+            defaults_q = defaults_q.filter(models.AdSpot.id.notin_(not_ids))
+
+        default_rows = self.session.execute(defaults_q).all()
+
+        defaults = [
+            dc.AdSpotDefault(
+                row[0],
+                row[1],
+                dc.AdTaskConfig(
+                    row[2],
+                    from_dt,
+                    to_dt
+                )
+            )
+            for row in default_rows
+        ]
+        return defaults
+
+    def allocate_pending_playbacks(
+            self,
+            from_dt: datetime.datetime,
+            to_dt: datetime.datetime
+    ) -> list['dc.AdTask']:
         rows: list['models.Playback'] = self.session.execute(
             select(
                 models.Playback.id,
@@ -361,6 +448,7 @@ class MS:
                 models.Playback.adspot_id == models.AdSpot.id,
             ).filter(
                 models.Playback.smart_contract.isnot(None),
+                models.AdSpot.active.is_(True),
                 sa.or_(
                     sa.and_(
                         models.Playback.taken_at.is_(None),

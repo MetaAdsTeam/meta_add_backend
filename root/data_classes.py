@@ -119,6 +119,13 @@ class AdTask(Deeply):
 
 
 @dataclass
+class AdSpotDefault(Deeply):
+    ad_spot_id: int
+    api_url: str
+    config: 'AdTaskConfig'
+
+
+@dataclass
 class TimeSlot(Deeply):
     id: Optional[int]
     from_time: datetime.datetime
@@ -152,6 +159,7 @@ class UserWeb(Deeply):
 
 @dataclass
 class StreamData(Deeply):
+    adspot_id: int
     path: str
     from_time: datetime.datetime
     to_time: datetime.datetime

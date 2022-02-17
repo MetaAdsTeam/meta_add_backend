@@ -1,6 +1,6 @@
 import signal
 import time
-from datetime import datetime
+from datetime import datetime, timedelta
 from threading import Thread
 
 import requests
@@ -19,6 +19,7 @@ class PlaybackDispatcher:
         )
         self.__logger = None
         self.near = root.Near()
+        self.iter_time = 15
 
     @property
     def logger(self) -> 'root.log_lib.Logger':
@@ -46,19 +47,42 @@ class PlaybackDispatcher:
 
     def component_loop(self):
         while self.alive:
+            iteration_started = datetime.utcnow()
             self.component_iteration()
-            time.sleep(5)
+            while datetime.utcnow() < iteration_started + timedelta(self.iter_time):
+                time.sleep(.1)
 
     def component_iteration(self):
+        from_dt = datetime.utcnow()
+        to_dt = from_dt + timedelta(seconds=self.iter_time)
         with root.context.sc as sc:
             self.ms = root.MS(sc.session)
-            ad_tasks = self.ms.allocate_pending_playbacks()
+            ad_tasks = self.ms.allocate_pending_playbacks(from_dt, to_dt)
+            task_ad_spot_ids = [t.ad_spot_id for t in ad_tasks]
+            ad_defaults = self.ms.get_adspot_defaults(from_dt, to_dt, not_ids=task_ad_spot_ids)
+            if ad_defaults:
+                self.logger.info(f'Fetched {len(ad_tasks)} ad tasks')
+                for ad_default in ad_defaults:
+                    self.process_ad_default(ad_default)
             if ad_tasks:
                 self.logger.info(f'Fetched {len(ad_tasks)} ad tasks')
             for ad_task in ad_tasks:
                 while datetime.utcnow() < ad_task.call_at:
                     time.sleep(.1)
                 self.process_task(ad_task)
+
+    def process_ad_default(self, ad_default: 'root.dc.AdSpotDefault'):
+        try:
+            r: 'requests.Response' = requests.post(
+                ad_default.api_url,
+                json=ad_default.config.to_web()
+            )
+            if r.status_code < 400:
+                raise Exception(r.text)
+        except Exception as e:
+            self.logger.exception(
+                f'Failed to ad defaulr to {ad_default.api_url}. {e}', exc_info=True
+            )
 
     def process_task(self, ad_task: 'root.dc.AdTask'):
         ok = True
