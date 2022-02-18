@@ -676,15 +676,33 @@ class MS:
         self.session.commit()
         return timeslot.id
 
-    def add_playback_timeslot(self, timeslot, playback):
+    def add_playback_timeslot(self, timeslot: 'models.TimeSlot', playback: 'models.Playback'):
         if (timeslot.to_time - timeslot.from_time).seconds > self.context.max_timeslot_duration:
             raise exc.APIError(f'APIError: period from_time-to_time is must be '
                                f'smaller than {self.context.max_timeslot_duration} sec')
 
         q = select(
+            models.TimeSlot.id,
+        ).join(
+            models.Playback,
+            models.TimeSlot.id == models.Playback.timeslot_id,
+        ).where(
+            models.TimeSlot.from_time >= timeslot.from_time,
+            models.TimeSlot.to_time < timeslot.from_time,
+            models.Playback.adspot_id == playback.adspot_id,
+            models.Playback.smart_contract.isnot_(None),
+        )
+
+        exist_playback = self.session.execute(q).first()
+
+        if exist_playback:
+            raise exc.APIError(f'APIError: period from_time+to_time '
+                               f'should not be busy with other playback.')
+
+        q = select(
             models.Creative.blockchain_ref
         ).where(
-            models.Creative.id == playback.creative_id
+            models.Creative.id == playback.creative_id,
         )
         creative = self.session.execute(q).first()
         if not creative:
