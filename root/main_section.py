@@ -361,6 +361,7 @@ class MS:
         return [
             dc.Playback(
                 row.Playback.id,
+                row.AdSpot.id,
                 row.AdSpot.name,
                 row.AdSpotsStats.likes,
                 row.AdSpot.preview_thumb_url,

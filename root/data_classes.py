@@ -64,6 +64,7 @@ class Creative(Deeply):
 @dataclass
 class Playback(Deeply):
     id: int
+    adspot_id: int
     adspot_name: str
     adspot_likes: int
     preview_thumb_url: str
