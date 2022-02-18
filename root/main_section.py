@@ -358,6 +358,7 @@ class MS:
             dc.Playback(
                 row.Playback.id,
                 row.AdSpot.name,
+                row.AdSpot.preview_thumb_url,
                 row.TimeSlot.from_time,
                 row.TimeSlot.to_time,
                 row.Creative.advert_id,
