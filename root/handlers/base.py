@@ -3,6 +3,7 @@ from contextlib import suppress
 from datetime import datetime
 from typing import Optional, Awaitable
 
+import pytz
 from deeply import Deeply
 import sqlalchemy.exc as sa_exc
 from sqlalchemy.orm import Session
@@ -189,7 +190,11 @@ class BaseHandler(RequestHandler):
         try:
             body = escape.json_encode(data)
         except TypeError:
-            data = Deeply._Deeply__deep_dict(data, Deeply.rules)  # noqa
+
+            rules = [
+                (lambda obj: hasattr(obj, 'isoformat'), utils.proper_dt_iso),
+            ]
+            data = Deeply._Deeply__deep_dict(data, rules)  # noqa
             body = escape.json_encode(data)
         await self.finish(body)
 

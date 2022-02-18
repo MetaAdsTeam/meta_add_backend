@@ -2,6 +2,7 @@ import datetime
 from dataclasses import dataclass, field
 from typing import Optional
 
+import pytz
 from deeply import Deeply
 
 
@@ -135,7 +136,15 @@ class TimeSlot(Deeply):
     price: float
 
     def __contains__(self, item: datetime.datetime):
-        return self.from_time <= item < self.to_time
+        if (
+                item.tzinfo is not None and self.from_time.tzinfo is not None
+                or
+                item.tzinfo is None and self.from_time.tzinfo is None
+        ):
+            return self.from_time <= item < self.to_time
+        elif self.from_time.tzinfo is not None:
+            return self.from_time <= item.replace(tzinfo=pytz.UTC) < self.to_time
+        return self.from_time.replace(tzinfo=pytz.UTC) <= item < self.to_time.replace(tzinfo=pytz.UTC)
 
 
 @dataclass

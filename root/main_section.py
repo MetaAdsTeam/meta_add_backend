@@ -15,9 +15,9 @@ from logging import Logger
 import root
 import root.log_lib as log_lib
 import root.models as models
+import root.utils as utils
 import root.data_classes as dc
 import root.exceptions as exc
-from root import enums
 
 
 class MS:
@@ -538,7 +538,15 @@ class MS:
             row.AdSpotsStats.max_traffic,
         )
 
-    def get_timeslots_by_adspot_id(self, id_: int, date_: 'Optional[datetime]' = None) -> list['dc.TimeSlot']:
+    def get_timeslots_by_adspot_id(
+            self,
+            id_: int,
+            client_time: 'Optional[datetime.datetime]' = None
+    ) -> list['dc.TimeSlot']:
+        client_day_start, client_day_end = None, None
+        if client_time:
+            client_day_start = client_time.replace(hour=0, minute=0, second=0, microsecond=0)
+            client_day_end = client_day_start.replace(hour=23, minute=59)
         q = select(
                 models.Playback,
                 models.TimeSlot,
@@ -552,8 +560,11 @@ class MS:
             ).filter(
                 models.AdSpot.id == id_,
             )
-        if date_ is not None:
-            q = q.filter(cast(models.TimeSlot.from_time, Date) == date_)
+        if client_time is not None:
+            q = q.filter(
+                models.TimeSlot.from_time >= utils.cut_timezone(client_day_start),
+                models.TimeSlot.from_time <= utils.cut_timezone(client_day_end),
+            )
         rows: list['models.TimeSlot'] = self.session.execute(q).all()
         db_time_slots = [
             dc.TimeSlot(
@@ -564,7 +575,7 @@ class MS:
                 row.AdSpot.price
             ) for row in rows
         ]
-        if date_ is None:
+        if client_time is None:
             return db_time_slots
 
         adspot_price = self.session.query(
@@ -575,7 +586,8 @@ class MS:
 
         time_slots = []
         for i in range(24 * 60):
-            dt = datetime.datetime.combine(date_, datetime.time(i // 60, i % 60))
+            dt = client_day_start.replace(hour=i // 60, minute=i % 60)
+            # dt = datetime.datetime.combine(date_, datetime.time(i // 60, i % 60))
             locked_ts = next((ts for ts in db_time_slots if dt in ts), None)
             if locked_ts:
                 time_slots.append(locked_ts)
