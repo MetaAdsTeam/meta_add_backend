@@ -737,6 +737,12 @@
           "adspot_name": {
             "type": "string"
           },
+          "adspot_likes": {
+            "type": "integer"
+          },
+          "preview_thumb_url": {
+            "type": "string"
+          },
           "from_time": {
             "type": "string"
           },

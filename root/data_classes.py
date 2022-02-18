@@ -65,6 +65,7 @@ class Creative(Deeply):
 class Playback(Deeply):
     id: int
     adspot_name: str
+    adspot_likes: int
     preview_thumb_url: str
     from_time: datetime
     to_time: datetime

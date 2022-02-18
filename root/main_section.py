@@ -328,7 +328,8 @@ class MS:
             models.CreativeType,
             models.TimeSlot,
             models.AdSpot,
-            models.AdSpotType
+            models.AdSpotType,
+            models.AdSpotsStats,
         ).join(
             models.Creative,
             models.Playback.creative_id == models.Creative.id,
@@ -347,6 +348,9 @@ class MS:
         ).join(
             models.AdSpotType,
             models.AdSpot.spot_type_id == models.AdSpotType.id,
+        ).join(
+            models.AdSpotsStats,
+            models.AdSpot.id == models.AdSpotsStats.spot_id,
         )
         if ids is not None:
             q = q.filter(models.Playback.id.in_(ids))
@@ -358,6 +362,7 @@ class MS:
             dc.Playback(
                 row.Playback.id,
                 row.AdSpot.name,
+                row.AdSpotsStats.likes,
                 row.AdSpot.preview_thumb_url,
                 row.TimeSlot.from_time,
                 row.TimeSlot.to_time,
