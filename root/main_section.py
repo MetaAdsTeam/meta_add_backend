@@ -703,7 +703,7 @@ class MS:
             models.TimeSlot.from_time >= timeslot.from_time,
             models.TimeSlot.to_time < timeslot.from_time,
             models.Playback.adspot_id == playback.adspot_id,
-            models.Playback.smart_contract.isnot_(None),
+            models.Playback.smart_contract.isnot(None),
         )
 
         exist_playback = self.session.execute(q).first()
