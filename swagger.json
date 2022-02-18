@@ -743,6 +743,9 @@
           "preview_thumb_url": {
             "type": "string"
           },
+          "jump_url": {
+            "type": "string"
+          },
           "from_time": {
             "type": "string"
           },

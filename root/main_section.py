@@ -364,6 +364,7 @@ class MS:
                 row.AdSpot.name,
                 row.AdSpotsStats.likes,
                 row.AdSpot.preview_thumb_url,
+                row.AdSpot.jump_url,
                 row.TimeSlot.from_time,
                 row.TimeSlot.to_time,
                 row.Creative.advert_id,

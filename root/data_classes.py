@@ -67,6 +67,7 @@ class Playback(Deeply):
     adspot_name: str
     adspot_likes: int
     preview_thumb_url: str
+    jump_url: str
     from_time: datetime
     to_time: datetime
     advert_id: int
