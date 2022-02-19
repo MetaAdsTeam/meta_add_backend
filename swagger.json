@@ -721,6 +721,9 @@
           },
           "blockchain_ref": {
             "type": "string"
+          },
+          "moderated": {
+            "type": "boolean"
           }
         }
       },

@@ -115,6 +115,16 @@ class MS:
             models.TimeSlot,
             models.TimeSlot.id == models.Playback.timeslot_id,
         ).filter(
+            sa.or_(
+                sa.and_(
+                    models.Creative.moderated.isnot(False),
+                    models.AdSpot.spot_type_id != 2,  # Any ads except Offline
+                ),
+                sa.and_(
+                    models.Creative.moderated.is_(True),
+                    models.AdSpot.spot_type_id == 2,  # Offline ads
+                ),
+            ),
             models.TimeSlot.from_time <= moment,
             models.TimeSlot.to_time > moment,
         )
