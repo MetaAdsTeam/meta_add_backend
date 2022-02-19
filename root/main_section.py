@@ -181,6 +181,8 @@ class MS:
     def get_creatives(self, ids: Optional[list[int]] = None, mint: bool = False) -> list['dc.Creative']:
         q = select(
             models.Creative,
+        ).where(
+            models.Creative.moderated.isnot(False)
         )
         if mint:
             q = q.filter(models.Creative.blockchain_ref.isnot(None))
@@ -458,6 +460,16 @@ class MS:
                 models.AdSpot,
                 models.Playback.adspot_id == models.AdSpot.id,
             ).filter(
+                sa.or_(
+                    sa.and_(
+                        models.Creative.moderated.isnot(False),
+                        models.AdSpot.spot_type_id != 2,    # Any ads except Offline
+                    ),
+                    sa.and_(
+                        models.Creative.moderated.is_(True),
+                        models.AdSpot.spot_type_id == 2,    # Offline ads
+                    ),
+                ),
                 models.Playback.smart_contract.isnot(None),
                 models.AdSpot.active.is_(True),
                 sa.or_(

@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy import Column, Integer, String, ForeignKey, Boolean
 
 from root import models
 
@@ -15,6 +15,7 @@ class Creative(models.Base):
     description = Column(String)
     url = Column(String)
     path = Column(String, nullable=False)
+    moderated = Column(Boolean)
 
     def __init__(
             self,

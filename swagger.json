@@ -734,6 +734,10 @@
             "type": "integer",
             "example": 1
           },
+          "adspot_id": {
+            "type": "integer",
+            "example": 1
+          },
           "adspot_name": {
             "type": "string"
           },
