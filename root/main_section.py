@@ -103,6 +103,7 @@ class MS:
     ) -> list['Row']:
         if moment is None:
             moment = datetime.datetime.utcnow()
+
         stream_q = select(
             models.Playback.adspot_id,
             models.Creative.path,
@@ -114,6 +115,9 @@ class MS:
         ).join(
             models.TimeSlot,
             models.TimeSlot.id == models.Playback.timeslot_id,
+        ).join(
+            models.AdSpot,
+            models.AdSpot.id == models.Playback.adspot_id,
         ).filter(
             sa.or_(
                 sa.and_(
