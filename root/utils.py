@@ -68,8 +68,12 @@ def make_thumbnail(filepath: str, target_side_size: int = 350) -> Optional[str]:
         else:
             v_cap = cv2.VideoCapture(filepath)
             res, im_ar = v_cap.read()
-            while (im_ar.mean() < 50 or im_ar.mean() > 220) and res:
+            frames = 1000
+            while res and (im_ar.mean() < 25 or im_ar.mean() > 240) and frames:
                 res, im_ar = v_cap.read()
+                frames -= 1
+            if im_ar is None:
+                _, im_ar = cv2.VideoCapture(filepath).read()
 
         height, width, _ = im_ar.shape
         sides_swapped = False

@@ -17,5 +17,5 @@ def regenerate_creative_thumbnails():
 
 
 if __name__ == '__main__':
-    utils.make_thumbnail('C:\\Users\\Alexander\\Downloads\\1645102811.100973_Nike.webm')
+    utils.make_thumbnail('C:\\Users\\Alexander\\Downloads\\Earth.mp4')
     # regenerate_creative_thumbnails()
