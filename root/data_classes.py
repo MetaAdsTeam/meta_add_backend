@@ -56,6 +56,7 @@ class Creative(Deeply):
     id: int
     nft_ref: str
     url: str
+    thumbnail: str
     name: str
     description: str
     blockchain_ref: str

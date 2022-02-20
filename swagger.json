@@ -713,6 +713,9 @@
           "url": {
             "type": "string"
           },
+          "thumbnail": {
+            "type": "string"
+          },
           "name": {
             "type": "string"
           },

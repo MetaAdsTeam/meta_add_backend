@@ -57,11 +57,10 @@ def is_image(filename: str) -> bool:
     ]
 
 
-def make_thumbnail(filepath: str) -> Optional[str]:
+def make_thumbnail(filepath: str, target_side_size: int = 350) -> Optional[str]:
     filename = os.path.basename(filepath).rsplit('.', 1)[0]
     dirname = os.path.dirname(filepath)
     save_on_filename = os.path.join(dirname, f'thumb_{filename}.png')
-    target_side_size = 350
     max_side_size = target_side_size * 2
     try:
         if is_image(filepath):
@@ -69,7 +68,7 @@ def make_thumbnail(filepath: str) -> Optional[str]:
         else:
             v_cap = cv2.VideoCapture(filepath)
             res, im_ar = v_cap.read()
-            while im_ar.mean() < 128 and res:
+            while (im_ar.mean() < 50 or im_ar.mean() > 220) and res:
                 res, im_ar = v_cap.read()
 
         height, width, _ = im_ar.shape
@@ -82,6 +81,7 @@ def make_thumbnail(filepath: str) -> Optional[str]:
         target_width = round(width / (height / target_height))
 
         if target_width > max_side_size:
+            # The case where one side / other side > 2
             target_height = round(target_height / (target_width / max_side_size))
             target_width = max_side_size
 

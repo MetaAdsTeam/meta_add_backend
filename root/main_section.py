@@ -210,6 +210,7 @@ class MS:
                 row.Creative.id,
                 row.Creative.nft_ref,
                 row.Creative.url,
+                row.Creative.thumbnail,
                 row.Creative.name,
                 row.Creative.description,
                 row.Creative.blockchain_ref,
