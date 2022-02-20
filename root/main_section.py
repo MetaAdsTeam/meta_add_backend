@@ -205,17 +205,25 @@ class MS:
             q = q.filter(models.Creative.advert_id == self.user.id)
 
         rows: list['models.Creative'] = self.session.execute(q).all()
-        return [
-            dc.Creative(
-                row.Creative.id,
-                row.Creative.nft_ref,
-                row.Creative.url,
-                row.Creative.thumbnail,
-                row.Creative.name,
-                row.Creative.description,
-                row.Creative.blockchain_ref,
-            ) for row in rows
-        ]
+
+        creatives = []
+        for row in rows:
+            thumbnail_url = None
+            if row.Creative.thumbnail is not None:
+                thumbnail_url = self.path_to_url(row.Creative.thumbnail)
+
+            creatives.append(
+                dc.Creative(
+                    row.Creative.id,
+                    row.Creative.nft_ref,
+                    row.Creative.url,
+                    thumbnail_url,
+                    row.Creative.name,
+                    row.Creative.description,
+                    row.Creative.blockchain_ref,
+                )
+            )
+        return creatives
 
     def get_creative(self, id_: int) -> 'dc.Creative':
         creatives = self.get_creatives([id_])
