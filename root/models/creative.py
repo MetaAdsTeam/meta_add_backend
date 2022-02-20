@@ -15,6 +15,7 @@ class Creative(models.Base):
     description = Column(String)
     url = Column(String)
     path = Column(String, nullable=False)
+    thumbnail = Column(String)
     moderated = Column(Boolean)
 
     def __init__(
@@ -27,6 +28,7 @@ class Creative(models.Base):
             description,
             url,
             path,
+            thumbnail,
     ):
         self.advert_id = advert_id
         self.content_type_id = content_type_id
@@ -36,3 +38,4 @@ class Creative(models.Base):
         self.description = description
         self.url = url
         self.path = path
+        self.thumbnail = thumbnail

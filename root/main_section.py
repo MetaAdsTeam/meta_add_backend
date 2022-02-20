@@ -141,15 +141,14 @@ class MS:
         stream_rows = self.session.execute(stream_q).all()
         return stream_rows
 
+    def path_to_url(self, media_path: str) -> str:
+        stream_filename: str = media_path.removeprefix(self.context.static_path)
+        return self.context.static_url + stream_filename
+
     def stream_file_meta(self, stream_path: str) -> tuple[str, bool]:
         stream_filename: str = stream_path.removeprefix(self.context.static_path)
-        stream_url = self.context.static_url + stream_filename
-
-        is_image = stream_filename.rsplit('.', 1)[-1] in [
-            'jpg', 'jpeg', 'jfif', 'pjpeg', 'pjp', 'apng', 'png',
-            'svg', 'webp', 'gif', 'bmp', 'ico', 'tif', 'tiff'
-        ]
-
+        stream_url = self.path_to_url(stream_path)
+        is_image = utils.is_image(stream_filename)
         return stream_url, is_image
 
     def get_adspot_default_stream(self, id_: int) -> Optional[dc.StreamWeb]:
@@ -244,7 +243,8 @@ class MS:
             description: str,
     ):
         advert_id = self.user.id
-        filename = f'{datetime.datetime.utcnow().timestamp()}_{filename}'
+        safe_filename = utils.safe_filename(filename)
+        filename = f'{int(datetime.datetime.utcnow().timestamp())}_{safe_filename}'
         filepath = os.path.join(self.context.static_path, filename)
         with open(filepath, 'wb') as f:
             f.write(base64.b64decode(file))
@@ -259,6 +259,7 @@ class MS:
         except exc.APIError as e:
             exc.APIError(e.message)
         else:
+            thumbnail = utils.make_thumbnail(filepath)
             creative = models.Creative(
                 advert_id,
                 None,  # TODO: remove useless field
@@ -268,6 +269,7 @@ class MS:
                 description,
                 url,
                 filepath,
+                thumbnail
             )
             self.session.add(creative)
             self.session.commit()
@@ -374,30 +376,41 @@ class MS:
             q = q.filter(models.Advertiser.id == self.user.id)
 
         rows: list['models.Playback'] = self.session.execute(q).all()
-        return [
-            dc.Playback(
-                row.Playback.id,
-                row.AdSpot.id,
-                row.AdSpot.name,
-                row.AdSpotsStats.likes,
-                row.AdSpot.preview_thumb_url,
-                row.AdSpot.jump_url,
-                row.TimeSlot.from_time,
-                row.TimeSlot.to_time,
-                row.Creative.advert_id,
-                row.Creative.name,
-                row.Creative.description,
-                row.Creative.url,
-                row.Creative.path,
-                row.Playback.status and row.Playback.status.value,
-                row.Playback.smart_contract,
-                row.AdSpot.price,
-                row.TimeSlot.locked,
-                row.AdSpotType.name,
-                row.Playback.taken_at,
-                row.Playback.processed_at,
-            ) for row in rows
-        ]
+
+        playbacks = []
+
+        for row in rows:
+
+            preview = row.AdSpot.preview_thumb_url
+            if row.Creative.thumbnail:
+                preview = self.path_to_url(row.Creative.thumbnail)
+
+            playbacks.append(
+                dc.Playback(
+                    row.Playback.id,
+                    row.AdSpot.id,
+                    row.AdSpot.name,
+                    row.AdSpotsStats.likes,
+                    preview,
+                    row.AdSpot.jump_url,
+                    row.TimeSlot.from_time,
+                    row.TimeSlot.to_time,
+                    row.Creative.advert_id,
+                    row.Creative.name,
+                    row.Creative.description,
+                    row.Creative.url,
+                    row.Creative.path,
+                    row.Playback.status and row.Playback.status.value,
+                    row.Playback.smart_contract,
+                    row.AdSpot.price,
+                    row.TimeSlot.locked,
+                    row.AdSpotType.name,
+                    row.Playback.taken_at,
+                    row.Playback.processed_at,
+                )
+            )
+
+        return playbacks
 
     def get_playback(self, id_: int) -> 'dc.Playback':
         playbacks = self.get_playbacks([id_])
