@@ -369,6 +369,8 @@ class MS:
         ).join(
             models.AdSpotsStats,
             models.AdSpot.id == models.AdSpotsStats.spot_id,
+        ).order_by(
+            sa.desc(models.Playback.id)
         )
         if ids is not None:
             q = q.filter(models.Playback.id.in_(ids))

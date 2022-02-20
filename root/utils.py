@@ -58,7 +58,7 @@ def is_image(filename: str) -> bool:
 
 
 def make_thumbnail(filepath: str) -> Optional[str]:
-    filename = os.path.basename(filepath).rsplit('.', 1)[-1]
+    filename = os.path.basename(filepath).rsplit('.', 1)[0]
     dirname = os.path.dirname(filepath)
     save_on_filename = os.path.join(dirname, f'thumb_{filename}.png')
     target_side_size = 350
