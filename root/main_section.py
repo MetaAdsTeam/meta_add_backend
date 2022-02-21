@@ -2,22 +2,23 @@ import base64
 import datetime
 import json
 import os
+from logging import Logger
 from typing import Optional, Union
 
 import aiofiles
 import aiohttp
+import sqlalchemy as sa
 from aiohttp.web import HTTPException
 from sqlalchemy import select, delete, update, Date, cast
 from sqlalchemy.engine import Row
 from sqlalchemy.orm import Session
-import sqlalchemy as sa
-from logging import Logger
+
 import root
+import root.data_classes as dc
+import root.exceptions as exc
 import root.log_lib as log_lib
 import root.models as models
 import root.utils as utils
-import root.data_classes as dc
-import root.exceptions as exc
 
 
 class MS:
@@ -501,11 +502,11 @@ class MS:
                 sa.or_(
                     sa.and_(
                         models.Creative.moderated.isnot(False),
-                        models.AdSpot.spot_type_id != 2,    # Any ads except Offline
+                        models.AdSpot.spot_type_id != 2,  # Any ads except Offline
                     ),
                     sa.and_(
                         models.Creative.moderated.is_(True),
-                        models.AdSpot.spot_type_id == 2,    # Offline ads
+                        models.AdSpot.spot_type_id == 2,  # Offline ads
                     ),
                 ),
                 models.Playback.smart_contract.isnot(None),
@@ -606,18 +607,18 @@ class MS:
             client_day_start = client_time.replace(hour=0, minute=0, second=0, microsecond=0)
             client_day_end = client_day_start.replace(hour=23, minute=59)
         q = select(
-                models.Playback,
-                models.TimeSlot,
-                models.AdSpot,
-            ).join(
-                models.TimeSlot,
-                models.Playback.timeslot_id == models.TimeSlot.id,
-            ).join(
-                models.AdSpot,
-                models.Playback.adspot_id == models.AdSpot.id,
-            ).filter(
-                models.AdSpot.id == id_,
-            )
+            models.Playback,
+            models.TimeSlot,
+            models.AdSpot,
+        ).join(
+            models.TimeSlot,
+            models.Playback.timeslot_id == models.TimeSlot.id,
+        ).join(
+            models.AdSpot,
+            models.Playback.adspot_id == models.AdSpot.id,
+        ).filter(
+            models.AdSpot.id == id_,
+        )
         if client_time is not None:
             q = q.filter(
                 models.TimeSlot.from_time >= utils.cut_timezone(client_day_start),

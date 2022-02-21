@@ -3,24 +3,22 @@ from contextlib import suppress
 from datetime import datetime
 from typing import Optional, Awaitable
 
-import pytz
-from deeply import Deeply
 import sqlalchemy.exc as sa_exc
+from deeply import Deeply
 from sqlalchemy.orm import Session
 from tornado import escape
+from tornado.escape import json_decode
 from tornado.template import Loader
 from tornado.web import RequestHandler
-from tornado.escape import json_decode
-
 from web3_token import Web3Token
-from root import Context
+
+import root.data_classes as dc
 import root.db_controller as db_controller
+import root.exceptions as exceptions
 import root.main_section as main_section
 import root.utils as utils
-import root.data_classes as dc
-import root.exceptions as exceptions
+from root import Context
 from root.log_lib import get_logger
-
 
 logger = get_logger(__name__)
 

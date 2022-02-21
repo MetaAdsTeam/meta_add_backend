@@ -7,8 +7,8 @@ from typing import Union, Optional
 
 import aiofiles
 import aiohttp
-import pytz
 import cv2
+import pytz
 
 
 def proper_utc_date(iso_string: str) -> datetime:
